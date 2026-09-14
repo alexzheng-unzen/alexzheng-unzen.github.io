@@ -1,0 +1,81 @@
+/* shelf.css · bookshelf module for the narrative prototypes (F / G) · 2026-09-08
+   Extracted from 05-E-prototype/shelf.html (lines 64–130) with renames so it can live inside a full page:
+     .case -> .bookshelf .case · .shelves -> .tiers · .shelf -> .tier · .shelf .lab .num -> .count · .shelf.hidden-note -> .tier-note
+     .spread (fixed div) -> dialog.shelf-spread (native <dialog> appended to body: Esc + focus trap for free, no transform-ancestor bug)
+   Host page supplies the tokens; the fallbacks below are E's values so F needs no overrides. No url() in here (file:// rule). */
+.bookshelf{--wood:var(--shelf-wood,#B9A98E);--wood-dark:var(--shelf-wood-dark,#8E7D62);--mist:var(--shelf-mist,#DCE5DA);--tab:var(--shelf-tab,#C65D42);--shadow-ink:var(--shelf-ink-rgb,36,62,49)}
+.bookshelf .case{margin:2.6rem 0 0;display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:clamp(20px,3vw,48px);align-items:start}
+.bookshelf .tiers{position:relative;min-width:0}
+.bookshelf .tier{position:relative;margin-bottom:2.2rem}
+.bookshelf .tier .lab{display:flex;align-items:baseline;gap:.8rem;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--meta);margin:0 0 .6rem}
+.bookshelf .tier .lab b{font-family:var(--display);font-weight:400;font-size:1.2rem;letter-spacing:0;text-transform:none;color:var(--fg);font-feature-settings:"kern","liga"}
+html:lang(zh-Hans) .bookshelf .tier .lab b{letter-spacing:.08em}
+.bookshelf .tier .lab .count{color:var(--accent);font-family:var(--display);font-size:1.05rem;font-feature-settings:"kern","liga"}
+.bookshelf .tier .lab .note{text-transform:none;letter-spacing:.02em}
+.bookshelf .row{display:flex;align-items:flex-end;gap:3px;min-height:222px;padding:0 14px;position:relative}
+.bookshelf .plank{height:12px;background:linear-gradient(var(--wood),var(--wood-dark));box-shadow:0 10px 0 -6px rgba(var(--shadow-ink),.10),0 2px 0 var(--wood-dark);border-top:1px solid #D8CCB4;position:relative}
+.bookshelf .plank::after{content:"";position:absolute;left:0;right:0;top:12px;height:18px;background:linear-gradient(rgba(var(--shadow-ink),.10),transparent)}
+/* a book */
+.bookshelf .book{all:unset;position:relative;display:block;height:var(--h);width:var(--w);cursor:pointer;transform-origin:bottom center;transition:transform .35s var(--ease),box-shadow .35s var(--ease);
+  background:var(--c);color:var(--ink);border:1px solid rgba(var(--shadow-ink),.22);border-bottom:0;box-shadow:inset 3px 0 0 rgba(255,255,255,.35),inset -3px 0 0 rgba(var(--shadow-ink),.10)}
+.bookshelf .book::before{content:"";position:absolute;inset:8px 6px auto 6px;height:1px;background:currentColor;opacity:.35}
+.bookshelf .book::after{content:"";position:absolute;inset:auto 6px 8px 6px;height:1px;background:currentColor;opacity:.35}
+.bookshelf .book .t{position:absolute;left:50%;top:18px;bottom:18px;transform:translateX(-50%);writing-mode:vertical-rl;text-orientation:mixed;font-family:var(--display);font-size:12.5px;line-height:1;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-feature-settings:"kern","liga"}
+.bookshelf .book .t.zh{font-family:var(--cjk-serif);text-orientation:mixed;letter-spacing:.08em;font-size:12.5px}
+.bookshelf .book.en .t{top:34px}
+.bookshelf .book.en::before{top:8px;height:16px;background:var(--tab);opacity:1;inset:8px 0 auto 0}
+.bookshelf .book:hover,.bookshelf .book:focus-visible{transform:translateY(-8px)}
+.bookshelf .book.out{transform:translateY(-16px) rotate(-1.5deg);box-shadow:inset 3px 0 0 rgba(255,255,255,.35),inset -3px 0 0 rgba(var(--shadow-ink),.10),6px 10px 0 rgba(var(--shadow-ink),.12);z-index:2}
+.bookshelf .row.dim .book:not(.out){opacity:.55}
+.bookshelf .tier-note{font-family:var(--mono);font-size:11px;color:var(--meta);margin:-1.6rem 0 2rem;padding-left:14px}
+/* the desk: cover card */
+.bookshelf .desk{position:sticky;top:76px;min-height:420px}
+.bookshelf .card{border:1px solid var(--line-soft);background:var(--paper);padding:22px 22px 20px;transition:opacity .3s var(--ease),transform .3s var(--ease)}
+.bookshelf .card.idle{color:var(--meta);font-family:var(--mono);font-size:12px;line-height:1.7}
+.bookshelf .card.idle .hand{font-family:var(--display);font-size:1.6rem;color:var(--fg);line-height:1.2;margin:0 0 .8rem;font-feature-settings:"kern","liga"}
+.bookshelf .cover{--c:var(--paper);position:relative;aspect-ratio:3/4;width:100%;background:var(--c);color:var(--ink,var(--fg));border:1px solid rgba(var(--shadow-ink),.25);padding:26px 22px;display:flex;flex-direction:column;box-shadow:inset 0 0 0 8px var(--paper),inset 0 0 0 9px rgba(var(--shadow-ink),.15),8px 8px 0 var(--mist)}
+.bookshelf .cover .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;opacity:.8}
+.bookshelf .cover h2{font-family:var(--display);font-weight:400;font-size:1.55rem;line-height:1.15;margin:1.2rem 0 .4rem;letter-spacing:0;font-feature-settings:"kern","liga"}
+.bookshelf .cover .zh{font-family:var(--cjk-serif);font-size:1.05rem;letter-spacing:.08em;opacity:.85}
+.bookshelf .cover .foot{margin-top:auto;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;line-height:1.7;opacity:.85}
+.bookshelf .cover .tab{position:absolute;right:-1px;top:26px;width:8px;height:44px;background:var(--tab)}
+.bookshelf .card .act{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.bookshelf .card .act button{font-family:var(--mono);font-size:12px;letter-spacing:.02em;padding:9px 14px;border:2px solid var(--fg);background:var(--fg);color:var(--bg);cursor:pointer;box-shadow:4px 4px 0 var(--tab);line-height:1}
+.bookshelf .card .act button.alt{background:none;color:var(--fg);box-shadow:none}
+.bookshelf .card .act button[disabled]{opacity:.45;cursor:not-allowed;box-shadow:none}
+.bookshelf .card .why{font-family:var(--mono);font-size:11px;color:var(--meta);line-height:1.6;margin:10px 0 0}
+/* the spread: a native dialog on body */
+dialog.shelf-spread{padding:0;border:0;background:transparent;max-width:none;max-height:none;width:min(980px,calc(100vw - 48px));overflow:visible}
+dialog.shelf-spread::backdrop{background:rgba(36,62,49,.38)}
+dialog.shelf-spread .pages{width:100%;aspect-ratio:3/2;max-height:calc(100vh - 48px);background:var(--paper);display:grid;grid-template-columns:1fr 1fr;box-shadow:0 30px 60px -20px rgba(0,0,0,.35);position:relative;overflow:hidden;color:var(--fg);font-family:var(--sans)}
+dialog.shelf-spread .pages::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:2px;background:linear-gradient(90deg,rgba(36,62,49,.18),rgba(36,62,49,.04));transform:translateX(-1px)}
+dialog.shelf-spread .pg{padding:clamp(20px,4vw,48px);display:flex;flex-direction:column;min-width:0}
+dialog.shelf-spread .pg.l{border-right:1px solid var(--line-soft)}
+dialog.shelf-spread h2{font-family:var(--display);font-weight:400;font-size:clamp(1.6rem,1rem + 2vw,2.6rem);line-height:1.1;margin:0 0 .6rem;font-feature-settings:"kern","liga"}
+dialog.shelf-spread .k{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--meta)}
+dialog.shelf-spread p{margin:.8rem 0 0;font-size:.98rem;line-height:1.6;max-width:44ch}
+dialog.shelf-spread .lines{margin-top:auto;display:grid;gap:10px}
+dialog.shelf-spread .lines i{display:block;height:1px;background:var(--line-soft)}
+dialog.shelf-spread .lines i:nth-child(2n){width:86%}dialog.shelf-spread .lines i:nth-child(3n){width:64%}
+dialog.shelf-spread .close{all:unset;position:absolute;right:16px;top:12px;z-index:2;font-family:var(--mono);font-size:12px;cursor:pointer;color:var(--meta);padding:6px 10px;border:1px solid var(--line-soft);background:var(--paper)}
+dialog.shelf-spread .close:hover{color:var(--fg);border-color:var(--fg)}
+dialog.shelf-spread .folio{margin-top:auto;font-family:var(--display);font-size:12px;color:var(--meta);letter-spacing:.1em;font-feature-settings:"kern","liga"}
+@media (max-width:1000px){.bookshelf .case{grid-template-columns:minmax(0,1fr)}.bookshelf .desk{position:static;min-height:0}}
+@media (max-width:640px){.bookshelf .tier .lab{flex-wrap:wrap;row-gap:.2rem}.bookshelf .row{min-height:150px;padding:0 8px 4px;gap:2px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin}.bookshelf .book{--h:calc(var(--h0) * .8)}dialog.shelf-spread .pages{grid-template-columns:1fr;aspect-ratio:auto;height:calc(100vh - 48px)}dialog.shelf-spread .pg.l{display:none}}
+@media (prefers-reduced-motion:reduce){.bookshelf .book,.bookshelf .card{transition:none}}
+
+/* F/G touch and reading refinements. */
+.bookshelf .book{min-width:40px;flex-shrink:0}
+.bookshelf .row{overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;padding-top:18px}
+.bookshelf .tier .lab{flex-wrap:wrap}
+.bookshelf .card .act button{min-height:44px}
+dialog.shelf-spread .close{min-height:32px;display:flex;align-items:center;box-sizing:content-box}
+dialog.shelf-spread .close:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+@media(max-width:640px){
+ dialog.shelf-spread{width:calc(100vw - 24px);max-height:calc(100dvh - 24px);overflow-y:auto}
+ dialog.shelf-spread .pages{height:auto;min-height:calc(100dvh - 48px);max-height:none;overflow:visible}
+ dialog.shelf-spread .pg.l{display:flex;padding-top:76px}
+ dialog.shelf-spread .pg.r{display:none}
+ dialog.shelf-spread .folio{overflow-wrap:anywhere;margin-top:24px}
+ dialog.shelf-spread .lines{margin-top:32px}
+}

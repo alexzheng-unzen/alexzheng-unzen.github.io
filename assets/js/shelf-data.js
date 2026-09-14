@@ -1,0 +1,69 @@
+/* shelf-data.js · the 48 books on the Initiatives shelf · 2026-09-06
+   Source of truth: 06-Initiatives书架与视频清单.md §2 (English title ≤6 words · Chinese original · type · year-month).
+   Red lines (06 §7) applied here, not at render time:
+     - client hospital name, low-code platform name, group abbreviation never appear (C1 / C13 / B14 renamed)
+     - only layer D (11 English originals, zero company names) is openable; A / B / C show a cover only
+     - C4 is restricted: counted in the 13, not shown on the shelf (see `hidden`)
+   Sizes are the file sizes 06 recorded (bytes), shown on D covers as a fact, not a claim. */
+window.SHELF = {
+  layers: [
+    { key: "A", rid: "shelf-a-10", en: "Self serve guides", zh: "自助指南", note_en: "Chinese, being rebuilt in English", note_zh: "中文，英文版重制中" },
+    { key: "B", rid: "shelf-b-14", en: "Training decks", zh: "培训课件", note_en: "four already bilingual", note_zh: "四份已双语" },
+    { key: "C", rid: "shelf-c-13", en: "Replication manuals and kits", zh: "复刻手册与工具包", note_en: "Chinese, cover only", note_zh: "中文，只展示封面" },
+    { key: "D", rid: "shelf-d-11", en: "Written in English", zh: "英文原生", note_en: "readable today", note_zh: "今天就能读" }
+  ],
+  books: [
+    /* A · 自助教程 10 */
+    { id: "A1", layer: "A", en: "Claude Code Starter Guide", zh: "Claude Code 入门指南", type_en: "tutorial", type_zh: "教程", when: "" },
+    { id: "A2", layer: "A", en: "Advanced Claude Code Library, 84 Picks", zh: "Claude Code 进阶资源库 · 技术版", type_en: "resource library", type_zh: "资源库", when: "2026-08" },
+    { id: "A3", layer: "A", en: "Claude for Non-Coders: 57 Picks", zh: "Claude 进阶用法 · 非技术版", type_en: "resource library", type_zh: "资源库", when: "2026-08" },
+    { id: "A4", layer: "A", en: "Back Up Your Claude Data", zh: "Claude 信息备份指南", type_en: "tutorial", type_zh: "教程", when: "" },
+    { id: "A5", layer: "A", en: "Clean Your C: Drive Safely", zh: "C 盘安全清理指南", type_en: "tutorial", type_zh: "教程", when: "" },
+    { id: "A6", layer: "A", en: "AI for Design: 2026 Field Guide", zh: "AI for Design 行业落地指南", type_en: "guide", type_zh: "指南", when: "2026-07" },
+    { id: "A7", layer: "A", en: "Making Decks with AI", zh: "AI 做 PPT · 创作者心得手册", type_en: "handbook", type_zh: "手册", when: "2026-07" },
+    { id: "A8", layer: "A", en: "ccusage Setup Notice", zh: "ccusage 安装通知", type_en: "notice", type_zh: "通知", when: "" },
+    { id: "A9", layer: "A", en: "Export HTML to PDF", zh: "HTML 导出 PDF 操作说明", type_en: "how-to", type_zh: "操作说明", when: "2026-08" },
+    { id: "A10", layer: "A", en: "API Console Launcher", zh: "API 控制台启动页", type_en: "launcher", type_zh: "启动页", when: "" },
+    /* B · 培训课件 14 */
+    { id: "B1", layer: "B", en: "Context Engineering, First Deck", zh: "Context Engineering 课件", type_en: "deck", type_zh: "课件", when: "2026-06" },
+    { id: "B2", layer: "B", en: "Model Limits and Context Engineering", zh: "模型能力与 CE 培训", type_en: "deck", type_zh: "课件", when: "2026-07" },
+    { id: "B3", layer: "B", en: "Group AI Training, Live Edition", zh: "集团 AI 培训 · 现场版", type_en: "deck, bilingual", type_zh: "课件 · 双语", when: "2026-07", bilingual: true },
+    { id: "B4", layer: "B", en: "Group AI Training, Self-Study Manual", zh: "集团 AI 培训 · 自助手册", type_en: "manual, bilingual", type_zh: "手册 · 双语", when: "2026-07", bilingual: true },
+    { id: "B5", layer: "B", en: "Context Engineering for the Group", zh: "Context Engineering 集团培训版", type_en: "deck, bilingual", type_zh: "课件 · 双语", when: "2026-07", bilingual: true },
+    { id: "B6", layer: "B", en: "Context Engineering, Full Edition", zh: "CE 集团培训版 · 最全版", type_en: "deck, bilingual", type_zh: "课件 · 双语", when: "2026-07", bilingual: true },
+    { id: "B7", layer: "B", en: "Vendor Ecosystem Map", zh: "生态赋能地图 · 培训附页", type_en: "appendix", type_zh: "附页", when: "2026-07" },
+    { id: "B8", layer: "B", en: "Deck Review and Errata", zh: "课件 Review 与勘误", type_en: "errata", type_zh: "勘误", when: "2026-07" },
+    { id: "B9", layer: "B", en: "Turn Work into Team Assets", zh: "团队 AI 资产化 · 意识觉醒课件", type_en: "deck", type_zh: "课件", when: "2026-06" },
+    { id: "B10", layer: "B", en: "Asset Capture, the Simple Way", zh: "沉淀资产 · 傻瓜指南", type_en: "guide", type_zh: "指南", when: "2026-06" },
+    { id: "B11", layer: "B", en: "Hackathon Playbook Deck", zh: "黑客松参赛培训课件", type_en: "deck", type_zh: "课件", when: "2026-08" },
+    { id: "B12", layer: "B", en: "Hackathon Playbook, Web Edition", zh: "黑客松参赛培训 · 网页版", type_en: "deck", type_zh: "课件", when: "2026-08" },
+    { id: "B13", layer: "B", en: "Tokenmaxxing Kickoff, Attendee Edition", zh: "Tokenmaxxing 启动会 · 参会者版", type_en: "deck", type_zh: "课件", when: "" },
+    { id: "B14", layer: "B", en: "July Case Sharing Backdrop", zh: "7 月案例分享 · 分享背板", type_en: "backdrop and script", type_zh: "背板与讲稿", when: "2026-07" },
+    /* C · 落地复刻指南与手册 13（C4 限阅：计数、不上架） */
+    { id: "C1", layer: "C", en: "Social Listening Replication Guide", zh: "Social Listening 落地指南 · 医院版", type_en: "replication guide", type_zh: "落地指南", when: "2026-08" },
+    { id: "C2", layer: "C", en: "Social Listening Information Flow Map", zh: "Social Listening 信息流路线图", type_en: "roadmap", type_zh: "路线图", when: "2026-06" },
+    { id: "C3", layer: "C", en: "Social Listening Source List", zh: "Social Listening 信源清单", type_en: "source list", type_zh: "清单", when: "2026-07" },
+    { id: "C4", layer: "C", en: "Training and Seat Provisioning Plan", zh: "培训与资源配给方案", type_en: "plan", type_zh: "方案", when: "2026-08", hidden: true },
+    { id: "C5", layer: "C", en: "Claims QC Tool: Start Here", zh: "理赔质检工具 · 从这里开始", type_en: "handover notes", type_zh: "交付说明", when: "2026-08" },
+    { id: "C6", layer: "C", en: "Group AI Knowledge Hub, One-Pager", zh: "集团 AI 知识共享平台 · 单页版", type_en: "one-pager", type_zh: "单页说明", when: "" },
+    { id: "C7", layer: "C", en: "National Medical Code Lookup Manual", zh: "国家医保编码 · 操作手册", type_en: "manual", type_zh: "操作手册", when: "" },
+    { id: "C8", layer: "C", en: "Policy PDF Cleaner, Developer Notes", zh: "保单 PDF 清洗工具 · 开发者说明", type_en: "developer notes", type_zh: "开发者说明", when: "" },
+    { id: "C9", layer: "C", en: "The Skills Manual, 81 Entries", zh: "Skills 全库使用说明书", type_en: "manual", type_zh: "说明书", when: "" },
+    { id: "C10", layer: "C", en: "Shift Scheduler Demo Playbook", zh: "排班工具 · Demo 作战手册", type_en: "playbook", type_zh: "作战手册", when: "2026-08" },
+    { id: "C11", layer: "C", en: "Shift Scheduler User and Rollout Guide", zh: "排班工具 · 使用与推广说明", type_en: "user guide", type_zh: "使用说明", when: "" },
+    { id: "C12", layer: "C", en: "Claude Account Safety and Backup", zh: "Claude 防封 · 备份手册", type_en: "handbook", type_zh: "手册", when: "" },
+    { id: "C13", layer: "C", en: "Low-Code Platform Build Guide", zh: "低代码平台建站说明书", type_en: "manual", type_zh: "说明书", when: "" },
+    /* D · 英文原生 11 · openable */
+    { id: "D1", layer: "D", en: "Context Engineering and Token Efficiency", zh: "", type_en: "guide, Markdown", type_zh: "指南 · Markdown", when: "", open: true, bytes: 41218 },
+    { id: "D2", layer: "D", en: "A Crew of Agents", zh: "", type_en: "guide, Markdown", type_zh: "指南 · Markdown", when: "", open: true, bytes: 13062 },
+    { id: "D3", layer: "D", en: "Turn Your Work into Team Assets", zh: "", type_en: "guide, Markdown", type_zh: "指南 · Markdown", when: "", open: true, bytes: 43647 },
+    { id: "D4", layer: "D", en: "Reusable Units Cheat Sheet", zh: "", type_en: "cheat sheet, Markdown", type_zh: "速查表 · Markdown", when: "", open: true, bytes: 12194 },
+    { id: "D5", layer: "D", en: "Tool Whitebox Standard", zh: "", type_en: "skill and README", type_zh: "SKILL + README", when: "", open: true },
+    { id: "D6", layer: "D", en: "Data Tool War Stories", zh: "", type_en: "skill and README", type_zh: "SKILL + README", when: "", open: true },
+    { id: "D7", layer: "D", en: "Agent Housekeeping", zh: "", type_en: "skill and README", type_zh: "SKILL + README", when: "", open: true },
+    { id: "D8", layer: "D", en: "Growth Radar Playbook", zh: "", type_en: "playbook and skill", type_zh: "PLAYBOOK + SKILL", when: "", open: true },
+    { id: "D9", layer: "D", en: "Agent Browser Runtime", zh: "", type_en: "README and docs", type_zh: "README + docs", when: "", open: true },
+    { id: "D10", layer: "D", en: "sola-cli", zh: "", type_en: "README", type_zh: "README", when: "", open: true },
+    { id: "D11", layer: "D", en: "Adoption Dashboard README", zh: "", type_en: "README", type_zh: "README", when: "", open: true }
+  ]
+};

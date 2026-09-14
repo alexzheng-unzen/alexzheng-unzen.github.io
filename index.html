@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en" data-theme="f">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alex Zheng · Portfolio</title>
+<meta name="description" content="Portfolio of Alex Zheng: selected work, a reading shelf and origins.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%23365D49%27/%3E%3Ctext x=%2732%27 y=%2745%27 font-family=%27Georgia,serif%27 font-size=%2740%27 fill=%27%23F4F5F0%27 text-anchor=%27middle%27%3EA%3C/text%3E%3C/svg%3E">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="./assets/narrative/narrative.css">
+<link rel="stylesheet" href="./assets/narrative/shelf.css">
+<style>
+
+@font-face{font-family:"Geist";src:url("./assets/fonts/Geist-Variable.woff2") format("woff2");font-weight:100 900;font-display:swap}
+@font-face{font-family:"Geist Mono";src:url("./assets/fonts/GeistMono-Variable.woff2") format("woff2");font-weight:100 900;font-display:swap}
+@font-face{font-family:"HuiwenKai";src:url("./assets/fonts/huiwen-zhengkai.subset-n.woff2") format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"HuiwenHei";src:url("./assets/fonts/huiwen-hkhei.subset-n.woff2") format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"IMFell";src:url("./assets/fonts/im-fell-roman.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"IMFell";src:url("./assets/fonts/im-fell-italic.woff2") format("woff2");font-weight:400;font-style:italic;font-display:swap}
+/* 汇文正楷 / 港黑 centre 。，（HK style）; for zh-Hans borrow corner punctuation from the system Simplified font */
+@font-face{font-family:"CJKPunctSC";src:local("PingFang SC"),local("Microsoft YaHei"),local("Noto Sans CJK SC");font-weight:400;unicode-range:U+3000-303F,U+FF01-FF0F,U+FF1A-FF20,U+FF3B-FF40,U+FF5B-FF65}
+:root{
+  --lattice:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'><g fill='none' stroke='%23365D49' stroke-width='1' opacity='.11'><rect x='4' y='4' width='28' height='28'/><rect x='24' y='24' width='28' height='28'/></g></svg>");
+  --grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .1 0 0 0 0 .2 0 0 0 0 .1 0 0 0 .035 0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");
+  /* board 02 palette (= E) */
+  --bg:#F4F5F0; --bg-2:#FAFBF7; --paper:#FAFBF7; --fg:#243E31; --meta:#5F7A6C; --line:#8FA99B; --line-soft:#D9E1DA;
+  --accent:#365D49; --accent-ink:#2A4A3A; --red:#C65D42; --gold:#B08D3A; --green:#365D49; --mid:#A8BBB0; --blue:#628C9B;
+  --display:"IMFell","HuiwenKai","HuiwenHei",serif;
+  --cjk-sans:"HuiwenHei","PingFang SC","Microsoft YaHei",sans-serif;
+  --cjk-serif:"HuiwenKai","HuiwenHei",serif;
+  --shelf-wood:#B9A98E;--shelf-wood-dark:#8E7D62;--shelf-mist:#DCE5DA;--shelf-tab:#C65D42;--shelf-ink-rgb:36,62,49;
+}
+:root[data-bg="warm"]{--bg:#F7F5EE;--bg-2:#FCFAF4;--paper:#FCFAF4;--line-soft:#E0E1D3;--meta:#5E7466}
+html:lang(zh-Hans){--sans:"Geist","CJKPunctSC","HuiwenHei","PingFang SC","Microsoft YaHei",sans-serif;--display:"IMFell","CJKPunctSC","HuiwenKai","HuiwenHei",serif;--cjk-serif:"CJKPunctSC","HuiwenKai","HuiwenHei",serif}
+body{background-image:var(--grain);background-size:200px 200px}
+html:lang(zh-Hans) body{line-height:1.8}
+#fish{background-image:url("./assets/ui/goldfish-line-sheet.png")}
+.wipe .drop{background-image:url("./assets/ui/drop.png")}
+.fish-ring{background-image:url("./assets/ui/ripple-ring-0.png")}
+/* ---------- type: display faces (= E) ---------- */
+.hero h1,.title,.sys h3,.creed h2,.closing .title,.item .name,.stage h3,.ledger h2,.ledger li b,.receipt .v,.top .name,.outcome,.quote,.closing .motto .en{font-family:var(--display);font-weight:400;font-feature-settings:"kern","liga"}
+.eyebrow,.hero .who,.sys .kick,.motif-label,.item .sub,.stage .when,.fact .num.big,.fact .src::before,.pano .infobar,.pano .infobar span,.bookshelf .tier .lab,.bookshelf .count{font-feature-settings:"kern","liga"}
+.hero h1{letter-spacing:-.01em;line-height:1}
+.hero h1 .l2{font-style:italic}
+.title{letter-spacing:-.005em;line-height:1.08}
+.title .lt{font-style:italic}
+.sys h3{letter-spacing:0;line-height:1.15}
+.creed h2{letter-spacing:0;line-height:1.05}
+.creed h2 .b{font-style:italic}
+.closing .title .l2{font-style:italic;color:var(--accent)}
+.item .name{font-size:1.3rem;letter-spacing:0}
+.stage h3{font-size:1.35rem;letter-spacing:0;line-height:1.15}
+.outcome{font-style:italic;font-size:1.15rem;line-height:1.45;font-weight:400;color:var(--fg)}
+.quote{border-left:2px solid var(--red);font-style:italic;font-size:clamp(1.3rem, 1rem + 1vw, 1.8rem);line-height:1.3;color:var(--fg)}
+.closing .motto .en{font-style:italic;font-size:1.3rem}
+/* CJK: 汇文正楷 is one weight; hanzi need looser tracking and a taller line */
+html:lang(zh-Hans) .hero h1{letter-spacing:.06em;line-height:1.18}
+html:lang(zh-Hans) .hero h1 .l2,html:lang(zh-Hans) .title .lt,html:lang(zh-Hans) .creed h2 .b,html:lang(zh-Hans) .closing .title .l2,html:lang(zh-Hans) .outcome{font-style:normal}
+html:lang(zh-Hans) .title,html:lang(zh-Hans) .sys h3,html:lang(zh-Hans) .creed h2,html:lang(zh-Hans) .closing .title{letter-spacing:.06em;line-height:1.3}
+html:lang(zh-Hans) .item .name,html:lang(zh-Hans) .stage h3{letter-spacing:.08em}
+html:lang(zh-Hans) .outcome{font-family:var(--cjk-serif);letter-spacing:.04em;line-height:1.6}
+/* labels: IM Fell caps with tracking (the board's OPERA HEADDRESS captions); receipts + protobar stay Geist Mono */
+.eyebrow,.hero .who,.sys .kick,.motif-label,.item .sub,.stage .when,.fact .num.big{font-family:var(--display)}
+.eyebrow{font-size:14px;letter-spacing:.14em;font-weight:400}
+.hero .who{font-size:15px;letter-spacing:.06em;text-transform:uppercase;font-weight:400}
+.hero .who .cjk{text-transform:none;letter-spacing:.12em}
+.sys .kick{font-size:14px;letter-spacing:.12em}
+.sys .kick .pn{font-family:var(--mono);font-size:12px}
+.motif-label{font-size:12px;letter-spacing:.14em}
+.item .sub{font-size:12px;letter-spacing:.14em}
+.stage .when{font-size:14px;letter-spacing:.05em;text-transform:uppercase}
+.fact .num.big{font-weight:400;letter-spacing:0}
+html:lang(zh-Hans) .motif-text,html:lang(zh-Hans) .item .note,html:lang(zh-Hans) .role{font-family:var(--cjk-sans)}
+html:lang(zh-Hans) .eyebrow,html:lang(zh-Hans) .sys .kick,html:lang(zh-Hans) .hero .who,html:lang(zh-Hans) .item .sub{letter-spacing:.1em}
+/* ---------- surfaces: fieldnote page, rules in sage, one coral accent (= E) ---------- */
+.eyebrow::before{background:var(--red)}
+.btn{box-shadow:6px 6px 0 var(--red)}
+.btn:hover{box-shadow:8px 8px 0 var(--red)}
+.strip{background-image:var(--lattice);padding:2.4rem 1.2rem;border-left:1px solid var(--line-soft);border-right:1px solid var(--line-soft)}
+.item{background:var(--bg);padding:1rem;outline:1px solid transparent;transition:outline-color .3s}
+.item:hover,.item:focus-within{outline-color:var(--accent)}
+.sys .text{position:relative;padding-left:1.4rem;border-left:1px solid var(--line-soft);transition:border-color .3s}
+.sys:hover .text{border-left-color:var(--accent)}
+.fact{border:0;border-top:1px solid var(--fg);background:none;padding:.6rem 0 0;min-width:140px}
+.cap summary::before{content:"";display:inline-block;width:8px;height:8px;background:var(--red);margin-right:8px;vertical-align:0}
+.cap[open] summary::before{background:var(--accent)}
+.demo .frame{border:2px solid var(--accent);box-shadow:14px 14px 0 var(--mid)}
+.demo .acts .btn{box-shadow:4px 4px 0 var(--red)}
+dialog.demo-dialog{border:2px solid var(--accent)}
+dialog.demo-dialog::backdrop{background:rgba(36,62,49,.38)}
+.creed h2 .a{color:var(--red)}
+.stage .mark{display:none}
+/* panorama = a page of the fieldnote: thin leaf-green rules top and bottom (E's frieze) */
+.pano .frame{border-top:1px solid var(--accent);border-bottom:1px solid var(--accent);background-color:color-mix(in srgb,var(--bg) 70%,var(--paper))}
+.pano .frame img.line{filter:contrast(1.3) saturate(.9)}
+.pano .frame img.color{filter:contrast(1.12)}
+.pano .infobar{font-family:var(--display);font-size:12px;letter-spacing:.14em;color:var(--line)}
+.pano .infobar .cap-l{color:var(--accent)}
+/* element (single flat image) */
+.el img{mix-blend-mode:normal}
+.sys:hover .srail .el,.item:hover .el{transform:translateY(-3px)}
+@media (prefers-reduced-motion:reduce){.el{transition:none}}
+
+/* 09-08: quieter fieldnotes, clearer reading hierarchy. */
+.btn{box-shadow:3px 3px 0 var(--red)}
+.sys .text{padding-left:24px}
+.outcome{font-family:var(--sans);font-style:normal;font-size:1.1rem;line-height:1.6}
+html:lang(zh-Hans) .outcome{font-family:var(--cjk-sans);letter-spacing:0}
+.pano .infobar{color:var(--meta);letter-spacing:.07em}
+.strip{background-image:none;padding:1.5rem 0;border:0;border-top:1px solid var(--line-soft)}
+.item{background:none;padding:0;outline:none}
+.item .plate{padding-bottom:12px;border-bottom:1px solid var(--line-soft)}
+.item .fig{height:160px}
+@media(max-width:720px){.sys .text{padding-left:0}}
+@media(max-width:430px){.item .fig{height:88px}.item .plate{border:0;padding:0}}
+
+</style>
+</head>
+<body>
+<script src="./assets/js/shelf-data.js"></script>
+<script src="./assets/narrative/copy-n.js"></script>
+<script>
+/* Theme F hooks consumed by ./assets/narrative/render-n.js */
+(function () {
+  var KEYS = { window: 1, opera: 1, dimsum: 1, boat: 1, lion: 1, lychee: 1, banana: 1, goldfish: 1 };
+  window.THEME = {
+    id: "f",
+    receipts: false, tools: false,
+    boardLabel: "F · 岭南散页",
+    defaultBg: "cool",
+    hero: { line: "./assets/hero/panorama-line-1600.webp", color: "./assets/hero/panorama-color-1600.webp" },
+    demo: { poster: "./assets/demo/scheduler-poster.png", gif: "./assets/demo/scheduler-demo.gif" },
+    links: [
+      { label: "F 岭南散页", href: "index.html", current: true }
+    ],
+    motif: function (key, o) {
+      var s = (o && o.size) || 160;
+      if (!KEYS[key]) return "";
+      return '<span class="el" data-m="' + key + '" style="--s:' + s + 'px"><img src="./assets/elements/' + key + '.png" alt="" decoding="async"></span>';
+    },
+    marks: function () { return ""; },
+    stamp: function () { return ""; },
+    footMarks: function () { return ""; }
+  };
+})();
+</script>
+<script src="./assets/narrative/shelf.js"></script>
+<script src="./assets/narrative/render-n.js"></script>
+</body>
+</html>
