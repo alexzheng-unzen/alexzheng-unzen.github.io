@@ -438,6 +438,9 @@ footer .wrap{padding-bottom:80px}
 .hero .dir-list a::before{content:counter(dl,decimal-leading-zero);grid-row:1/3;font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--meta);padding-top:.25em}
 .hero .dir-list b{display:block;font-weight:600;font-size:.98rem;line-height:1.4}
 .hero .dir-list span{display:block;font-size:.9rem;line-height:1.55;color:var(--meta)}
-.hero .dir-list a:hover b,.hero .dir-list a:focus-visible b{color:var(--accent)}
+.hero .dir-list a:hover b,.hero .dir-list a:focus-visible b{color:var(--accent);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.18em}
+.hero .dir-list b::after{content:" 97";font-family:var(--mono);font-size:.8em;color:var(--meta);font-weight:400}
+.hero .dir-list a:hover b::after,.hero .dir-list a:focus-visible b::after{color:var(--accent)}
+.hero .dir-list a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 html:lang(zh-Hans) .hero .dir-list b{letter-spacing:.04em}
 footer .version{display:block;margin-top:.4rem;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--meta)}
