@@ -1,0 +1,25 @@
+Copyright (c) 2026 Alex Zheng (郑晓琪). All rights reserved.
+
+This repository holds the built output of a personal portfolio published at
+https://alexzheng-unzen.github.io/
+
+NO LICENCE IS GRANTED.
+
+The absence of a LICENSE file in this repository is deliberate, not an
+oversight. Work published without a licence stays under exclusive copyright:
+the only rights anyone else has are the ones GitHub's Terms of Service grant,
+which are viewing the repository and forking it through GitHub's own interface.
+
+In particular, the following are NOT permitted without prior written consent:
+
+  * copying, republishing or mirroring this site or any part of it;
+  * reusing the layout, stylesheets, scripts or written copy in another site,
+    template or product, whether or not attribution is given;
+  * reusing the illustrations under assets/ (the Lingnan panorama and the eight
+    motif drawings), which are original artwork by the author;
+  * including any of it in a dataset used to train or fine-tune a
+    machine-learning model.
+
+Reading the source in a browser to learn from it is fine. Shipping it is not.
+
+Contact: alexanderchat1005@gmail.com
