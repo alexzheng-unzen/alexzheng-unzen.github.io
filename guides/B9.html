@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta name="robots" content="noindex, noai, noimageai, noarchive">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>让经验,不止用一次 · 把个人做法与踩坑沉淀成团队资产 · AI Office Hour</title>
+<style>
+:root{
+  --blue:#3966CA; --blue-d:#27406e; --cyan:#00D4F1; --orange:#F08519;
+  --green:#2BB346; --red:#E6252F; --gold:#B6862C;
+  --bg:#EBF0FA; --bg2:#E0F1FF; --gold-soft:#FBF4E4;
+  --ink:#0F172A; --muted:#64748b; --line:#dde5f2; --card:#fff;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"OPPO Sans","Microsoft YaHei",-apple-system,Arial,sans-serif;font-size:16px;line-height:1.7}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px 72px}
+
+/* 锚点导航：吸顶胶囊 + scrollspy */
+nav.anchors{position:sticky;top:0;z-index:10;background:rgba(235,240,250,.95);backdrop-filter:blur(6px);
+  display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);margin-bottom:8px}
+nav.anchors .grp{font-size:12px;color:var(--muted);margin-right:2px}
+nav.anchors a{font-size:13px;color:var(--muted);text-decoration:none;padding:5px 11px;border-radius:8px}
+nav.anchors a:hover,nav.anchors a.on{background:#fff;color:var(--blue)}
+nav.anchors a.set{border:1px solid var(--line)}
+nav.anchors a.set:hover{border-color:var(--blue)}
+@media print{nav.anchors{display:none}}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#3966CA 0%,#27406e 100%);color:#fff;border-radius:16px;
+  padding:46px 40px;margin:18px 0 36px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:240px;height:240px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,212,241,.22),transparent 70%)}
+.hero .ey{font-size:12px;letter-spacing:3px;color:#bcd2ff;font-weight:600}
+.hero h1{font-size:36px;line-height:1.22;margin:12px 0 14px;letter-spacing:.5px;position:relative}
+.hero .subt{font-size:18px;color:#fff;font-weight:600;margin:0 0 14px}
+.hero .sub{font-size:16px;color:#dde9ff;max-width:840px;margin:0}
+.hero .sub b{color:#fff}
+.hero .tags{margin-top:22px;display:flex;gap:8px;flex-wrap:wrap}
+.hero .tags span{font-size:12.5px;background:rgba(255,255,255,.14);color:#eaf2ff;padding:4px 12px;border-radius:20px}
+
+/* 今天带走 */
+.takeaway{background:#fff;border:1px solid var(--line);border-top:4px solid var(--cyan);border-radius:12px;
+  padding:24px 28px;margin:-18px 0 40px}
+.takeaway .mt{font-size:12px;letter-spacing:2px;color:var(--blue);font-weight:700;display:block;margin-bottom:12px}
+.takeaway ul{margin:0;padding-left:20px} .takeaway li{margin:8px 0;font-size:15px;color:var(--ink)}
+.takeaway li b{color:var(--blue-d)}
+
+/* 章节 */
+section{margin:48px 0}
+h2{font-size:24px;margin:0 0 4px;letter-spacing:.3px}
+h2 .n{color:var(--blue);font-weight:800;margin-right:10px}
+h2 .en{color:var(--muted);font-weight:600;font-size:15px;margin-left:8px;letter-spacing:.5px}
+.qline{font-size:16px;color:var(--blue-d);font-weight:600;margin:2px 0 16px}
+h3{font-size:17px;margin:30px 0 6px;color:var(--ink)}
+.lead{color:var(--muted);font-size:15px;margin:0 0 20px;max-width:840px}
+p{margin:0 0 14px;max-width:880px}
+.small{font-size:13px;color:var(--muted);max-width:860px}
+b,strong{color:var(--ink)}
+code,kbd{font-family:Consolas,"SF Mono",monospace}
+kbd{background:#fff;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 7px;font-size:13px;font-weight:600;color:var(--blue-d)}
+code{background:#f4f7fd;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:13.5px;color:var(--blue-d)}
+
+/* 旧vs新双栏 */
+.shift{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0}
+.shift .col{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+.shift .col.old{opacity:.92}
+.shift .col.new{border:2px solid var(--blue);background:linear-gradient(180deg,#fff,#f6f9ff)}
+.shift h4{margin:0 0 12px;font-size:14px;letter-spacing:.5px}
+.shift .old h4{color:var(--muted)} .shift .new h4{color:var(--blue)}
+.shift .col.good h4{color:var(--green)} .shift .col.good{border-color:var(--green);background:linear-gradient(180deg,#fff,#f4fbf5)}
+.shift .txt{font-size:15px;margin:0 0 6px} .shift .note{font-size:13px;color:var(--muted);margin:0}
+
+/* 彩色左线提示框 */
+.pains{background:var(--bg2);border-left:4px solid var(--blue);border-radius:8px;padding:14px 18px;margin:16px 0;font-size:14.5px;color:var(--blue-d)}
+.warn{background:#fff7ec;border-left:4px solid var(--orange);border-radius:8px;padding:14px 18px;margin:16px 0;font-size:14.5px;color:#9a5409}
+.danger{background:#fdeced;border-left:4px solid var(--red);border-radius:8px;padding:14px 18px;margin:16px 0;font-size:14.5px;color:#9b1c1c}
+.plain{background:var(--gold-soft);border-left:4px solid var(--gold);border-radius:8px;padding:14px 18px;margin:16px 0;font-size:14.5px;color:#6B4A26}
+.plain b{color:#6B4A26}
+
+/* 决策表 */
+.dec{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:14.5px;margin:16px 0}
+.dec th{background:#f4f7fd;text-align:left;padding:11px 14px;font-size:12.5px;color:var(--muted);border-bottom:1px solid var(--line);font-weight:600}
+.dec td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.dec tr:last-child td{border-bottom:none}
+.dec .flag td{background:#f6f9ff} .dec .flag td b{color:var(--blue)}
+.dec td .lbl{color:var(--blue);font-weight:700} .dec .map{color:var(--blue);font-weight:700}
+.scroll{overflow-x:auto}
+
+/* 模块卡 */
+.mods{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}
+.mod{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 20px;border-top:3px solid var(--blue)}
+.mod.g1{border-top-color:var(--blue)} .mod.g2{border-top-color:var(--orange)} .mod.g3{border-top-color:var(--green)}
+.mod .id{font-size:12px;font-weight:700;color:var(--blue);letter-spacing:.5px}
+.mod.g2 .id{color:var(--orange)} .mod.g3 .id{color:var(--green)}
+.mod .h{font-size:15.5px;font-weight:700;margin:6px 0 8px}
+.mod .role{font-size:13.5px;color:var(--muted);margin:0}
+.mod .role b{color:var(--ink)}
+.mod .role .to{color:var(--blue);font-weight:700}
+
+/* 业界扫描柱状图 */
+.scan{background:#fff;border:1px solid var(--line);border-top:3px solid var(--blue);border-radius:12px;padding:22px 26px;margin:18px 0}
+.scan .cap{font-size:12.5px;letter-spacing:1px;color:var(--blue);font-weight:700;display:block;margin-bottom:3px}
+.scan .src{font-size:12px;color:var(--muted);margin:0 0 18px;line-height:1.55}
+.bars{display:flex;flex-direction:column;gap:14px}
+.brow .bar{display:grid;grid-template-columns:158px 1fr;gap:12px;align-items:center}
+.brow .lab{font-size:13.5px;font-weight:600;color:var(--ink);text-align:right;line-height:1.25}
+.brow .track{background:#eef2f9;border-radius:7px;height:28px;overflow:hidden}
+.brow .fill{height:100%;border-radius:7px;display:flex;align-items:center;padding:0 11px;color:#fff;font-size:12px;font-weight:700;white-space:nowrap}
+.brow .unit{font-size:12.5px;color:var(--muted);margin:5px 0 0 170px;line-height:1.45}
+.brow .unit b{color:var(--blue-d)}
+@media(max-width:760px){.brow .bar{grid-template-columns:104px 1fr}.brow .lab{font-size:12px}.brow .unit{margin-left:0}}
+
+/* 金句横幅 */
+.motto{background:var(--blue);color:#fff;border-radius:12px;padding:18px 26px;margin:24px 0 0;font-size:16.5px;font-weight:600;text-align:center;line-height:1.6}
+.motto.dark{background:var(--blue-d)}
+
+/* 编号步骤 */
+.steps{counter-reset:s;list-style:none;padding:0;margin:16px 0}
+.steps>li{counter-increment:s;background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 18px 16px 58px;position:relative;margin-bottom:12px;font-size:14.5px}
+.steps>li::before{content:counter(s);position:absolute;left:16px;top:14px;width:28px;height:28px;background:var(--blue);color:#fff;border-radius:50%;text-align:center;line-height:28px;font-weight:700;font-size:14px}
+.steps>li .who{font-weight:700;margin:0 0 8px;font-size:14.5px}
+.steps>li .who .you{color:var(--blue)} .steps>li .who .mate{color:var(--green)}
+
+/* 代码框 */
+.mono{font-family:Consolas,"SF Mono",monospace;font-size:13.5px;background:#f4f7fd;padding:14px 18px;border-radius:8px;line-height:1.95;color:var(--blue-d);margin:12px 0;white-space:pre-wrap;word-break:break-word;border:1px solid var(--line)}
+.mono .c{color:var(--muted)} .mono .g{color:#1c7a30;font-weight:600} .mono .y{color:#9a5409;font-weight:600} .mono .p{color:var(--blue);font-weight:700}
+
+/* invite 三扇门 */
+.doors{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}
+.door{background:#fff;border:1px dashed var(--blue);border-radius:12px;padding:20px 22px}
+.door .h{color:var(--blue);font-weight:700;font-size:15.5px;margin:0 0 8px}
+.door p{font-size:14px;margin:0 0 10px;color:var(--ink)}
+.door a{display:inline-block;font-size:13.5px;color:#fff;background:var(--blue);padding:6px 14px;border-radius:8px;text-decoration:none}
+.door a:hover{background:var(--blue-d)}
+.closer{margin-top:40px}
+.closer h2{border:none;font-size:21px;margin-bottom:10px}
+
+footer{margin-top:54px;border-top:1px solid var(--line);padding-top:18px;font-size:12.5px;color:var(--muted)}
+footer a{color:var(--blue);text-decoration:none}
+footer .grp-links{margin:10px 0}
+.watermark{position:fixed;bottom:18px;right:22px;font-size:11px;font-weight:500;color:rgba(15,23,42,.5);background:rgba(255,255,255,.9);padding:6px 12px;border:1px solid var(--line);border-radius:6px;backdrop-filter:blur(8px);pointer-events:none;z-index:50}
+.watermark .b{color:var(--blue);font-weight:700} .watermark .s{margin:0 6px;color:var(--line)}
+
+@media(max-width:760px){.shift,.mods,.doors{grid-template-columns:1fr}.hero h1{font-size:27px}.hero{padding:32px 24px}}
+@media print{body{background:#fff}.wrap{padding:0 16px}.hero{-webkit-print-color-adjust:exact;print-color-adjust:exact}.watermark{position:static}section{page-break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="anchors">
+    <span class="grp">本页:</span>
+    <a href="#c1">① Reusable Units</a>
+    <a href="#c2">② 怎么拆</a>
+    <a href="#c3">③ 怎么分享</a>
+    <span class="grp" style="margin-left:auto">这一组:</span>
+    <a class="set" href="B9-index.html">团队资产库</a>
+    <span class="set">方向备忘</span>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="ey">AI OFFICE HOUR · 午餐分享会 · 2026-06-25</div>
+    <h1>让经验,不止用一次</h1>
+    <p class="subt">把个人做法与踩坑,沉淀成团队资产</p>
+    <p class="sub">你一个人摸顺的做法、踩过的坑,其实都能拆成<b>"零件"</b>,被反复调用、在团队里复用。你 Vibe Coding 的经验,也能为团队添一块砖。这一场,讲清楚<b>怎么拆、怎么分享</b>。</p>
+    <div class="tags"><span>🍱 午餐分享会 · 边吃边听</span><span>主讲 Alex</span><span>面向全员 · 零基础友好</span><span>欢迎参加,一起讨论</span></div>
+  </div>
+
+  <!-- 今天带走 -->
+  <div class="takeaway">
+    <span class="mt">这一顿饭的工夫,你会带走</span>
+    <ul>
+      <li><b>一个判断:</b>能分享的有<b>三层</b>——成品 / 搭法 / 经验,绝不止"做好的那个工具"(水面下才是大头)</li>
+      <li><b>三种形态:</b>把它装进 <b>Skill</b> / <b>规则(CLAUDE.md)</b> / <b>Prompt</b>,配真实例子讲明白</li>
+      <li><b>一个认知跳跃:</b>不是"你去教同事(人)",是<b>你的 agent 去教同事的 agent</b>——这就是 A2A</li>
+      <li><b>一份干货:</b>一段<b>复制即用</b>的话,让你的 agent 当场帮你拆自己的项目</li>
+    </ul>
+  </div>
+
+  <!-- ① Reusable Units -->
+  <section id="c1">
+    <h2><span class="n">①</span>Reusable Units<span class="en">可复用单元</span></h2>
+    <p class="qline">我的项目对别人也有价值吗?</p>
+    <p class="lead">一听"分享给团队",大多数人脑子里只有一个画面:把我<b>做好的那个工具</b>交出去。其实,那只是能分享的<b>三层里最浅的一层</b>——先把这个误会破了。</p>
+
+    <div class="shift">
+      <div class="col old">
+        <h4>❌ 误会</h4>
+        <p class="txt">"分享 = 把我<b>做好的成品</b>,交给跟我干同一摊活的同事。我这活又专又杂、没现成工具能交——<b>所以我没啥可分享。</b>"</p>
+        <p class="note">结果:你以为自己两手空空,其实漏掉了水面下更大的两块</p>
+      </div>
+      <div class="col new">
+        <h4>✅ 真相</h4>
+        <p class="txt">能分享的<b>有三层</b>:做好的<b>成品</b>只是水面上一角;水下还有你的<b>搭法(骨架)</b>、和你交过学费攒下的<b>经验(踩坑 + 工具用法)</b>——<b>这两层才是大头,也最少人想到。</b></p>
+        <p class="note">三层里,你至少有一层现在就能递出去</p>
+      </div>
+    </div>
+
+    <h3>能沉淀的三层,是一座冰山</h3>
+    <p class="lead">大多数人只看见浮在水面上的"成品"。真正值钱、又最被忽略的,是水面下那两层——下面每层配个例子看看:</p>
+    <div style="background:linear-gradient(180deg,#eef6ff 0%,#dcebfb 38%,#9cc2ee 38.3%,#3f6fb5 100%);border-radius:14px;margin:18px 0;overflow:hidden">
+      <svg viewBox="0 0 600 300" width="100%" height="230" preserveAspectRatio="xMidYMid meet" style="display:block">
+        <line x1="0" y1="114" x2="600" y2="114" stroke="#fff" stroke-width="2" stroke-dasharray="7 6" opacity=".85"/>
+        <text x="14" y="108" fill="#27406e" font-size="13" font-weight="700">▽ 水面线</text>
+        <polygon points="300,28 352,114 248,114" fill="#ffffff"/>
+        <polygon points="248,114 352,114 412,182 378,252 300,286 214,256 192,186" fill="#eaf3ff" opacity=".96"/>
+        <text x="300" y="84" text-anchor="middle" fill="#27406e" font-size="15" font-weight="800">A 成品</text>
+        <text x="300" y="176" text-anchor="middle" fill="#27406e" font-size="15" font-weight="800">B 搭法</text>
+        <text x="300" y="232" text-anchor="middle" fill="#27406e" font-size="15" font-weight="800">C 经验</text>
+        <text x="588" y="58" text-anchor="end" fill="#27406e" font-size="12.5" font-weight="700">露出水面 · 只有一角</text>
+        <text x="588" y="276" text-anchor="end" fill="#ffffff" font-size="12.5" font-weight="700">沉在水下 · 才是大头</text>
+      </svg>
+    </div>
+    <div class="mods" style="grid-template-columns:1fr">
+      <div class="mod g1">
+        <div class="id">🔺 露出水面 · 大家唯一想得到的</div>
+        <div class="h">A · 成品 / 能力 —— 做好的工具,给同事直接用</div>
+        <p class="role">例:你做了个<b>"每周把数据套模板、自动出周报"</b>的小工具 → 同样要交周报的同事,直接拿去用。<span class="to">→ 多半打包成 Skill</span></p>
+      </div>
+      <div class="mod g2">
+        <div class="id">🔻 沉在水下 ① · 很多人没发现</div>
+        <div class="h">B · 搭法 / 骨架 —— 不给成品,给"你是怎么搭的"</div>
+        <p class="role">同一套<b>"按规则筛信息 → 工作台展示"</b>的骨架,换个业务照样能搭——我们的舆情监测、控费台、报告自动化,骨子里是同一套法。把你的搭法讲清楚,同事就能搭自己的新系统。<span class="to">→ 写成"搭建说明 / 模板"</span></p>
+      </div>
+      <div class="mod g3">
+        <div class="id">🔻 沉在水下 ② · 最看不见、最值钱</div>
+        <div class="h">C · 经验 / 踩坑 —— 你交过的学费</div>
+        <p class="role"><b>C1 跟 AI 沟通的教训:</b>哪种说法它听不懂、爱在哪翻车(如逼它"没把握就说没有、别编")。<b>　C2 工具用法:</b>上公众号 / 小红书<b>批量采集</b>、<b>转格式</b>工具怎么使。<span class="to">→ C1 写成规则,C2 打包成 Skill</span></p>
+      </div>
+    </div>
+
+    <h3>这三层不是我们瞎想——别的公司都在公开做</h3>
+    <p class="lead">满世界翻了一圈:从 Anthropic、OpenAI 到 LinkedIn、Rippling,<b>A / B / C 三层都有团队在公开沉淀、分享</b>(点名字跳原文):</p>
+    <div class="scroll">
+    <table class="dec">
+      <tr><th style="width:96px">三层</th><th>别家公司 / 社区,正在公开分享的</th><th>看这里</th></tr>
+      <tr><td><span class="map">A 成品</span></td><td>按岗位打包好的 <b>skill 合集</b>:一个仓就 <b>349 个</b>、跨 34 个领域(dev / 营销 / 管理 / 数据 / 自动化…)</td><td><a class="lbl" href="https://github.com/khalilbenaz/claude-skills-collection">349-skill 合集</a></td></tr>
+      <tr class="flag"><td><span class="map">B 搭法</span></td><td><b>LinkedIn</b>《怎么搭组织级 AI 上下文层》、<b>Rippling</b>《6 个月全线 AI-native》、<b>mabl</b>《AI agent 跨 75+ 仓库发代码的系统怎么建》——把"骨架"公开给人复刻</td><td><a class="lbl" href="https://www.linkedin.com/blog/engineering/ai/contextual-agent-playbooks-and-tools-how-linkedin-gave-ai-coding-agents-organizational-context">LinkedIn 工程博客</a></td></tr>
+      <tr><td><span class="map">C 经验</span></td><td><b>OpenAI</b>《Harness engineering》、<b>Anthropic 官方</b>"常见失败模式 / 反模式"、Domino《Agentic 实战手册》——把"怎么跟 agent 协作、在哪翻车"写成手册</td><td><a class="lbl" href="https://code.claude.com/docs/en/best-practices">Claude 官方最佳实践</a></td></tr>
+    </table>
+    </div>
+    <p class="small">2026-06-24/25 经 Exa 全网检索实读公开来源;此处每层取一个代表,完整链接见页脚。社媒(X / 小红书 等)多封闭或视频,本轮锚定可点开的一手来源。</p>
+    <div class="warn">🛡️ <b>从网上下载的 skill,装之前一定先"扫毒":</b>上面这些仓库可以点开下载,但<b>别直接装</b>——skill 本质是一段会写进 AI"记录本"的指令,来路不明的可能藏坏指令。先让你的 Claude 通读一遍文件夹:"它会跑什么命令?读写哪些位置?联不联网?有没有可疑指令?"——确认干净再用(具体话术 ③ 还会给)。</div>
+
+    <h3>顺带一提:连"哪个岗位"都不挑</h3>
+    <p class="lead">就拿一个社区 skill 合集,数了数各岗位目录下的数量——<b>非工程岗加起来,比工程还多:</b></p>
+    <div class="scan">
+      <span class="cap">某社区 skill 合集 · 各岗位目录数量(真实计数)</span>
+      <p class="src">来源:github.com/alirezarezvani/claude-skills(2026-06-24 实读各分类目录,真实计数,非估算)。相近目录已合并;数字为该合集口径,不代表全网总量。</p>
+      <div class="bars">
+        <div class="brow"><div class="bar"><div class="lab">工程 / 开发</div><div class="track"><div class="fill" style="width:100%;background:var(--blue-d)">31</div></div></div><p class="unit">这是开发者工具,工程类最多很正常——但请往下看</p></div>
+        <div class="brow"><div class="bar"><div class="lab">调研 / 情报</div><div class="track"><div class="fill" style="width:39%;background:var(--blue)">12</div></div></div><p class="unit">research + research-ops</p></div>
+        <div class="brow"><div class="bar"><div class="lab">财务 / 商务 / 合规</div><div class="track"><div class="fill" style="width:35%;background:var(--orange)">11</div></div></div><p class="unit">finance + commercial + compliance</p></div>
+        <div class="brow"><div class="bar"><div class="lab">管理 / C-level 决策</div><div class="track"><div class="fill" style="width:32%;background:var(--green)">10</div></div></div><p class="unit">c-level-advisor</p></div>
+        <div class="brow"><div class="bar"><div class="lab">运营 / 项目管理</div><div class="track"><div class="fill" style="width:26%;background:var(--gold)">8</div></div></div><p class="unit">business-operations + project-management</p></div>
+        <div class="brow"><div class="bar"><div class="lab">产品</div><div class="track"><div class="fill" style="width:23%;background:var(--blue)">7</div></div></div><p class="unit">product-team</p></div>
+        <div class="brow"><div class="bar"><div class="lab">个人效率 · 营销增长</div><div class="track"><div class="fill" style="width:29%;background:var(--orange)">9</div></div></div><p class="unit">productivity 5 + 营销 / 增长 4</p></div>
+      </div>
+    </div>
+    <div class="plain">🔑 <b>沉淀这事不分岗位,你那摊活也有得拆。</b>而拆出来的东西,落地无非三种形态——<b>Skill / 规则(CLAUDE.md) / Prompt</b>,正是下一节(②)要教你怎么打包的。</div>
+
+    <div class="motto">能分享的远不止"做好的工具"——你的搭法、你交过的学费,都是别人能直接拿去用的资产。</div>
+  </section>
+
+  <!-- ② 怎么拆 -->
+  <section id="c2">
+    <h2><span class="n">②</span>怎么拆<span class="en">了解 Skill / 规则(CLAUDE.md)</span></h2>
+    <p class="qline">认出来了,怎么把它"装"成 AI 能直接用的零件?</p>
+    <p class="lead">就三种形态:把一套流程<b>打包成 Skill</b>、把一条经验<b>写成规则(CLAUDE.md)</b>、把一段调顺的话<b>存成 Prompt</b>。下面各讲明白、配真实例子。</p>
+
+    <!-- Skill -->
+    <h3>拆法一 · 打包成 Skill</h3>
+    <div class="plain"><b>什么是 Skill(用大白话):</b>把"做一件事的完整步骤"教给 AI、存成一个<b>带名字的小包</b>,以后喊名字它就照着做。像给同学写了一张<b>"菜谱"</b>——谁拿到都能照着做出同一道菜,不用你在旁边盯。</div>
+    <div class="scroll">
+    <table class="dec">
+      <tr><th>关于 Skill,你只要搞懂四件事</th><th>说人话</th></tr>
+      <tr><td><span class="lbl">什么东西能做成?</span></td><td>你会<b>反复做、步骤比较固定</b>的事(每周周报排版、每次出 HTML 套同一套模板)。一次性的活不值得做。</td></tr>
+      <tr><td><span class="lbl">用什么做成?</span></td><td><b>不用写代码</b>——把"你平时怎么做这件事"讲给 Claude,让它替你整理成一个 <code>SKILL.md</code>(就是那张菜谱)。</td></tr>
+      <tr class="flag"><td><span class="lbl">做 vs 不做,差在哪?</span></td><td>不做:每次<b>从头交代一遍、还常漏步骤</b>;做成 Skill:<b>一句话调起、步骤不走样,还能整包发给同事</b>。</td></tr>
+      <tr><td><span class="lbl">长什么样?</span></td><td>一个文件夹,里面一个 <code>SKILL.md</code>:开头写"叫什么、干嘛用、何时用",下面是步骤。就这么简单。</td></tr>
+    </table>
+    </div>
+    <p class="small">💡 真实例子:团队已经把"出 HTML 选对模板、套品牌色"打包成了一个 skill。要做课件时,一句话就调起来,版式不用从头调:</p>
+    <div class="mono"><span class="p">›</span> 帮我做一页午餐分享用的课件
+
+<span class="g">✓</span> 已加载 skill:公司 HTML 模板
+  <span class="c">→ 自动套白底工具风 + 品牌蓝 #3966CA</span>
+  <span class="c">→ 版式、打印样式都现成,直接往里填内容</span></div>
+    <div class="pains">⭐ <b>窍门:</b>你甚至不用记里面的步骤——Skill 把"怎么做"固化进去了,喊名字就执行。能反复用的活,都能这样攒成一张张"菜谱"。</div>
+
+    <!-- 规则 -->
+    <h3>拆法二 · 写成一条规则(CLAUDE.md)</h3>
+    <div class="plain"><b>什么是 CLAUDE.md(用大白话):</b>它是 AI 的<b>"员工手册"</b>,放在你项目里。每次开新对话,AI 都会<b>先自动读一遍</b>。写进去的规则 = "入职须知",它从此默认遵守,你不用每次重新交代。</div>
+    <div class="shift">
+      <div class="col good">
+        <h4>✅ 该写进去(写一次,永久生效)</h4>
+        <p class="txt">· 你是谁 + 环境(Windows、中文用户名、文件放哪个盘)<br>· 团队规则(给同事的工具要透明可验;C 盘不落地)<br>· 输出偏好(中文回复、报告套某模板)</p>
+      </div>
+      <div class="col old">
+        <h4>🚫 别写进去</h4>
+        <p class="txt">· 一次性的任务细节(这次这个文件怎么改)<br>· 涉密数据(客户名单、财务数字)<br>· 写成长篇百科——每次对话它全文都要读一遍,越长越慢</p>
+        <p class="note">当"查找表",别当"百科全书";控制在 200 行内</p>
+      </div>
+    </div>
+    <p class="small">💡 真实例子:一条我们踩出来的坑——"中文路径别用 cmd 开 Chrome"(会静默失败、还假装成功)。写进 CLAUDE.md 后,AI 自己绕开:</p>
+    <div class="shift">
+      <div class="col old">
+        <h4>❌ 没写进规则</h4>
+        <div class="mono" style="margin:0;background:#fbfbfb"><span class="p">›</span> 打开 E:\调研\报告.html
+cmd start chrome "E:\调研\报告.html"
+<span class="g">✓</span> 完成
+
+<span class="c">其实是空白页,但它"以为"</span>
+<span class="c">成功了——你被骗,下次还踩</span></div>
+      </div>
+      <div class="col new">
+        <h4>✅ 写进 CLAUDE.md</h4>
+        <div class="mono" style="margin:0"><span class="p">›</span> 打开 E:\调研\报告.html
+<span class="y">📋 已读 CLAUDE.md 规则:</span>
+ 中文路径用 PowerShell
+ Start-Process,不用 cmd
+<span class="g">✓</span> 用 Start-Process 打开
+<span class="g">✓</span> 已确认页面正常</div>
+      </div>
+    </div>
+    <div class="pains">⭐ <b>窍门:</b>你踩一次,写成一两句话塞进 CLAUDE.md,<b>全团队的 AI 从此自动绕开</b>。越短越好。<br>📖 想更系统地管 CLAUDE.md / AGENTS.md、还有上下文与长期记忆 <code>/memory</code> → 翻上一期 <a href="B1.html">《Context Engineering 课件》</a>。</div>
+
+    <div class="warn">💡 还有一种<b>门槛最低</b>的零件:一段你反复在用、调顺了的话(Prompt),存下来下次直接粘——比如"我做的东西要发同事,他们用 Windows+WPS、没装开发环境,请确保双击就能用"。不用打包、不用写规则,存一段就是资产。</div>
+
+    <h4 style="font-size:15px;margin:30px 0 8px;color:var(--blue-d);border-bottom:2px solid var(--line);padding-bottom:6px">拆法二的活样本 · 我们真踩出来的几条规则(C 经验层)</h4>
+    <p class="small">这些就是上一节冰山里 <b>C1「跟 AI 沟通的教训」</b>那一层——每条写成一句话贴进 CLAUDE.md,你的 AI 从此自动绕开:</p>
+    <div class="scroll">
+    <table class="dec">
+      <tr><th>这条规则(踩坑换来的)</th><th>谁会遇到,就拿去贴进 CLAUDE.md</th></tr>
+      <tr><td><b>中文路径开文件,用 PowerShell Start-Process、别用 cmd</b>(cmd 会静默失败、还假装成功)</td><td>任何在中文 Windows 上让 AI 开本地文件 / 网页的人</td></tr>
+      <tr><td><b>让 AI "没把握就说没有、别编"</b>:涉及数字 / 事实,要求它逐字从原文取证</td><td>任何用 AI 出涉及数据 / 事实内容的人(怕它一本正经胡说)</td></tr>
+      <tr><td><b>给同事用的工具要"白盒化"</b>:输入 / 规则 / 过程 / 结果 / 异常都摆明,让非技术同事能自己 QA</td><td>任何做工具要发给别的同事用的人</td></tr>
+      <tr><td><b>交付前必须真跑一遍</b>(build / 实测),别只静态看一眼就说"好了"</td><td>任何用 AI 出代码 / 工具并交付的人</td></tr>
+      <tr><td><b>给老板的报告要书面化、去口语、结论先行</b>(别堆黑话、字别太灰)</td><td>任何要给中高层写汇报 / 报告的人</td></tr>
+      <tr><td><b>批量删文件前先列清单、删后留一份 .md 日志</b>(可回滚、可追责)</td><td>任何要让 AI 批量清理 / 删文件的人</td></tr>
+    </table>
+    </div>
+
+    <div class="pains">⭐ <b>记住三种形态就够了:</b>能反复做的流程 → 打包成 <b>Skill</b>;一条经验 / 沟通教训 → 写进 <b>CLAUDE.md 规则</b>;一段调顺的话 → 存成 <b>Prompt</b>。冰山三层(成品 / 搭法 / 经验),都能装进这三种形态里,丢进<a href="B9-index.html">团队资产库</a>。</div>
+
+    <div class="motto">不用交出整个项目,打包成 Skill、写成一条规则、或存一段 Prompt,你随手就能递出一块资产。</div>
+  </section>
+
+  <!-- ③ 怎么分享 -->
+  <section id="c3">
+    <h2><span class="n">③</span>怎么分享<span class="en">A2A:Claude Code 之间互传经验</span></h2>
+    <p class="qline">拆好的零件,怎么让同事直接用上?</p>
+    <p class="lead">我们的惯性是:"我得写个文档、录个教程,让同事<b>看懂、学会、再照着做</b>。"——这是<b>传统的"教人"</b>:慢,靠人的记性,时间一长就走样。今天想请你换一个思路。</p>
+    <div class="plain">💡 <b>认识一个新词:A2A(Agent2Agent)。</b>Google 今年提出的概念,本意是"<b>让 AI agent 之间互相协作、彼此交接任务</b>"。落到我们这儿最接地气的一种:<b>你不去教同事这个"人",而是让你的 agent 把本事打包成零件、交给同事的 agent。</b></div>
+    <div class="shift">
+      <div class="col old">
+        <h4>🧑‍🏫 传统 · 教人</h4>
+        <p class="txt">你写份文档 / 录个教程 → 同事<b>人读 → 人懂 → 人照做</b>。</p>
+        <p class="note">慢;全靠人的记性——会忘、每次做得还不一样</p>
+      </div>
+      <div class="col new">
+        <h4>🤖 A2A · 让 agent 教 agent</h4>
+        <p class="txt">你的 agent 把本事打包成零件 → 同事的 agent <b>直接吃进去、之后自动调用</b>,不用再教第二遍。</p>
+        <p class="note">比人记得牢、做得稳(前提:规则别写太长太杂,否则它也会看漏)</p>
+      </div>
+    </div>
+    <p class="small">说穿了:省掉的,正是传统教人里最费劲的那段"<b>人肉学习</b>"。</p>
+
+    <h3>方向一 · 把你的零件,发给同事</h3>
+    <p class="lead">别被"A2A"唬住,说穿了就一句话:<b>把你那一小块零件的内容,发给同事,他放进自己的 Claude Code。</b>发什么、怎么放,就看零件是哪一种——</p>
+    <div class="scroll">
+    <table class="dec">
+      <tr><th>零件是哪种</th><th>你发什么</th><th>同事怎么"装"</th></tr>
+      <tr><td><span class="lbl">规则 / 一句好用的话</span></td><td>就几句文字,直接微信 / 飞书发</td><td>对他的 Claude 说一句"把这几句写进我的 CLAUDE.md"</td></tr>
+      <tr><td><span class="lbl">Skill</span></td><td>一个文件夹(里面是 SKILL.md),压成 zip 发</td><td>解压,放进自己的 skills 文件夹,重开对话就能用</td></tr>
+    </table>
+    </div>
+    <p class="lead">举个最常见的:把你刚踩的"中文路径"那条坑,发成一条规则——三步:</p>
+    <ol class="steps">
+      <li>
+        <p class="who"><span class="you">① 你这边</span> · 让 AI 把刚踩的坑,整理成一条能直接用的规则</p>
+        <div class="mono" style="margin:0"><span class="p">›</span> 我刚发现:中文路径别用 cmd 开 Chrome,会静默失败。
+  帮我写成一条能直接贴进 CLAUDE.md 的规则,越短越好。
+
+<span class="g">✓</span> 规则草稿(复制这两行就行):
+  <span class="c">打开含中文路径的本地文件 / 网页,用 PowerShell Start-Process,</span>
+  <span class="c">不要用 cmd start chrome(会静默失败、还假装成功)。</span></div>
+      </li>
+      <li>
+        <p class="who"><span class="you">② 发出去</span> · 把这两行 + 一句话,微信 / 飞书丢给同事</p>
+        <div class="mono" style="margin:0"><span class="c"># 不用开会、不用写说明,原话发:</span>
+"这是我踩出来的一条规则,让你的 Claude 把它写进 CLAUDE.md,
+ 以后开中文路径的文件就不会翻车了。"</div>
+      </li>
+      <li>
+        <p class="who"><span class="mate">③ 同事那边</span> · 他把这两行交给自己的 Claude,一次,永久生效</p>
+        <div class="mono" style="margin:0"><span class="p">›</span> [粘上你发的那两行] 帮我写进 CLAUDE.md
+<span class="g">✓</span> 已写入,下次新对话自动生效
+
+<span class="c"># 几天后他随手开一个中文路径的文件 —— AI 自己就绕开了那个坑</span></div>
+      </li>
+    </ol>
+    <p class="small">关键就一点:你只发了<b>两行字</b>,同事的 Claude 却<b>永久</b>记住了这件事——他甚至不用知道这条规则是你贡献的。这就是"零件"比"发一篇说明文档"强的地方:<b>文档要人读、人记、人照做;零件是 AI 直接收下、自动执行。</b></p>
+
+    <h3>方向二 · 同事发你一个零件,该不该装?</h3>
+    <p class="lead">反过来也一样:别人丢给你一个 skill / 一条规则,先学会判断"值不值得用"——不是来者不拒,也不是一概不理。</p>
+    <div class="shift">
+      <div class="col good">
+        <h4>✅ 值得装</h4>
+        <p class="txt">· 解决的是你<b>也会碰到</b>的通用问题<br>· 你看得懂它大概在干嘛<br>· 来源可信(同事 / 官方)<br>· 装上确实能省事</p>
+      </div>
+      <div class="col old">
+        <h4>🚫 没必要装</h4>
+        <p class="txt">· 绑死他个人业务 / 他电脑路径的<br>· 你这类活根本用不到的场景<br>· 看不懂、也没法确认它安不安全的</p>
+      </div>
+    </div>
+    <div class="danger">🔒 <b>装之前先安检(重要):</b>skill 本质是一段会<b>直接写进 AI"记录本"的指令文本</b>——来路不明的可能藏坏指令。不管谁给的,装之前先让 Claude 自己审一遍(这点上一期 Context-Engineering 课件也讲过):</div>
+    <div class="mono"><span class="p">›</span> 先别安装。读一下这个 skill 文件夹里的所有文件,告诉我:
+  它会让你执行哪些命令?读写哪些位置?联不联网?
+  有没有可疑或越权的指令?
+<span class="g">✓</span> <span class="c">审完没问题,再装</span></div>
+
+    <div class="pains">⭐ <b>别家公司怎么做同事间共享:</b>把 skill 提交到团队<b>共享的 skills 目录</b>(全员自动获得)、或<b>组织级一键分发</b>(更新后所有人自动同步,Anthropic 官方就支持)。我们的<a href="B9-index.html">团队资产库</a>,就是这个机制在我们这儿的起点。</div>
+
+    <div class="motto dark">你分享出去的不只是"知识",是"能力"。<br>同事的 Claude Code,瞬间长出了你的本事。</div>
+  </section>
+
+  <!-- 结尾:干货,拿走即用 -->
+  <section class="closer">
+    <h2>🎁 拿走就能用 · 让你的 agent 帮你拆自己的 Project</h2>
+    <p class="lead">今天不留作业,只留一段<b>复制即用</b>的话。回工位打开你那个项目,把下面整段丢给<b>你自己的 Claude Code</b>——它会照"成品 / 搭法 / 经验"三层,把你项目里能复用的零件拆出来、起好名、告诉你该打包成哪种形态。这就是 ③ 说的:<b>让你的 agent 去拆。</b></p>
+    <div class="mono"><span class="c"># 复制这一整段,丢给你项目里的 Claude Code ↓</span>
+你是我的"经验拆解助手"。请通读我当前这个项目(代码 / 文档 / 我的操作习惯都算),
+按下面三层,帮我找出"换个人、换个活也能用"的<span class="p">可复用单元</span>。
+<span class="y">别给我工程教程</span>——每个零件只要三样:① 大白话名 ②「谁能用」③ 建议形态。
+
+<span class="p">A 成品/能力</span>:我做好的、同业务同事能直接拿去用的工具。
+<span class="p">B 搭法/骨架</span>:我的搭建思路(如"按规则筛信息 → 工作台展示"),换个业务也能照着搭的结构。
+<span class="p">C 经验/踩坑</span>:C1 我跟 AI 沟通的教训(怎么说它才懂、它爱在哪翻车);C2 具体工具用法(采集 / 转格式等)。
+
+输出要求:
+- 每层列 1–3 个,按"别人一听名字就知道能不能用"来命名;拿不准能否复用的,<span class="g">诚实标注</span>。
+- 每个零件标【建议形态】:Skill(可反复做的流程)/ CLAUDE.md 规则(一条经验)/ Prompt(一段调顺的话)。
+- 最后挑出"<span class="g">最该第一个分享出去</span>"的那一个,直接帮我打包好(写出 SKILL.md 或那条规则的原文)。</div>
+  </section>
+
+  <footer>
+    <p><strong style="color:var(--blue-d)">仅作分享。</strong>边吃边听、欢迎讨论,不是考核标准。哪招好用留哪招;拆出好零件,丢到 AI 群里,下一个受益的可能就是你。</p>
+    <p class="grp-links">这一组配套:<a href="B9-guide.md">沉淀资产上手指南</a> · <a href="B9-index.html">团队资产库索引</a> · <span>阶段定位与方向备忘</span> · 上一期 <a href="B1.html">Context Engineering 课件(省 token)</a> · 延伸 <a href="A1.html">Claude Code 入门指南</a></p>
+    <p>业界参照(概念):<a href="https://claude.com/blog/skills-explained">Anthropic · Skills explained</a> · <a href="https://code.claude.com/docs/en/sub-agents">Claude Code 官方 · Subagents</a> · <a href="https://www.ibm.com/think/topics/agent2agent-protocol">IBM · 什么是 Agent2Agent(A2A)协议</a> · <a href="https://www.agensi.io/learn/how-to-share-claude-code-skills-with-team">How to Share Claude Code Skills With Your Team</a></p>
+    <p>业界来源(三层实证 / 柱状图均 2026-06-24~25 经 Exa 实读公开来源):
+    <b>A 成品</b> <a href="https://github.com/khalilbenaz/claude-skills-collection">349-skill 合集</a> · <a href="https://github.com/alirezarezvani/claude-skills">claude-skills(柱状图语料)</a>;
+    <b>B 搭法</b> <a href="https://www.linkedin.com/blog/engineering/ai/contextual-agent-playbooks-and-tools-how-linkedin-gave-ai-coding-agents-organizational-context">LinkedIn 工程博客</a> · <a href="https://www.mabl.com/blog/how-we-built-a-system-for-ai-agents-to-ship-real-code-across-75-repos">mabl</a>;
+    <b>C 经验</b> <a href="https://code.claude.com/docs/en/best-practices">Anthropic 官方最佳实践</a> · <a href="https://www.engineering.fyi/article/harness-engineering-leveraging-codex-in-an-agent-first-world">OpenAI · Harness engineering</a>;
+    <b>C2 工具</b> <a href="https://github.com/whynpc9/wespy-plus">wespy-plus(公众号采集+转格式)</a>。
+    <br><span style="color:var(--muted)">柱状图 = 社区合集各岗位目录的真实计数;收藏数取当日;社媒(X / 小红书 等)多为封闭或视频,本轮锚定可点开的一手来源。</span></p>
+    <p style="margin-top:14px">AI Office Hour · 2026-06-25 · 主讲 / 整理 Alex 郑晓琪</p>
+  </footer>
+
+</div>
+
+<div class="watermark"><span class="b"></span><span class="s">·</span>Alex 郑晓琪</div>
+
+<script>
+const links=document.querySelectorAll('nav.anchors a[href^="#"]');
+const secs=[...links].map(a=>document.querySelector(a.getAttribute('href')));
+addEventListener('scroll',()=>{let i=secs.findIndex(s=>s&&s.getBoundingClientRect().top>90)-1;
+if(i<-1)i=secs.length-1;if(i<0)i=0;links.forEach((a,j)=>a.classList.toggle('on',j===i));},{passive:true});
+</script>
+</body>
+</html>

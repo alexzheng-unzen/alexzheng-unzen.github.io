@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta name="robots" content="noindex, noai, noimageai, noarchive">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>团队 AI 资产库 · 索引与提交指引</title>
+<style>
+  :root {
+    --bg: #FAFAF7; --surface: #FFFFFF; --ink: #1A1A1A; --ink-soft: #3D3D3D; --muted: #6B6B6B;
+    --line: #E8E5DD; --line-soft: #F0EDE6;
+    --accent: #3966CA; --accent-soft: #EAF0FB;
+    --solve: #2D6A4F; --solve-soft: #E8F1ED;
+    --gold: #B6862C; --gold-soft: #FBF4E4;
+    --term-bg: #1C1C1E; --term-ink: #F5F5F5; --term-muted: #8E8E93; --term-amber: #FBBF24;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; background: var(--bg); color: var(--ink); line-height: 1.75; font-size: 16px; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 80px 32px 120px; }
+
+  .docnav { position: sticky; top: 0; z-index: 900; background: rgba(255,255,255,0.92); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .docnav .inner { max-width: 760px; margin: 0 auto; padding: 10px 32px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: 13px; }
+  .docnav .label { color: var(--muted); margin-right: 4px; }
+  .docnav a { color: var(--ink-soft); border: 1px solid var(--line); padding: 5px 12px; border-radius: 6px; text-decoration: none; }
+  .docnav a:hover { border-color: var(--accent); color: var(--accent); }
+  .docnav a.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  @media print { .docnav { display: none; } }
+
+  .hero { border-bottom: 1px solid var(--line); padding-bottom: 48px; margin-bottom: 52px; }
+  .eyebrow { font-size: 13px; font-weight: 600; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 18px; }
+  h1 { font-size: clamp(32px, 5vw, 44px); font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 18px; }
+  .lede { font-size: 18px; line-height: 1.6; color: var(--ink-soft); max-width: 620px; }
+  .lede strong { color: var(--ink); font-weight: 600; }
+
+  section { margin-bottom: 64px; }
+  h2 { font-size: 26px; font-weight: 700; line-height: 1.25; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 2px solid var(--ink); }
+  h3 { font-size: 19px; font-weight: 600; margin: 30px 0 12px; }
+  p { margin-bottom: 14px; color: var(--ink-soft); }
+  p strong { color: var(--ink); font-weight: 600; }
+  ul, ol { margin: 12px 0 18px 22px; color: var(--ink-soft); }
+  li { margin-bottom: 8px; }
+  code { font-family: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace; background: var(--line-soft); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: var(--ink); }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-soft); }
+  a:hover { border-bottom-color: var(--accent); }
+  .section-lede { font-size: 16.5px; color: var(--ink-soft); margin-bottom: 18px; }
+
+  /* type cards */
+  .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 20px 0; }
+  .type { border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; background: var(--surface); }
+  .type .t-name { font-weight: 700; color: var(--accent); margin-bottom: 6px; }
+  .type .t-desc { font-size: 14.5px; color: var(--ink-soft); margin: 0 0 8px; }
+  .type .t-eg { font-size: 13px; color: var(--muted); }
+  @media (max-width: 640px) { .type-grid { grid-template-columns: 1fr; } }
+
+  /* asset list grouped */
+  .grp { margin: 20px 0; }
+  .grp-title { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  .asset { border: 1px solid var(--line); border-radius: 10px; padding: 14px 18px; background: var(--surface); margin-bottom: 10px; display: flex; gap: 14px; align-items: flex-start; }
+  .asset .tag { flex: 0 0 auto; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; background: var(--gold-soft); color: var(--gold); margin-top: 2px; }
+  .asset .meat .name { font-weight: 600; color: var(--ink); }
+  .asset .meat .what { font-size: 14px; color: var(--ink-soft); margin: 2px 0 0; }
+
+  /* submission template */
+  .tmpl { background: var(--term-bg); border-radius: 10px; margin: 18px 0; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+  .tmpl-bar { background: #2C2C2E; padding: 10px 14px; display: flex; align-items: center; gap: 10px; }
+  .tmpl-bar .title { font-size: 12px; color: var(--term-muted); font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .tmpl-bar .copy-btn { margin-left: auto; background: var(--accent); color: #fff; border: none; font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 5px; cursor: pointer; }
+  .tmpl-bar .copy-btn:hover { background: #2B4FA0; }
+  .tmpl pre { padding: 18px 20px; color: var(--term-ink); font-family: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace; font-size: 13.5px; line-height: 1.7; white-space: pre-wrap; word-break: break-word; margin: 0; }
+  .tmpl pre .lbl { color: var(--term-amber); }
+
+  .tip { background: var(--solve-soft); border-left: 3px solid var(--solve); padding: 14px 18px; margin: 16px 0; border-radius: 0 6px 6px 0; font-size: 15px; color: var(--ink-soft); }
+  .tip strong { color: var(--solve); }
+  .note { background: var(--accent-soft); border-left: 3px solid var(--accent); padding: 14px 18px; margin: 16px 0; border-radius: 0 6px 6px 0; font-size: 15px; color: var(--ink-soft); }
+  .note strong { color: var(--accent); }
+
+  footer { border-top: 1px solid var(--line); padding-top: 26px; margin-top: 56px; font-size: 13px; color: var(--muted); line-height: 1.7; }
+  .watermark { position: fixed; bottom: 18px; right: 22px; font-size: 11px; font-weight: 500; color: rgba(26,26,26,0.45); background: rgba(255,255,255,0.88); padding: 6px 12px; border: 1px solid rgba(0,0,0,0.08); border-radius: 4px; pointer-events: none; z-index: 1000; }
+  .watermark .wm-brand { color: var(--accent); font-weight: 600; }
+  .watermark .wm-sep { margin: 0 6px; color: rgba(0,0,0,0.2); }
+
+  @media print { body { background: white; } .wrap { padding: 24px; } .tmpl { box-shadow: none; } .copy-btn { display: none; } .watermark { position: static; } section { page-break-inside: avoid; } }
+</style>
+</head>
+<body>
+
+  <nav class="docnav"><div class="inner"><span class="label">这一组:</span>
+    <a href="B9.html">觉醒课件</a>
+    <a class="active" href="B9-index.html">团队资产库</a>
+    <span>方向备忘</span>
+  </div></nav>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">团队资产库 · Team Asset Library</div>
+    <h1>我们沉淀好东西的地方</h1>
+    <p class="lede">
+      你跑通的好流程、好 prompt、好模板,不该只活在你一个人的电脑里。
+      <strong>放进来,它就能被别人找到、被反复用,还替你署着名。</strong>
+      这页讲清:库里有什么、什么算资产、怎么提交。
+    </p>
+  </header>
+
+  <!-- TYPES -->
+  <section id="types">
+    <h2>什么算一个"资产"</h2>
+    <p class="section-lede">不用很大很正式。下面任意一类,只要别人能复用,就值得进库:</p>
+    <div class="type-grid">
+      <div class="type">
+        <div class="t-name">Skill</div>
+        <p class="t-desc">把整套流程打包,别人一句话就能调起来。</p>
+        <div class="t-eg">例:保单 PDF 清洗、RAG 检索增强包</div>
+      </div>
+      <div class="type">
+        <div class="t-name">模板 Template</div>
+        <p class="t-desc">留出空让人填,换个场景照样能用。</p>
+        <div class="t-eg">例:Excel 模板映射、课件 HTML 模板</div>
+      </div>
+      <div class="type">
+        <div class="t-name">Prompt</div>
+        <p class="t-desc">一段反复好用的话,存下来直接抄。</p>
+        <div class="t-eg">例:给同事工具时的"白盒化"指令开头</div>
+      </div>
+      <div class="type">
+        <div class="t-name">规则 Rule</div>
+        <p class="t-desc">写进 <code>CLAUDE.md</code>,让大家默认遵守。</p>
+        <div class="t-eg">例:Agent Clutter Prevention、品牌语气</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CURRENT LIBRARY -->
+  <section id="library">
+    <h2>库里有什么</h2>
+    <p class="section-lede">下面是<strong>团队自己造的</strong>资产——经过一遍清点、每条都对得上文件的真实清单。(我们装的那些第三方 skill 不算自家资产,不列在这。)</p>
+
+    <div class="grp">
+      <div class="grp-title">✅ 已成型 · 即刻可用</div>
+      <div class="asset"><span class="tag">规则</span><div class="meat"><div class="name">品牌语气(brand-voice)</div><p class="what">对外正式 / B2B 文案的语气法则 + 术语词典,口径一致。</p></div></div>
+      <div class="asset"><span class="tag">规则</span><div class="meat"><div class="name">内部工具白盒化七项</div><p class="what">给同事的工具必过的 7 项透明 checklist,非技术同事也能验。</p></div></div>
+      <div class="asset"><span class="tag">规则</span><div class="meat"><div class="name">数据工具踩坑清单</div><p class="what">19 个真实坑 + 16 项飞行前 checklist,做数据工具前先读。</p></div></div>
+      <div class="asset"><span class="tag">模板</span><div class="meat"><div class="name">Excel 模板映射</div><p class="what">字段翻译、覆盖规则、一拆多的通用打法。</p></div></div>
+      <div class="asset"><span class="tag">规则</span><div class="meat"><div class="name">Agent 防乱建(clutter-prevention)</div><p class="what">5 条红线,防 AI 到处乱建文件——所有项目自动遵守。</p></div></div>
+      <div class="asset"><span class="tag">Skill</span><div class="meat"><div class="name">玩法说明书写法(research-game-manual)<span style="color:var(--solve);font-weight:600;font-size:12px;"> · 新打包</span></div><p class="what">"牌桌→破局→体验→商业→流程→转正"六段框架 + 空白模板,每次调研都用。</p></div></div>
+      <div class="asset"><span class="tag">Skill</span><div class="meat"><div class="name">公司 HTML 模板组(html-templates)<span style="color:var(--solve);font-weight:600;font-size:12px;"> · 新打包</span></div><p class="what">报告用 AM 卡片风、培训用白底壳,选对即套,配公司色板。</p></div></div>
+    </div>
+
+    <div class="grp">
+      <div class="grp-title">⭐ 高频好料 · 待打包入库</div>
+      <div class="asset"><span class="tag">规则·Prompt</span><div class="meat"><div class="name">品牌 Token + AI 提示块</div><p class="what">色值 / 字体 / 配色规则 + 三场景现成提示块,任何对外物料即用。</p></div></div>
+      <div class="asset"><span class="tag">Prompt·规则</span><div class="meat"><div class="name">沉淀资产傻瓜指南</div><p class="what">5 步把跑通的东西变成资产——全员资产化的起点流程。</p></div></div>
+      <div class="asset"><span class="tag">Skill</span><div class="meat"><div class="name">团队用量编译脚本(build.mjs)</div><p class="what">配 roster.json,从用量数据出排名 / 奖牌 / 成本,周报每周跑。</p></div></div>
+    </div>
+
+    <p style="font-size:13.5px;color:var(--muted);margin-top:18px;">注:定价模型、国医保编码爬虫、低代码催收等是<strong>好的项目样本</strong>(下次类似项目可翻出来参考),但不属于"大家会反复调用的资产",暂不入库,以免给库灌水。</p>
+  </section>
+
+  <!-- HOW TO SUBMIT -->
+  <section id="submit">
+    <h2>怎么提交</h2>
+    <p class="section-lede">不用写得很完整。复制下面这张小卡,填好,连同你的东西一起丢进库里就行。</p>
+
+    <div class="tmpl">
+      <div class="tmpl-bar">
+        <span class="title">资产提交卡</span>
+        <button class="copy-btn" onclick="copyTmpl()">复制</button>
+      </div>
+      <pre id="tmpl-text"><span class="lbl">【资产名】</span> 一句话能看懂的名字
+<span class="lbl">【类型】</span>   Skill / 模板 / Prompt / 规则(选一个)
+<span class="lbl">【解决什么】</span> 它帮人省了什么事 / 解决什么问题
+<span class="lbl">【怎么用】</span> 一句话说清怎么调起来(命令 / 在哪填)
+<span class="lbl">【作者】</span>   你的名字
+<span class="lbl">【日期】</span>   YYYY-MM-DD</pre>
+    </div>
+
+    <div class="tip">
+      <strong>门槛很低:</strong>哪怕只是一段你反复在用的 prompt,也欢迎丢进来。
+      资产不是"做得多完美才配进库",而是"只要别人能用上,就值得留下"。
+    </div>
+
+    <div class="note" id="location-note">
+      <strong>放在哪(待定):</strong>团队共享落点正在确认中——
+      待定为<strong>飞书知识库</strong>或<strong>共享盘</strong>其一。确定后这里会更新具体入口,
+      本页也会作为它的封面/导航。在此之前,先把你的资产提交卡 + 文件发给 Alex 汇总。
+    </div>
+  </section>
+
+  <footer>
+    团队 AI 资产库 · 索引与提交指引 · v0.1<br>
+    维护:<strong style="color: var(--accent);">Alex 郑晓琪</strong> <br>
+    配套:周四《把你的项目变成团队的资产》觉醒课件 + 阶段定位与方向备忘。
+  </footer>
+
+</div>
+
+<div class="watermark">
+  <span class="wm-brand"></span>
+  <span class="wm-sep">·</span>
+  Alex 郑晓琪
+</div>
+
+<script>
+  function copyTmpl() {
+    var el = document.getElementById('tmpl-text');
+    var text = el.innerText || el.textContent;
+    navigator.clipboard.writeText(text).then(function () {
+      var btn = document.querySelector('.copy-btn');
+      var old = btn.textContent; btn.textContent = '已复制 ✓';
+      setTimeout(function () { btn.textContent = old; }, 1600);
+    });
+  }
+</script>
+
+</body>
+</html>

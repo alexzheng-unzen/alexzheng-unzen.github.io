@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta name="robots" content="noindex, noai, noimageai, noarchive">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude 信息备份指南 · 全员版</title>
+<style>
+  :root{--blue:#3966CA;--ink:#1a1f2e;--muted:#6b7488;--line:#e4e8f0;--bg:#f4f6fb;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  [hidden]{display:none!important;}
+  body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.6;padding:30px 20px;}
+  .wrap{max-width:940px;margin:0 auto;}
+
+  .hero{background:linear-gradient(135deg,#3966CA,#5b86e0);color:#fff;border-radius:16px;padding:28px 30px;}
+  .hero .kick{font:600 12px/1 "SF Mono",Consolas,monospace;letter-spacing:.15em;opacity:.85;margin-bottom:10px;}
+  .hero h1{font-size:24px;font-weight:780;line-height:1.3;}
+  .hero p{font-size:14px;opacity:.96;margin-top:10px;max-width:730px;}
+  .hero .meta{font-size:12px;opacity:.8;margin-top:14px;}
+
+  .filterbar{position:sticky;top:10px;z-index:20;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);
+    border:1px solid #c5d6f5;border-radius:14px;padding:16px 18px;margin-top:16px;box-shadow:0 6px 22px rgba(20,30,60,.08);}
+  .filterbar .ftitle{font-size:13px;font-weight:750;color:var(--blue);margin-bottom:10px;}
+  .frow{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:8px 0;}
+  .flabel{font-size:13px;font-weight:700;color:#33405e;width:86px;flex:none;}
+  .seg{display:inline-flex;background:#eef1f6;border-radius:10px;padding:3px;gap:3px;flex-wrap:wrap;}
+  .seg button{border:none;background:transparent;color:#4a5570;font:600 13px/1 inherit;
+    padding:8px 14px;border-radius:8px;cursor:pointer;transition:.15s;}
+  .seg button:hover{color:var(--blue);}
+  .seg button.active{background:var(--blue);color:#fff;box-shadow:0 2px 7px rgba(57,102,202,.35);}
+  .fnow{font-size:12.5px;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px dashed #d9e3f7;}
+  .fnow b{color:var(--blue);}
+
+  .panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px 24px;
+    box-shadow:0 4px 18px rgba(20,30,60,.05);margin-top:16px;}
+  .panel h2{font-size:17px;font-weight:760;margin-bottom:4px;color:var(--ink);}
+  .panel h2 .pill{font-size:11.5px;font-weight:700;color:#fff;border-radius:6px;padding:2px 9px;margin-right:8px;vertical-align:middle;}
+  .pill-os{background:#0a8f5b;} .pill-acct{background:var(--blue);}
+  .panel .note{font-size:13px;color:var(--muted);margin-bottom:14px;}
+  .panel .note b{color:#33405e;}
+
+  code{background:#eef1f6;border-radius:4px;padding:1px 6px;font:12.5px "SF Mono",Consolas,monospace;color:#33405e;word-break:break-all;}
+
+  .homes{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .home{border-radius:12px;padding:16px 18px;font-size:13.5px;}
+  .home.loc{background:#e9f6ef;border:1px solid #bfe6d0;}
+  .home.cld{background:#fdeeec;border:1px solid #f3cdc6;}
+  .home .ht{font-weight:780;font-size:15px;margin-bottom:8px;}
+  .home.loc .ht{color:#1f9d6b;} .home.cld .ht{color:#d4453b;}
+  .home ul{margin:0 0 0 17px;padding:0;} .home li{margin:5px 0;}
+  @media(max-width:680px){.homes{grid-template-columns:1fr;}}
+
+  .scroll{overflow-x:auto;}
+  table.cmp{border-collapse:collapse;width:100%;font-size:13px;margin-top:2px;}
+  table.cmp th,table.cmp td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top;}
+  table.cmp th{background:#eef1f6;font-weight:700;color:#33405e;font-size:12.5px;}
+  table.cmp tr:nth-child(even) td{background:#fafbfe;}
+  table.cmp td.p{font-weight:700;color:var(--blue);white-space:nowrap;}
+  .ok{color:#1f9d6b;font-weight:700;}
+
+  .callout{border-radius:10px;padding:13px 16px;font-size:13.5px;margin-top:12px;}
+  .c-red{background:#fdeeec;border:1px solid #f3cdc6;} .c-red b{color:#d4453b;}
+  .c-blue{background:#eef3fc;border:1px solid #c5d6f5;} .c-blue b{color:var(--blue);}
+  .c-amber{background:#fef6e6;border:1px solid #f0dca6;color:#7a5c00;} .c-amber b{color:#8a6500;}
+  .c-green{background:#e9f6ef;border:1px solid #bfe6d0;color:#236047;} .c-green b{color:#1f9d6b;}
+
+  .steps{counter-reset:s;}
+  .step{position:relative;padding:12px 0 12px 40px;border-top:1px solid #eef1f6;font-size:13.5px;}
+  .step:first-child{border-top:none;}
+  .step::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:11px;width:26px;height:26px;
+    background:var(--blue);color:#fff;border-radius:50%;font:700 13px/26px "SF Mono",monospace;text-align:center;}
+  .step .st{font-weight:700;margin-bottom:3px;}
+  .codeblk{display:block;background:#1a1f2e;color:#e6ecf7;border-radius:8px;padding:11px 13px;margin:8px 0;
+    font:12.5px/1.5 "SF Mono",Consolas,monospace;overflow-x:auto;white-space:pre;}
+
+  .gloss{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .gc{background:#f7faff;border:1px solid #d9e3f7;border-radius:10px;padding:13px 15px;font-size:13px;}
+  .gc b{color:var(--blue);display:block;margin-bottom:4px;font-size:13.5px;}
+  @media(max-width:680px){.gloss{grid-template-columns:1fr;}}
+
+  .foot{font-size:12px;color:var(--muted);margin-top:20px;text-align:center;}
+
+  /* 折叠名词卡 */
+  .foldcard summary{cursor:pointer;list-style:none;font-size:17px;font-weight:760;color:var(--ink);display:flex;align-items:center;gap:8px;}
+  .foldcard summary::-webkit-details-marker{display:none;}
+  .foldcard summary::before{content:"▸";color:var(--blue);font-size:13px;}
+  .foldcard[open] summary::before{content:"▾";}
+  .foldcard .foldhint{font-size:12.5px;font-weight:400;color:var(--muted);}
+
+  /* Claude Code 跑备份 Prompt */
+  .promptbox{position:relative;margin-top:12px;}
+  .copybtn{position:absolute;top:10px;right:10px;background:var(--blue);color:#fff;border:none;border-radius:7px;
+    padding:7px 13px;font:700 12px/1 inherit;cursor:pointer;z-index:2;}
+  .copybtn:active{transform:scale(.96);}
+  .prompt{background:#1a1f2e;color:#e6ecf7;border-radius:10px;padding:18px 18px 16px;font-size:13px;line-height:1.75;white-space:pre-wrap;word-break:break-word;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="kick">AI 协作小贴士</div>
+    <h1>Claude 信息备份指南 · 全员版</h1>
+    <p>最近社区有一波账号误封。这份指南只解决一件事：<b>万一哪天号没了，你的对话、代码、资料别跟着一起没，换个号还能接着干。</b>原则很简单——<b>能自己安全做的就做，碰数据安全的发到 token 燃烧营一起讨论</b>，不自己瞎搭备份管道。</p>
+    <div class="meta">👇 先选「你的系统 + 你的账号」，页面只显示和你相关的部分。不懂的词文末有「大白话名词卡」。</div>
+  </div>
+
+  <!-- 筛选器 -->
+  <div class="filterbar">
+    <div class="ftitle">⚙️ 选你的情况，看你的步骤</div>
+    <div class="frow">
+      <span class="flabel">① 你的系统</span>
+      <span class="seg" data-group="os">
+        <button data-val="win" class="active">🪟 Windows</button>
+        <button data-val="mac">🍎 Mac</button>
+      </span>
+    </div>
+    <div class="frow">
+      <span class="flabel">② 你的账号</span>
+      <span class="seg" data-group="acct">
+        <button data-val="team" class="active">🏢 公司 Team 账号</button>
+        <button data-val="pro">💳 个人 Pro · Max</button>
+        <button data-val="mix">🔀 两个都有</button>
+      </span>
+    </div>
+    <div class="fnow">当前查看：<b id="nowOs">Windows</b> · <b id="nowAcct">公司 Team 账号</b></div>
+  </div>
+
+  <!-- 两个家 -->
+  <div class="panel">
+    <h2>先看懂一件事：你的数据只有两个"家"</h2>
+    <div class="note">想清楚这点，下面做什么就不会乱——所有平台的数据，无非落在这两个家之一。</div>
+    <div class="homes">
+      <div class="home loc">
+        <div class="ht">🟢 本地（在你电脑硬盘上）</div>
+        <ul>
+          <li><b>Claude Code 终端版</b>的 <code>~/.claude</code> 文件夹（你全部的对话记录＋配置）</li>
+          <li>Claude Code 帮你写出来的<b>代码 / 文档</b></li>
+        </ul>
+        <div style="margin-top:8px;font-weight:700;color:#1f9d6b;">特点：不绑账号 → 封号也带不走，换个号照样能读。</div>
+      </div>
+      <div class="home cld">
+        <div class="ht">🔴 云端（在 Claude 的服务器上）</div>
+        <ul>
+          <li><b>claude.ai 网页</b>里的对话、Projects 项目</li>
+          <li><b>桌面 App</b>（Mac / Windows 版）里的对话<br><small style="color:#9a6b65">——它只是网页的"壳"，数据和网页同一片云</small></li>
+        </ul>
+        <div style="margin-top:8px;font-weight:700;color:#d4453b;">特点：绑账号 → 号一封，这部分立刻就没。</div>
+      </div>
+    </div>
+    <div class="callout c-blue">👉 <b>"备份"就两个动作：</b>① 把<b>云端</b>那部分<b>搬出来</b>（搬到公司管控的地方）；② 让<b>本地</b>那个文件夹<b>多一份副本</b>。下面按你的情况分别说。</div>
+  </div>
+
+  <!-- 密级红线 -->
+  <div class="panel" style="border:2px solid #f3cdc6;">
+    <h2>⚠️ 先划红线：内容分密级，敏感的不外流</h2>
+    <div class="note">咱们是健康险行业，<b>客户的病、钱、证件信息属于"敏感个人信息"</b>。备份时先分清：<b>能共享的才进飞书；敏感的只放公司受控的地方。</b>拿不准 → 一律当敏感处理。</div>
+    <div class="scroll"><table class="cmp">
+      <tr><th style="min-width:80px">密级</th><th style="min-width:300px">包括哪些（保险 / 健康场景）</th><th style="min-width:190px">能放哪</th></tr>
+      <tr>
+        <td class="p" style="color:#d4453b">🔴 高敏</td>
+        <td>客户<b>姓名＋身份证 / 手机 / 住址</b>、<b>病历 / 体检 / 理赔 / 健康</b>数据、保单与赔付明细、银行卡 / 支付信息、未公开的<b>财务·合同·商业机密</b>、各种密码 / 密钥</td>
+        <td><b>只放公司指定的受控位置</b>（工作机指定盘 / 公司网络盘等）；<u>不上任何云、不进飞书、不外发</u></td>
+      </tr>
+      <tr>
+        <td class="p" style="color:#b07d00">🟡 中</td>
+        <td>内部流程 / 话术、未公开的项目资料、不含个人信息的内部汇总</td>
+        <td>团队飞书（<b>仅内部可见</b>）可以；公开渠道不可</td>
+      </tr>
+      <tr>
+        <td class="p" style="color:#1f9d6b">🟢 低</td>
+        <td>公开资料、通用 prompt 模板、已发布的内容</td>
+        <td>随便存、可共享</td>
+      </tr>
+    </table></div>
+    <div class="callout c-red">🧭 <b>一句话判断：</b>内容里只要带<b>"某个具体的人是谁 ＋ 他的健康 / 钱 / 证件"</b>，就按 🔴 高敏处理。<b>拿不准就当高敏</b>，没人会怪你太小心。</div>
+    <div class="callout c-amber">💡 <b>最上游、最有效的一招：一开始就别把客户原始敏感数据喂给 AI。</b>要用先<b>脱敏</b>——去掉真实姓名 / 证件号，用"客户 A""保单 X"代替。<b>没进过 AI 的数据，根本不用操心怎么备份它。</b></div>
+  </div>
+
+  <!-- 云端：TEAM -->
+  <div class="panel" data-acct="team">
+    <h2><span class="pill pill-acct">账号：公司 Team</span>云端对话怎么备</h2>
+    <div class="note">目标＝<b>被封也能换号照用</b>。Team 有管理员能给你重开座位（seat），续命相对容易。</div>
+    <div class="callout c-green">✅ <b>你要做的其实就一件事：重要的 Prompt / 对话结论，当场复制进<u>飞书团队知识库</u></b>（仅非敏感内容）。知识进了飞书就不绑在你这一个号上——你号出问题，内容还在，谁都能接着用。<br><span style="color:#b07d00;font-size:12.5px;">⚠️ 客户 / 病历 / 理赔 / 财务等敏感数据<b>别进飞书</b>，按上面「红线」放公司受控位置。</span></div>
+    <div class="callout c-blue">💡 <b>封号后怎么续：</b>① 找管理员重开座位；② 重要内容已在飞书，新号直接接着用；③ 如果你也用 Claude Code，本机的 <code>~/.claude</code> 不绑号，换号能无缝读回（见下方「本地」部分）。</div>
+  </div>
+
+  <!-- 云端：PRO -->
+  <div class="panel" data-acct="pro">
+    <h2><span class="pill pill-acct">账号：个人 Pro·Max</span>云端对话怎么备</h2>
+    <div class="note">和 Team 的区别：<b>没有管理员兜底</b>——号没了没人帮你恢复，全靠你自己手里那份。所以官方导出对你更要紧。</div>
+    <div class="callout c-red">🔴 <b>第一步：用官方功能做一次"全量导出"。</b>你若从没备份过，云端那堆对话现在是"裸奔"状态。<br>
+      <b>路径（已核实）：</b>点左下角你的首字母头像 → <b>Settings 设置</b> → <b>Privacy 隐私</b> → <b>Export data 导出数据</b>，提交后等邮件里的下载链接（网页版或桌面 App 都行，手机 App 不行）。
+      <div style="margin-top:8px;padding-top:8px;border-top:1px solid #f3cdc6;font-size:12.5px;color:#7a4a44;">
+        几个坑：① 导出是 <b>JSON 数据文件</b>（留档用）；② 链接 <b>24 小时过期</b>，过期重导即可；③ <b>不含 Claude 的"记忆(memory)"</b>；④ 导出的数据<b>不能再导回到另一个个人账号</b>——所以导出主要是"留底查阅"，真正"换号无缝接着干"靠的是本地 <code>~/.claude</code>（见下方）。<br>
+        ⚠️ <b>导出的 JSON 包含你全部对话，本身就是敏感件</b>：下载后别留在「下载」文件夹裸着，挪到公司受控位置；里面若有客户敏感内容，按红线处理、必要时发到 token 燃烧营讨论。</div>
+    </div>
+    <div class="callout c-blue">💡 <b>日常：</b>重要对话当场复制到本地文档（记事本 / Word / Obsidian）；非敏感的也可进飞书。每隔一段时间再导出 1 次兜底。</div>
+  </div>
+
+  <!-- 云端：MIX -->
+  <div class="panel" data-acct="mix">
+    <h2><span class="pill pill-acct">账号：两个都有</span>先看这条，再看下面两块</h2>
+    <div class="callout c-amber">🔀 <b>你有两个账号，两边都要照顾：</b>工作内容走 <b>Team 账号</b> → 存飞书（仅非敏感）；个人内容走 <b>Pro 账号</b> → 官方导出。下面「公司 Team」和「个人 Pro·Max」两块都已为你显示，各看各的。<br>
+      💡 <b>一个省力的真相：</b>不管你用哪个账号登录 <b>Claude Code</b>，对话历史都堆在<u>同一台电脑的同一个 <code>~/.claude</code></u> 里。所以本地只要备份一次，两个账号的终端历史就<b>一起保住</b>。</div>
+  </div>
+
+  <!-- 本地：WINDOWS -->
+  <div class="panel" data-os="win">
+    <h2><span class="pill pill-os">系统：Windows</span>本地 <code>~/.claude</code> 怎么备份</h2>
+    <div class="note"><b>最值得备份的是 Claude Code 的 <code>~/.claude</code> 文件夹</b>（完整路径＝<code>C:\Users\你的用户名\.claude</code>）。它不绑账号，封号后新号直接读它续命。<b>不上任何云</b>，按下面顺序来：</div>
+
+    <div class="callout c-green">✅ <b>第一步先确认：公司是否已经在自动备份你的工作电脑（或用户目录）？</b>不清楚就发到 token 燃烧营问一声。如果有，<b>你什么都不用做</b>——只要确认 <code>C:\Users\你的用户名\.claude</code> 在备份范围内即可。这是最省心的方式。</div>
+
+    <div class="note" style="margin:14px 0 6px;"><b>如果公司没有统一备份</b>，自己给它在<b>另一块盘</b>留副本（U 盘 / 移动硬盘 / 电脑的第二块硬盘，<u>不是云</u>）：</div>
+    <div class="steps">
+      <div class="step">
+        <div class="st">把这行命令存成 <code>backup.bat</code></div>
+        桌面新建记事本，粘进下面这行（把 <code>D:\claude-backup</code> 改成你那块盘的实际盘符路径），另存为 <code>backup.bat</code>（保存类型选"所有文件"）：
+        <span class="codeblk">robocopy "%USERPROFILE%\.claude" "D:\claude-backup" /E /R:1 /W:1 /XD node_modules</span>
+        意思：把 <code>.claude</code> 文件夹，每次只复制有变化的部分，备到 D 盘（或你的 U 盘 / 移动硬盘）。<br><small style="color:#6b7488">（<code>%USERPROFILE%</code> 不用改、命令会自动找到你的用户文件夹；你只要把 <code>D:\claude-backup</code> 换成你那块盘。）</small>
+      </div>
+      <div class="step">
+        <div class="st">用"任务计划程序"让它每天自动跑</div>
+        开始菜单搜<b>「任务计划程序」</b> → 「创建基本任务」→ 取名 → 触发器选<b>「每天」</b> → 操作选「启动程序」指向 <code>backup.bat</code> → 完成。<br>
+        <b>⚠️ 关键一步：</b>建好后双击该任务 → 「设置」选项卡 → 勾上<b>「错过计划开始后，尽快启动任务」</b>。否则到点电脑没开机，这次就<b>悄悄不跑了</b>。
+      </div>
+      <div class="step">
+        <div class="st">验收 ＋ 一次"能不能还原"检查</div>
+        打开 <code>D:\claude-backup</code>，看文件"修改日期"是今天 ✅ 在跑；再<b>随便打开里面一个文件确认能读出内容</b>（不是空壳）。<span class="ok">备份要能还原才算数。</span>
+      </div>
+    </div>
+    <div class="callout c-amber">⚠️ <b>U 盘 / 移动硬盘别一直插着不管：</b>它和电脑放一起，电脑丢 / 进水就一起没了。理想是另存一处。<b>敏感数据的异地备份与加密别自己折腾</b>——需要的话发到 token 燃烧营一起讨论。</div>
+  </div>
+
+  <!-- 本地：MAC -->
+  <div class="panel" data-os="mac">
+    <h2><span class="pill pill-os">系统：Mac</span>本地 <code>~/.claude</code> 怎么备份</h2>
+    <div class="note"><b>最值得备份的是 Claude Code 的 <code>~/.claude</code> 文件夹</b>（完整路径＝<code>/Users/你的用户名/.claude</code>）。它不绑账号，封号后新号直接读它续命。Mac 上有现成的好办法，<b>全程不上云</b>：</div>
+
+    <div class="callout c-green">✅ <b>第一步先确认：公司是否已在自动备份你的工作电脑？</b>不清楚就发到 token 燃烧营问一声。有的话确认 <code>~/.claude</code> 在范围内，你就不用额外做。</div>
+
+    <div class="callout c-green">✅ <b>自己做的首选：开启 Time Machine（几乎零操作）。</b>系统设置 → 通用 → Time Machine → 接一个<b>移动硬盘</b>并选它。开启后它<b>每小时自动备份整台电脑</b>，<code>~/.claude</code> 默认就被包含，不用单独设。<br><span style="color:#236047;font-size:12.5px;">注意：它备到<b>本地外接硬盘、不上云</b>；防的是"电脑坏 / 丢"，而封号时本地文件本来就还在——两头都保。</span></div>
+    <div class="callout c-amber">⚠️ Time Machine 要<b>定期把那块硬盘接上</b>才会备（笔记本平时不插＝没在备）。敏感数据的加密与异地存放别自己折腾，需要的话发到 token 燃烧营讨论。</div>
+  </div>
+
+  <!-- 三类数据对照 -->
+  <div class="panel">
+    <h2>📦 三类数据，三种备法（别搞混）</h2>
+    <div class="note">和 Claude 有关的东西其实分三类，备法各不同。看清这张表，就知道下面那个 Prompt 管的是哪部分、没管的又靠什么补。</div>
+    <div class="scroll"><table class="cmp">
+      <tr><th style="min-width:170px">哪类数据</th><th style="min-width:150px">封号会不会丢</th><th style="min-width:220px">怎么备</th></tr>
+      <tr>
+        <td class="p">① claude.ai <b>网页</b>对话 / Projects 项目</td>
+        <td style="color:#d4453b;font-weight:700">🔴 会！号一封立刻没</td>
+        <td>官方<b>导出 Export</b>（个人）/ 存飞书（Team）——<b>见前面「云端对话怎么备」</b></td>
+      </tr>
+      <tr>
+        <td class="p">② Claude Code <b>终端</b>对话历史<small>（就是 <code>~/.claude</code> 文件夹）</small></td>
+        <td style="color:#1f9d6b;font-weight:700">🟢 不会（在本地、不绑号）<small style="color:#7a8194;font-weight:400">但硬盘坏 / 误删会丢，且云端没有任何副本</small></td>
+        <td>下面这个 <b>Claude Code Prompt</b> / robocopy / Time Machine</td>
+      </tr>
+      <tr>
+        <td class="p">③ 本地<b>项目代码 / 文档</b></td>
+        <td style="color:#1f9d6b;font-weight:700">🟢 不会（本来就在你硬盘上）</td>
+        <td><b>git 私有仓库</b>（顺带还能回滚被 AI 改坏的代码）</td>
+      </tr>
+    </table></div>
+    <div class="callout c-amber">👇 <b>下面这个 Prompt 只解决 ② 和 ③（本地）。</b>① 网页那部分它<b>备不了</b>——号一封就没，务必另用前面的<b>官方导出</b>。两者各管一段，缺一不可。</div>
+  </div>
+
+  <!-- 懒人版：让 Claude Code 自己跑备份 -->
+  <div class="panel" style="border:2px solid #c5d6f5;">
+    <h2>🤖 懒人版：把本地备份直接交给 Claude Code 跑</h2>
+    <div class="note">你们大多在用 Claude Code——与其手动敲命令，不如把整套<b>本地备份</b>丢给它自己做。把下面这段<b>粘进 Claude Code、回车</b>即可，它会全程问你、用大白话汇报。<br>
+      ⚠️ 它备份的是<b>本地 <code>~/.claude</code> 和代码</b>；<b>claude.ai 网页对话是云端，Claude Code 备不了</b>，那部分用前面的「官方导出」。</div>
+    <div class="promptbox">
+      <button class="copybtn" id="copybtn" onclick="copyPrompt()">📋 复制 Prompt</button>
+      <div class="prompt" id="ccprompt">请帮我备份 Claude Code 的本地数据，按下面要求做，每一步用大白话告诉我你在做什么：
+
+1. 先判断我的系统是 Windows 还是 Mac，找到我的 ~/.claude 文件夹（Windows 在 C:\Users\我的用户名\.claude，Mac 在 /Users/我的用户名/.claude），并告诉我它有多大。
+
+2. 问我要把备份放到哪个【本地】位置（比如另一块硬盘 D:、一个 U 盘 / 移动硬盘的盘符，Mac 上的外接硬盘）。
+   ⚠️ 绝对不要备份到 OneDrive、iCloud 等任何云盘 / 同步盘；只能放本地物理盘。如果我给的路径是云盘，请提醒我并停下。
+
+3. 用系统自带工具做"只复制、不删除原件"的备份，复制到我指定位置下的 claude-backup 文件夹：
+   · Windows 用 robocopy，排除 node_modules；
+   · Mac 用 rsync，排除 node_modules。
+
+4. 备份完成后做验收并告诉我结果：源和目标的文件数量 / 大小是否一致，并随机打开备份里的一个文件确认能读出内容（不是空壳）。如有文件因正被占用没复制成功，如实告诉我。
+
+5. 顺便看一下我电脑上 Claude Code 写过的代码 / 文档项目：如果还没用 git 备份，告诉我哪些值得加 git——但先别自动 push 到任何外部仓库，等我确认。
+
+6. 最后问我：要不要把这个备份设成【每天自动跑一次】？
+   · 要的话，Windows 帮我建一个"任务计划程序"任务并勾上"错过后尽快运行"；Mac 给我一条能加进定时任务的命令。
+   · 全程不要把任何数据传到云端，也不要帮我加密（加密的事另外处理）。
+
+请用中文回复，每做完一步简短说一句结果。</div>
+    </div>
+    <div class="callout c-amber" style="margin-top:12px;">💡 它只会"复制"不会删原件，给的目的地也只认本地盘——放心跑。跑完它还会问你要不要设成每天自动。</div>
+  </div>
+
+  <!-- 代码 git -->
+  <div class="panel">
+    <h2>如果你会用 Claude Code 写代码 / 文档</h2>
+    <div class="note">产出本就在本地项目里，配上 git 就有了带历史版本的备份。</div>
+    <div class="callout c-blue">💡 用 <b>公司的私有 git 仓库</b>（GitHub / GitLab / Gitee 企业版，<b>有没有可在 token 燃烧营问一声</b>，别用个人 GitHub）：项目里 <code>git init</code> → 连私库 → 习惯性 <code>commit + push</code>。<br>
+      <b>两条铁律：</b>① <b>绝不把密钥 / 客户数据提交进去</b>（一旦 push 很难彻底删干净）；② 仓库必须是<b>私有</b>。<br>
+      <b>验收：</b>打开私库网页能看到今天的提交 = 成功。</div>
+  </div>
+
+  <!-- 发到燃烧营讨论 -->
+  <div class="panel" style="border:2px solid #c5d6f5;">
+    <h2>✋ 这些别自己 DIY，发到 token 燃烧营一起定</h2>
+    <div class="note">下面几件事弄不好会"以为安全其实裸奔"或"加密后自己也打不开"，建议发到 token 燃烧营一起讨论、对齐统一口径：</div>
+    <div class="callout c-blue">
+      <b>① 整机 / 用户目录的自动备份</b>——异地备份（在另一处也存一份）别各自捣鼓，在 token 燃烧营对齐公司是否已覆盖你的电脑。<br>
+      <b>② 敏感数据的加密存储与"恢复密钥"保管</b>——加密了却丢了密钥＝数据永久打不开，密钥必须由公司托管。<br>
+      <b>③ 公司统一的备份落点</b>（受控网络盘 / 加密移动盘等）——别各自往私人云盘搭管道。<br>
+      <b>④ 账号被封后的申诉 / 重开座位</b>——Team 账号找管理员，个人账号走 Anthropic 官方申诉。
+    </div>
+  </div>
+
+  <!-- 周期表 -->
+  <div class="panel">
+    <h2>推荐备份周期一览</h2>
+    <div class="note">记不住细节？记这张表就够。</div>
+    <div class="scroll"><table class="cmp">
+      <tr><th style="min-width:160px">备份对象</th><th style="min-width:120px">建议频率</th><th>怎么实现</th></tr>
+      <tr><td class="p">重要网页 / 桌面对话</td><td><b>随手</b>（当场）</td><td>非敏感→飞书 / 本地文档；<b style="color:#d4453b">敏感→公司受控位置，不上云不进飞书</b></td></tr>
+      <tr><td class="p">官方全量导出<small>（个人账号）</small></td><td><b>每月 1 次</b></td><td>设置→隐私→导出数据；没备过的先补 1 次（Team 成员无需此步）</td></tr>
+      <tr><td class="p"><code>~/.claude</code> 文件夹</td><td><b>每天</b>（自动）</td><td>先在 token 燃烧营确认公司是否已覆盖；否则 Win：robocopy 到另一块盘　/　Mac：Time Machine 到外接硬盘</td></tr>
+      <tr><td class="p">代码 / 文档</td><td><b>随手 / 至少每天</b></td><td>git push 到<b>公司私有仓库</b>（不含密钥 / 客户数据）</td></tr>
+    </table></div>
+  </div>
+
+  <!-- 名词卡（折叠） -->
+  <div class="panel">
+    <details class="foldcard">
+    <summary>大白话名词卡<span class="foldhint">（看不懂上面的词？点这里展开）</span></summary>
+    <div class="gloss" style="margin-top:14px">
+      <div class="gc"><b><code>~/.claude</code> 是什么？</b>Claude Code 终端版在你电脑上的"老巢"文件夹，存着你全部对话记录和配置。<code>~</code> 指你的个人目录——<span data-os="win">Windows 上完整路径是 <code>C:\Users\你的用户名\.claude</code></span><span data-os="mac">Mac 上完整路径是 <code>/Users/你的用户名/.claude</code></span>。它在本地、不绑账号，<b>备份它＝换号能续命的关键</b>。</div>
+      <div class="gc" data-os="win"><b>robocopy 是什么？</b>Windows <b>自带</b>的智能复制工具，不用安装。只复制有变化的部分，每天自动跑也很快，适合做定时备份。</div>
+      <div class="gc" data-os="mac"><b>Time Machine 是什么？</b>Mac 自带的"时光机"自动备份。接一块移动硬盘选上，它每小时自动备整机（含 <code>~/.claude</code>），备在<b>本地硬盘、不上云</b>。</div>
+      <div class="gc"><b>git / 私有仓库 是什么？</b>git 是"带时间戳的存档器"。把代码连上<b>公司私有仓库</b>后，每次"提交并推送"就在仓库存一个版本，哪天的样子都能找回。私有＝只有授权的人能看。</div>
+      <div class="gc"><b>飞书知识库 是什么？</b>咱们团队飞书里的文档 / 知识库空间。把<b>非敏感</b>的 Prompt、结论存这里＝全团队都能看、不绑某个号，谁的号出问题都不影响大家。</div>
+      <div class="gc"><b>官方导出（Export data）？</b>Anthropic 提供的"打包下载我账号数据"功能，导出是 <b>JSON 文件</b>。申请制：点完等邮件发链接（<b>24h 过期</b>），不实时。<b>个人号</b>在 设置→隐私 里点；Team 成员一般没这入口，存飞书即可。</div>
+      <div class="gc"><b>"公司受控位置"指什么？</b>由公司管理、能审计、人走了能收回的存储（如工作机指定盘、公司网络盘）。<b>不是</b>你的个人 OneDrive / iCloud / 私人网盘。放哪不确定就发到 token 燃烧营讨论。</div>
+    </div>
+    </details>
+  </div>
+
+  <!-- 底线 -->
+  <div class="panel">
+    <div class="callout c-blue" style="margin-top:0;">
+      🎯 <b>诚实底线：没有 100% 完美的备份。</b>目标很朴素——<b>不是"绝对不丢"，而是"封了也不丢、换号能续上"。</b>
+      对绝大多数人，做到三件事就躲过了最惨的"全没"：① 重要对话当场存好（非敏感进飞书、敏感进公司受控位置）；② 给本地 <code>~/.claude</code> 设一份不上云的备份（或确认公司已覆盖）；③ <b>碰加密、整机备份、敏感外发这类事，发到 token 燃烧营一起讨论</b>。
+    </div>
+  </div>
+
+  <div class="foot">AI 协作小贴士 · 2026-06-29 · 官方导出依据 Anthropic 帮助中心核实；<code>~/.claude</code> 路径、Time Machine 为系统通用做法。涉及公司存储 / 加密 / 合规，以 token 燃烧营讨论后的统一口径为准</div>
+</div>
+
+<script>
+  function copyPrompt(){
+    var t = document.getElementById('ccprompt').innerText;
+    var ok = false;
+    try{ var ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select(); ok=document.execCommand('copy'); document.body.removeChild(ta); }catch(e){}
+    if(!ok && navigator.clipboard){ navigator.clipboard.writeText(t); }
+    var b=document.getElementById('copybtn'); b.textContent='✓ 已复制'; setTimeout(function(){ b.textContent='📋 复制 Prompt'; },1600);
+  }
+
+  var state = {os:'win', acct:'team'};
+  var osName = {win:'Windows', mac:'Mac'};
+  var acctName = {team:'公司 Team 账号', pro:'个人 Pro · Max', mix:'两个都有'};
+  function apply(){
+    document.querySelectorAll('[data-os]').forEach(function(el){
+      el.hidden = (el.getAttribute('data-os') !== state.os);
+    });
+    document.querySelectorAll('[data-acct]').forEach(function(el){
+      var a = el.getAttribute('data-acct');
+      var show = (state.acct === 'mix') ? (a==='team'||a==='pro'||a==='mix') : (a===state.acct);
+      el.hidden = !show;
+    });
+    document.getElementById('nowOs').textContent = osName[state.os];
+    document.getElementById('nowAcct').textContent = acctName[state.acct];
+  }
+  document.querySelectorAll('.seg').forEach(function(seg){
+    var group = seg.getAttribute('data-group');
+    seg.querySelectorAll('button').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        seg.querySelectorAll('button').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        state[group] = btn.getAttribute('data-val');
+        apply();
+      });
+    });
+  });
+  apply();
+</script>
+</body>
+</html>

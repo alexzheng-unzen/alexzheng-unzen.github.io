@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta name="robots" content="noindex, noai, noimageai, noarchive">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code 入门指南 · 从「用不起来」到「真的好用」</title>
+<style>
+  :root {
+    --bg: #FAFAF7;
+    --surface: #FFFFFF;
+    --ink: #1A1A1A;
+    --ink-soft: #3D3D3D;
+    --muted: #6B6B6B;
+    --line: #E8E5DD;
+    --line-soft: #F0EDE6;
+    --accent: #2D5F8D;
+    --accent-soft: #EBF1F7;
+    --pain: #B23A1F;
+    --pain-soft: #FBEEEA;
+    --solve: #2D6A4F;
+    --solve-soft: #E8F1ED;
+    --term-bg: #1C1C1E;
+    --term-ink: #F5F5F5;
+    --term-muted: #8E8E93;
+    --term-green: #4ADE80;
+    --term-cyan: #5EEAD4;
+    --term-amber: #FBBF24;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.75;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding: 0;
+  }
+
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 80px 32px 120px;
+  }
+
+  /* ─── Hero ──────────────────────────── */
+  .hero {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 56px;
+    margin-bottom: 56px;
+  }
+
+  .eyebrow {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-size: clamp(34px, 5.2vw, 48px);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+    color: var(--ink);
+  }
+
+  .lede {
+    font-size: 19px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+    max-width: 640px;
+  }
+
+  .lede strong { color: var(--ink); font-weight: 600; }
+
+  .meta {
+    margin-top: 32px;
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .meta span::before {
+    content: "·";
+    margin-right: 24px;
+    color: var(--line);
+  }
+  .meta span:first-child::before { content: ""; margin: 0; }
+
+  /* ─── Sections ──────────────────────── */
+  section { margin-bottom: 72px; }
+
+  h2 {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--ink);
+    color: var(--ink);
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 40px 0 14px;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+  }
+
+  h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 24px 0 8px;
+    color: var(--ink);
+  }
+
+  p { margin-bottom: 16px; color: var(--ink-soft); }
+  p strong { color: var(--ink); font-weight: 600; }
+
+  ul, ol { margin: 12px 0 20px 22px; color: var(--ink-soft); }
+  li { margin-bottom: 8px; }
+
+  /* ─── Pain points ───────────────────── */
+  .pain-card {
+    background: var(--pain-soft);
+    border-left: 3px solid var(--pain);
+    border-radius: 0 8px 8px 0;
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+
+  .pain-card .pain-quote {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--pain);
+    margin-bottom: 10px;
+  }
+
+  .pain-card .pain-truth {
+    font-size: 15px;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+  .pain-card .pain-truth strong { color: var(--ink); }
+
+  /* ─── Solution blocks ──────────────── */
+  .solve-block {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 32px;
+    margin: 28px 0;
+  }
+
+  .solve-num {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-bottom: 14px;
+  }
+
+  .solve-block h3 { margin-top: 0; }
+
+  .solve-block .for-pain {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 18px;
+  }
+  .solve-block .for-pain strong { color: var(--accent); font-weight: 600; }
+
+  /* ─── Terminal mockup ──────────────── */
+  .terminal {
+    background: var(--term-bg);
+    border-radius: 10px;
+    margin: 18px 0;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    font-family: "SF Mono", "JetBrains Mono", "Cascadia Code", Menlo, Consolas, monospace;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .terminal-bar {
+    background: #2C2C2E;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .terminal-bar .dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    background: #5A5A5C;
+  }
+  .terminal-bar .dot.red { background: #FF5F57; }
+  .terminal-bar .dot.amber { background: #FEBC2E; }
+  .terminal-bar .dot.green { background: #28C840; }
+  .terminal-bar .title {
+    margin-left: auto;
+    margin-right: 36px;
+    font-size: 12px;
+    color: var(--term-muted);
+  }
+
+  .terminal-body {
+    padding: 18px 20px;
+    color: var(--term-ink);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .terminal-body .prompt { color: var(--term-cyan); user-select: none; }
+  .terminal-body .cmd { color: var(--term-ink); }
+  .terminal-body .out { color: var(--term-muted); }
+  .terminal-body .ok { color: var(--term-green); }
+  .terminal-body .warn { color: var(--term-amber); }
+  .terminal-body .comment { color: var(--term-muted); font-style: italic; }
+
+  /* ─── Inline code ──────────────────── */
+  code {
+    font-family: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    background: var(--line-soft);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: var(--ink);
+  }
+
+  kbd {
+    font-family: -apple-system, sans-serif;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 0.85em;
+    font-weight: 600;
+    color: var(--ink);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+  }
+
+  /* ─── Tip callout ──────────────────── */
+  .tip {
+    background: var(--solve-soft);
+    border-left: 3px solid var(--solve);
+    padding: 14px 18px;
+    margin: 16px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 15px;
+    color: var(--ink-soft);
+  }
+  .tip strong { color: var(--solve); }
+
+  /* ─── Compare table ────────────────── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 15px;
+    background: var(--surface);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+
+  th, td {
+    padding: 14px 18px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+
+  th {
+    background: var(--line-soft);
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  td strong { color: var(--ink); }
+  td.bad { color: var(--pain); }
+  td.good { color: var(--solve); }
+
+  /* ─── Tip blocks (alt accent) ──────── */
+  .tip-num {
+    display: inline-block;
+    background: #8B5A3C;
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-bottom: 14px;
+  }
+
+  .plain {
+    background: #FBF7EF;
+    border-left: 3px solid #C9A875;
+    padding: 12px 16px;
+    margin: 14px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 15px;
+    color: var(--ink-soft);
+  }
+  .plain strong { color: #6B4A26; }
+
+  .real-tip {
+    background: #F0F4EF;
+    border: 1px dashed #8FA68E;
+    padding: 14px 18px;
+    margin: 18px 0 4px;
+    border-radius: 6px;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .real-tip strong { color: var(--solve); }
+
+  /* ─── Black vs White box compare ────── */
+  .bw-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 18px 0;
+  }
+  .bw-compare > div {
+    border-radius: 10px;
+    overflow: hidden;
+    font-family: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .bw-compare .black-box {
+    background: #1C1C1E;
+    color: #E5E5E5;
+  }
+  .bw-compare .white-box {
+    background: #FCFBF7;
+    color: var(--ink);
+    border: 1px solid var(--line);
+  }
+  .bw-compare .bw-head {
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .bw-compare .black-box .bw-head { background: #2C2C2E; color: #FF8B7A; }
+  .bw-compare .white-box .bw-head { background: var(--solve-soft); color: var(--solve); }
+  .bw-compare .bw-body { padding: 14px 16px; white-space: pre-wrap; }
+
+  @media (max-width: 640px) {
+    .bw-compare { grid-template-columns: 1fr; }
+  }
+
+  /* ─── Tool comparison table ────────── */
+  .tool-table th:first-child { width: 22%; }
+  .tool-table th:nth-child(2) { width: 38%; }
+
+  /* ─── Watermark ────────────────────── */
+  .watermark {
+    position: fixed;
+    bottom: 18px;
+    right: 22px;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(26, 26, 26, 0.45);
+    background: rgba(255, 255, 255, 0.88);
+    padding: 6px 12px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    pointer-events: none;
+    z-index: 1000;
+    letter-spacing: 0.04em;
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+  .watermark .wm-brand { color: var(--accent); font-weight: 600; }
+  .watermark .wm-sep { margin: 0 6px; color: rgba(0,0,0,0.2); }
+
+  /* ─── Final pull-quote ─────────────── */
+  .pull-quote {
+    margin: 60px 0 40px;
+    padding: 40px;
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: 12px;
+    text-align: center;
+  }
+  .pull-quote .big {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.5;
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+  }
+  .pull-quote .sub {
+    font-size: 15px;
+    color: rgba(250, 250, 247, 0.7);
+    line-height: 1.7;
+  }
+
+  /* ─── Footer ───────────────────────── */
+  footer {
+    border-top: 1px solid var(--line);
+    padding-top: 28px;
+    margin-top: 60px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ─── Print ────────────────────────── */
+  @media print {
+    body { background: white; font-size: 13px; }
+    .wrap { padding: 24px; max-width: 100%; }
+    .terminal, .solve-block, .tip-grid .card { box-shadow: none; }
+    .pull-quote { background: var(--line-soft); color: var(--ink); }
+    .pull-quote .sub { color: var(--muted); }
+    section { page-break-inside: avoid; }
+    h2 { page-break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="eyebrow">入门指南 · Internal Enablement</div>
+    <h1>Claude Code 入门指南</h1>
+    <p class="lede">
+      从「用不起来」到「真的好用」，关键就在<strong>第一周</strong>。
+      新人 90% 的挫败感不来自工具，而来自<strong>前期没建立好 context</strong>——
+      而早期 context 怎么来？靠 Prompt。这份指南，只讲一件事：<strong>早期怎么把 Prompt 写到位。</strong>
+    </p>
+    <div class="meta">
+      <span>阅读约 8 分钟</span>
+      <span>面向：新接触 Claude Code 的同事</span>
+      <span>v1.0</span>
+    </div>
+  </header>
+
+  <!-- WHY -->
+  <section id="why">
+    <h2>为什么你会觉得 CC「不好用」？</h2>
+    <p>
+      和身边同事聊下来，新人的挫败感几乎都能归到三个根本原因。
+      这三件事不解决，再聪明的模型用着也会让人崩溃。
+    </p>
+
+    <div class="pain-card">
+      <p class="pain-quote">❶ 「它好像没听懂我在说什么」</p>
+      <p class="pain-truth">
+        <strong>真相：</strong>CC 不知道你能接收什么格式的回复。
+        你想要表格？bullet？直接改文件？还是 PPT 大纲？
+        不说，它就用默认猜——而默认猜往往不对。
+      </p>
+    </div>
+
+    <div class="pain-card">
+      <p class="pain-quote">❷ 「它做出来的东西不是我要的」</p>
+      <p class="pain-truth">
+        <strong>真相：</strong>你的「交代」在它眼里不够清晰。
+        CC 像一个聪明、但完全不了解你业务的实习生。
+        你必须告诉它三件事：① 目标是什么 ② "完成"长什么样 ③ 不要做什么。
+      </p>
+    </div>
+
+    <div class="pain-card">
+      <p class="pain-quote">❸ 「昨天明明做对了，今天怎么又错了？」</p>
+      <p class="pain-truth">
+        <strong>真相：</strong>它<strong>没有跨对话的长期记忆</strong>。
+        每开一个新对话，它就是「失忆」状态。
+        除非你把规则写进 <code>CLAUDE.md</code> 或 <code>/memory</code>，
+        否则昨天的指导，今天还要重来一遍。
+      </p>
+    </div>
+  </section>
+
+  <!-- HOW -->
+  <section id="how">
+    <h2>三个痛点，三个解法</h2>
+    <p>下面每个解法都配上命令演示，跟着敲一遍就会。</p>
+
+    <!-- SOLVE 1 -->
+    <div class="solve-block">
+      <div class="solve-num">SOLUTION 01</div>
+      <h3>用 Plan Mode 强制对齐方案</h3>
+      <p class="for-pain">解决 <strong>痛点 ❶ + ❷</strong>：听不懂 / 做错了</p>
+      <p>
+        在 Claude Code 终端里，按 <kbd>Shift</kbd> + <kbd>Tab</kbd>
+        切到 Plan Mode（你会看到底部状态栏变色），然后再提你的需求。
+      </p>
+
+      <div class="terminal">
+        <div class="terminal-bar">
+          <span class="dot red"></span>
+          <span class="dot amber"></span>
+          <span class="dot green"></span>
+          <span class="title">claude-code</span>
+        </div>
+        <div class="terminal-body"><span class="warn">⏸ plan mode on</span>  <span class="out">(shift+tab 切换模式)</span>
+
+<span class="prompt">› </span><span class="cmd">帮我做一个理赔数据清洗工具：</span>
+<span class="cmd">  输入是 CSV，输出 Excel，</span>
+<span class="cmd">  要能给非技术同事用</span>
+
+<span class="out">─ Plan ──────────────────────────────</span>
+<span class="out">1. 读取 CSV，识别编码（GBK/UTF-8）</span>
+<span class="out">2. 按字段清洗：去空、合并重复行</span>
+<span class="out">3. 输出 .xlsx + 自带使用说明</span>
+<span class="out">4. 打包成 .exe，双击可跑</span>
+
+<span class="prompt">› </span><span class="cmd">_</span>  <span class="comment">← 你看完方案再决定要不要让它跑</span></div>
+      </div>
+
+      <div class="tip">
+        <strong>为什么有效：</strong>在 Plan 阶段改方向只要 30 秒，
+        写完代码再改要 30 分钟。先让它说，再让它做。
+      </div>
+    </div>
+
+    <!-- SOLVE 2 -->
+    <div class="solve-block">
+      <div class="solve-num">SOLUTION 02</div>
+      <h3>用 <code>CLAUDE.md</code> 给它建一份「员工手册」</h3>
+      <p class="for-pain">解决 <strong>痛点 ❸</strong>：昨天交代过的事情今天又错</p>
+      <p>
+        在你的项目根目录运行 <code>/init</code>，CC 会生成一个
+        <code>CLAUDE.md</code>。这个文件会在<strong>每次新对话开始时被自动读取</strong>。
+      </p>
+
+      <div class="terminal">
+        <div class="terminal-bar">
+          <span class="dot red"></span>
+          <span class="dot amber"></span>
+          <span class="dot green"></span>
+          <span class="title">claude-code</span>
+        </div>
+        <div class="terminal-body"><span class="prompt">› </span><span class="cmd">/init</span>
+
+<span class="ok">✓</span> <span class="out">Created CLAUDE.md</span>
+<span class="ok">✓</span> <span class="out">This file is loaded into every conversation</span></div>
+      </div>
+
+      <p>然后把<strong>「每次都要解释一遍的事」</strong>写进去：</p>
+
+      <div class="terminal">
+        <div class="terminal-bar">
+          <span class="dot red"></span>
+          <span class="dot amber"></span>
+          <span class="dot green"></span>
+          <span class="title">CLAUDE.md</span>
+        </div>
+        <div class="terminal-body"><span class="warn"># 关于我</span>
+- 角色：运营 / 设计 / 营销（按你的实际写）
+- 系统：Windows 11 + PowerShell + 中文用户名
+
+<span class="warn"># 文件存放规则</span>
+- C 盘永不落地
+- D 盘：代码和半成品
+- E 盘：给同事的最终交付物（zip / PDF / exe）
+
+<span class="warn"># 输出偏好</span>
+- 中文回复
+- 给非技术同事的工具必须"白盒化"
+- 改完代码必须实跑一次再交付，不能只静态 review</div>
+      </div>
+
+      <div class="tip">
+        <strong>为什么有效：</strong>写一次永久生效。从此 CC 不会再把文件丢到 C 盘，
+        也不会忘记你是 Windows 用户。这是<strong>最高 ROI 的一次性投入</strong>。
+      </div>
+    </div>
+
+    <!-- SOLVE 3 -->
+    <div class="solve-block">
+      <div class="solve-num">SOLUTION 03</div>
+      <h3>用 <code>/memory</code> 让它记住业务事实</h3>
+      <p class="for-pain">解决 <strong>痛点 ❸</strong>「失忆」的跨项目版本</p>
+      <p>
+        <code>CLAUDE.md</code> 是<strong>项目级</strong>规则（只在这个项目生效），
+        <code>/memory</code> 是<strong>账号级</strong>长期记忆（所有对话都能调用）。
+      </p>
+
+      <div class="terminal">
+        <div class="terminal-bar">
+          <span class="dot red"></span>
+          <span class="dot amber"></span>
+          <span class="dot green"></span>
+          <span class="title">claude-code</span>
+        </div>
+        <div class="terminal-body"><span class="prompt">› </span><span class="cmd">/memory</span>
+
+<span class="out">📝 Edit your long-term memory</span>
+<span class="out">(Claude will recall this across all conversations)</span></div>
+      </div>
+
+      <h4>适合写进去的</h4>
+      <ul>
+        <li>✅ 公司全称、业务一句话介绍、品牌色（如「主色 #2D5F8D」）</li>
+        <li>✅ 你的英文名拼写、常用同事名字、部门缩写</li>
+        <li>✅ 你的输出偏好（例：PPT 默认 16:9、文档默认中文）</li>
+      </ul>
+
+      <h4>不要写进去的</h4>
+      <ul>
+        <li>❌ 一次性任务、临时调试细节</li>
+        <li>❌ 涉密信息（客户名单、内部财务数据）</li>
+      </ul>
+
+      <div class="tip">
+        <strong>小心机：</strong>把<strong>「你公司是干嘛的」</strong>写进去，
+        CC 给的建议会立刻变专业——它知道你不是泛泛做事，而是在某个具体行业里做事。
+      </div>
+    </div>
+  </section>
+
+  <!-- TEMPLATE -->
+  <section id="template">
+    <h2>写 Prompt 的三段式模板</h2>
+    <p>
+      第一周还没建立好 <code>CLAUDE.md</code> 的时候，每次提需求按这个结构走。
+      <strong>这是新人最该背下来的一个模板。</strong>
+    </p>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <span class="dot red"></span>
+        <span class="dot amber"></span>
+        <span class="dot green"></span>
+        <span class="title">prompt-template</span>
+      </div>
+      <div class="terminal-body"><span class="prompt">› </span><span class="warn">【目标】</span><span class="cmd"> 我要做什么</span>
+  <span class="out">例：把这个 CSV 转成飞书能导入的 Excel</span>
+
+  <span class="warn">【上下文】</span><span class="cmd"> 环境 / 限制 / 参考</span>
+  <span class="out">例：Windows 11，文件在 E:\xxx\，</span>
+  <span class="out">    参考我之前给的模板（已附在对话里）</span>
+
+  <span class="warn">【验收标准】</span><span class="cmd"> "完成"长什么样</span>
+  <span class="out">例：双击 .exe 就能跑，非技术同事也能用，</span>
+  <span class="out">    遇到错误要弹中文提示</span></div>
+    </div>
+
+    <p style="margin-top: 28px;">对比一下效果差异：</p>
+
+    <table>
+      <thead>
+        <tr><th>业余 Prompt</th><th>专业 Prompt</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="bad">「帮我做个工具处理这个表格」</td>
+          <td class="good">上面那个三段式</td>
+        </tr>
+        <tr>
+          <td class="bad">CC 写一个能跑、但你用不上的脚本</td>
+          <td class="good">CC 写一个你同事第一次见就会用的 .exe</td>
+        </tr>
+        <tr>
+          <td class="bad">你来回修 5 轮还不对</td>
+          <td class="good">一次到位，剩下时间能干别的</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- BONUS TIPS -->
+  <section id="tips">
+    <h2>实战中磨出来的小习惯</h2>
+    <p>下面 6 条是真实工作中磨出来的。每条都会讲清楚：<strong>什么意思 · 为什么这样做 · 具体怎么操作</strong>。</p>
+
+    <!-- HABIT 1 -->
+    <div class="solve-block">
+      <div class="tip-num">📎 HABIT 01</div>
+      <h3>参考材料优先：能给图就别打字</h3>
+      <div class="plain"><strong>一句话讲清楚：</strong>CC 看图比读字快。一张截图能省你 500 字的描述。</div>
+
+      <p><strong>为什么这样做：</strong>"现代风格""高级感"这种词每个人理解都不一样，CC 也不例外。但你扔一张图过去，它能直接读出来配色、布局、字体感觉。</p>
+
+      <p><strong>怎么操作：</strong></p>
+      <ul>
+        <li>直接把图片<strong>拖进对话框</strong>就行</li>
+        <li>PDF、Word、Excel 也都能拖</li>
+        <li>截屏后 <kbd>Ctrl</kbd>+<kbd>V</kbd> 也能粘贴</li>
+      </ul>
+
+      <div class="terminal">
+        <div class="terminal-bar">
+          <span class="dot red"></span><span class="dot amber"></span><span class="dot green"></span>
+          <span class="title">claude-code</span>
+        </div>
+        <div class="terminal-body"><span class="prompt">› </span><span class="cmd">[拖入 reference.png]</span>
+<span class="cmd">  做一个像这样风格的着陆页，</span>
+<span class="cmd">  配色换成 #2D5F8D</span>
+
+<span class="ok">✓</span> <span class="out">已识别 1 张参考图</span>
+<span class="out">  → 提取到：极简排版、大间距、深色 CTA</span>
+<span class="out">  → 准备按此风格生成，配色已替换</span></div>
+      </div>
+
+      <div class="real-tip">
+        <strong>真正的窍门：</strong>与其打"做一个现代风格的页面"，
+        不如截一张你看上眼的网站丢给它，说"做一个像这样的，配色换成 #2D5F8D"。
+      </div>
+    </div>
+
+    <!-- HABIT 2 -->
+    <div class="solve-block">
+      <div class="tip-num">🌍 HABIT 02</div>
+      <h3>让 CC 注意「环境差异」——你不用自己懂环境</h3>
+      <div class="plain"><strong>一句话讲清楚：</strong>你电脑能跑的东西，发给同事可能就打不开。让 CC 自己注意这个问题，比你自己学环境知识简单 100 倍。</div>
+
+      <p><strong>为什么这样做：</strong></p>
+      <ul>
+        <li>你装了 Node.js、Python，同事电脑里没有</li>
+        <li>你用 Mac，同事用 Windows</li>
+        <li>你用 Office，同事用 WPS</li>
+        <li>不说，CC 默认按"开发者环境"写——普通同事打不开很正常</li>
+      </ul>
+
+      <p><strong>怎么操作：</strong>你不用自己知道环境细节，把下面这句话扔给 CC 就行：</p>
+
+      <div class="terminal">
+        <div class="terminal-bar">
+          <span class="dot red"></span><span class="dot amber"></span><span class="dot green"></span>
+          <span class="title">prompt 模板</span>
+        </div>
+        <div class="terminal-body"><span class="prompt">› </span><span class="cmd">我做的东西最后要发给同事，他们用 Windows + WPS，</span>
+<span class="cmd">  没装任何开发环境。请确保我做出来的东西</span>
+<span class="cmd">  能让他们双击打开就用，避免任何只在我电脑能跑的写法。</span>
+
+<span class="out">─────────────────────────────────────</span>
+<span class="ok">✓</span> <span class="out">已记录约束：</span>
+<span class="out">  · 优先生成 .exe / .html（自带依赖）</span>
+<span class="out">  · 避免需要装 Node / Python 才能跑的方案</span>
+<span class="out">  · 文件路径不用中文，避免乱码</span></div>
+      </div>
+
+      <div class="real-tip">
+        <strong>真正的窍门：</strong>把"环境约束"当成 prompt 的固定开头。
+        CC 会自动选兼容性最好的方案——比如打包成 .exe 而不是 .py 脚本、
+        生成单文件 HTML 而不是要装 Node 的应用。
+      </div>
+    </div>
+
+    <!-- HABIT 3 -->
+    <div class="solve-block">
+      <div class="tip-num">✅ HABIT 03</div>
+      <h3>验收看真东西，别只信「完成 ✅」</h3>
+      <div class="plain"><strong>一句话讲清楚：</strong>CC 经常"自我感觉良好"——它说完成了，但实际可能跑不起来。</div>
+
+      <p><strong>常见翻车现场：</strong></p>
+      <ul>
+        <li>文件夹里有 .exe，但双击没反应</li>
+        <li>HTML 打开是空白页</li>
+        <li>"成功生成 Excel"——打开是乱码</li>
+      </ul>
+
+      <p><strong>怎么操作：</strong>每次让它做完事，加一句话强制验收：</p>
+
+      <div class="terminal">
+        <div class="terminal-bar">
+          <span class="dot red"></span><span class="dot amber"></span><span class="dot green"></span>
+          <span class="title">prompt 模板</span>
+        </div>
+        <div class="terminal-body"><span class="prompt">› </span><span class="cmd">做完之后帮我自己跑一下，截一张图给我看是不是正常的。</span>
+<span class="cmd">  如果跑不起来你自己改，不要让我手动 debug。</span></div>
+      </div>
+
+      <div class="real-tip">
+        <strong>真正的窍门：</strong>CC <strong>能自己跑程序、自己截图、自己 debug</strong>。
+        它不主动做，只是因为你没要求。要求一下，验收质量立刻上一个档次。
+      </div>
+    </div>
+
+    <!-- HABIT 4 -->
+    <div class="solve-block">
+      <div class="tip-num">📦 HABIT 04</div>
+      <h3>白盒化：给同事的工具要「透明」</h3>
+      <div class="plain">
+        <strong>专业名词翻译：</strong><br>
+        · <strong>黑盒</strong>＝你只看到结果，中间发生什么是「黑」的，看不见<br>
+        · <strong>白盒</strong>＝每一步都告诉你做了什么，结果可以自己验证对错
+      </div>
+
+      <p><strong>同一个任务，两种交付效果对比：</strong></p>
+
+      <div class="bw-compare">
+        <div class="black-box">
+          <div class="bw-head">❌ 黑盒（不推荐）</div>
+          <div class="bw-body">› 处理这 100 条理赔单
+
+✓ 完成
+[文件已生成]
+
+<span style="color:#888">同事打开发现少了几条，
+不知道是被过滤了，
+还是工具坏了——
+只能跑来找你。</span></div>
+        </div>
+        <div class="white-box">
+          <div class="bw-head">✅ 白盒（推荐）</div>
+          <div class="bw-body">› 处理这 100 条理赔单
+
+📥 输入：100 行 CSV
+📋 规则：去重 → 合并金额 → 标记异常
+⚙️ 过程：
+   · 跳过 3 行重复
+   · 标记 5 行金额异常
+📊 结果：92 条有效 + report.txt
+⚠️ 异常：第 27 行金额为 0
+✅ 自检：金额加总 = 输入总和
+📌 边界：未处理超长字符串</div>
+        </div>
+      </div>
+
+      <p><strong>给同事做工具时，明确要求 CC 实现"白盒化七项"：</strong></p>
+      <ol>
+        <li><strong>输入</strong>：处理了什么数据</li>
+        <li><strong>规则</strong>：按什么规则处理</li>
+        <li><strong>过程</strong>：每一步做了什么</li>
+        <li><strong>结果</strong>：输出在哪、有多少</li>
+        <li><strong>异常</strong>：哪些数据没处理 / 报错</li>
+        <li><strong>自检</strong>：结果对不对（比如总数是否守恒）</li>
+        <li><strong>边界</strong>：什么情况不处理（说清楚比假装能处理强）</li>
+      </ol>
+
+      <div class="real-tip">
+        <strong>真正的窍门：</strong>把这 7 项写进 <code>CLAUDE.md</code>，
+        所有项目自动遵循。同事用了出问题，他自己就能看出是哪一步——
+        不会再跑来问你。
+      </div>
+    </div>
+
+    <!-- HABIT 5 -->
+    <div class="solve-block">
+      <div class="tip-num">🤝 HABIT 05</div>
+      <h3>多 Agent 协作：选对工具 + 省钱思路</h3>
+      <div class="plain"><strong>一句话讲清楚：</strong>不要把所有任务压在一个 AI 上。每个 AI 擅长的事不一样，搭配着用更香。</div>
+
+      <p><strong>目前手上常用工具的强项：</strong></p>
+
+      <table class="tool-table">
+        <thead>
+          <tr><th>工具</th><th>强在哪</th><th>适合干</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Claude Code</strong></td>
+            <td>综合实力强、对话理解好、代码质量高</td>
+            <td>新项目首选、复杂逻辑、写代码、做工具</td>
+          </tr>
+          <tr>
+            <td><strong>Codex (GPT-5/4)</strong></td>
+            <td>第二意见、深度 debug、有时 review 很猛</td>
+            <td>Claude 卡住了让 Codex 看、交叉验证</td>
+          </tr>
+          <tr>
+            <td><strong>Kimi</strong></td>
+            <td>长文本、中文搜索、读 PDF 强</td>
+            <td>调研、读长文档、找资料</td>
+          </tr>
+          <tr>
+            <td><strong>OpenClaw</strong></td>
+            <td>飞书集成、轻量自动化</td>
+            <td>群机器人、跟同事的接口</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4 style="margin-top: 28px;">💰 外面听回来的省钱思路</h4>
+
+      <div class="terminal">
+        <div class="terminal-bar">
+          <span class="dot red"></span><span class="dot amber"></span><span class="dot green"></span>
+          <span class="title">workflow</span>
+        </div>
+        <div class="terminal-body"><span class="warn">阶段 1：调试</span>  <span class="out">→ 用 Claude Code 或 Codex</span>
+  <span class="comment">把"做什么、怎么做"跑通，</span>
+  <span class="comment">调出一个能用的 prompt + 流程 + 模板</span>
+
+<span class="warn">阶段 2：执行</span>  <span class="out">→ 换便宜模型批量跑</span>
+  <span class="comment">比如 Haiku、GPT-4o-mini</span>
+  <span class="comment">同样的 prompt，token 单价低 10-100 倍</span>
+
+<span class="ok">✓ 结果：</span><span class="out">质量没掉太多，成本砍掉一个数量级</span></div>
+      </div>
+
+      <div class="real-tip">
+        <strong>真正的窍门：</strong>把 Claude Code 当你的<strong>"研发"</strong>，
+        便宜模型当你的<strong>"流水线工人"</strong>。
+        研发算账要算质量，流水线算账要算成本。<br>
+        <strong>什么时候要用这招：</strong>要处理的数据特别多、单次任务要跑几百上千次、
+        token 不够用的时候——这是个救命思路。
+      </div>
+    </div>
+
+    <!-- HABIT 6 -->
+    <div class="solve-block">
+      <div class="tip-num">🧹 HABIT 06</div>
+      <h3>一对话一任务：上下文越干净越准</h3>
+      <div class="plain"><strong>一句话讲清楚：</strong>一个对话只解决一件事，别在一个窗口里东聊西聊。</div>
+
+      <p><strong>为什么这样做：</strong></p>
+      <ul>
+        <li>CC 会"记住"同一对话里前面聊过的所有内容</li>
+        <li>上下文越乱，它越容易把不相关的事串在一起</li>
+        <li>你做完任务 A 跳到任务 B，CC 可能用 A 的思路解 B（错得很隐蔽）</li>
+      </ul>
+
+      <p><strong>怎么操作：</strong></p>
+
+      <div class="terminal">
+        <div class="terminal-bar">
+          <span class="dot red"></span><span class="dot amber"></span><span class="dot green"></span>
+          <span class="title">claude-code</span>
+        </div>
+        <div class="terminal-body"><span class="comment"># 做完一件事，清空对话</span>
+<span class="prompt">› </span><span class="cmd">/clear</span>
+<span class="ok">✓</span> <span class="out">Conversation cleared. CLAUDE.md + /memory 保留。</span>
+
+<span class="comment"># 或者直接开新窗口（推荐）</span></div>
+      </div>
+
+      <div class="real-tip">
+        <strong>真正的窍门：</strong>把一个对话当一次<strong>"会议"</strong>——
+        议程清晰、结束就散。不要开一个对话当"全天客服"。<br>
+        <strong>放心：</strong><code>CLAUDE.md</code> 和 <code>/memory</code> 不会被清，长期规则永远在。
+      </div>
+    </div>
+  </section>
+
+  <!-- PULL QUOTE -->
+  <div class="pull-quote">
+    <p class="big">早期 context 不够时，Prompt 就是 context。</p>
+    <p class="sub">
+      把「目标 + 上下文 + 验收标准」说清楚，<br>
+      把「规则」写进 <code style="background:rgba(255,255,255,.1);color:#fff;">CLAUDE.md</code>，
+      把「事实」写进 <code style="background:rgba(255,255,255,.1);color:#fff;">/memory</code>。<br>
+      做到这三件事，你已经用得比 80% 的人都顺了。
+    </p>
+  </div>
+
+  <footer>
+    Claude Code 入门指南 · v1.0 · 内部 Enablement 文档<br>
+    整理：<strong style="color: var(--accent);">Alex 郑晓琪</strong> <br>
+    有补充或修订建议，欢迎反馈。
+  </footer>
+
+</div>
+
+<div class="watermark">
+  <span class="wm-brand"></span>
+  <span class="wm-sep">·</span>
+  Alex 郑晓琪
+</div>
+
+</body>
+</html>

@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta name="robots" content="noindex, noai, noimageai, noarchive">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>用 AI 做设计 · 2026 行业落地指南</title>
+<style>
+:root{
+  --blue:#2563EB; --blue-d:#1e40af; --blue-s:#eaf1fe; --cyan:#0891b2;
+  --orange:#F08519; --green:#2BB346; --green-s:#e8f5ee; --green-d:#1c7a30;
+  --red:#E6252F; --red-s:#fbe9e7; --violet:#6d4bb0; --violet-s:#efe9fa;
+  --amber:#b76e00; --amber-s:#fbf1dd;
+  --bg:#EEF2FA; --bg2:#eaf1fe; --ink:#0F172A; --ink2:#41485a;
+  --muted:#64748b; --line:#dde5f2; --line2:#eef0f5; --card:#fff; --radius:14px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"OPPO Sans","Microsoft YaHei","PingFang SC",-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px 72px}
+a{color:var(--blue-d);text-decoration:none}
+a:hover{text-decoration:underline}
+code{background:#f1f4fb;padding:1px 6px;border-radius:5px;font-size:.9em;
+  font-family:"SF Mono",Consolas,Menlo,monospace;color:var(--blue-d)}
+
+nav.toc{position:sticky;top:0;z-index:20;background:rgba(238,242,250,.95);backdrop-filter:blur(8px);
+  display:flex;gap:5px;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid var(--line);margin-bottom:8px}
+nav.toc a{font-size:13px;color:var(--muted);text-decoration:none;padding:5px 11px;border-radius:8px;white-space:nowrap}
+nav.toc a:hover,nav.toc a.on{background:#fff;color:var(--blue)}
+
+.hero{background:linear-gradient(135deg,#2563EB 0%,#1e40af 100%);color:#fff;border-radius:16px;
+  padding:52px 48px;margin:18px 0 40px;position:relative;overflow:hidden;box-shadow:0 20px 50px -16px rgba(37,99,235,.5)}
+.hero::after{content:"";position:absolute;right:-90px;top:-90px;width:340px;height:340px;
+  background:radial-gradient(circle,rgba(120,180,255,.25),transparent 70%);border-radius:50%;pointer-events:none}
+.hero .ey{font-family:Consolas,"SF Mono",monospace;font-size:12px;letter-spacing:2px;color:#bcd2ff;font-weight:600}
+.hero h1{font-size:34px;line-height:1.25;margin:12px 0 14px;letter-spacing:.5px}
+.hero .sub{font-size:17px;color:#dfe9ff;max-width:840px;margin:0 0 18px}
+.hero .sub b{color:#fff}
+.hero .meet{font-size:14.5px;background:#fff;padding:16px 20px;border-radius:10px;color:var(--ink);
+  max-width:840px;line-height:1.85;box-shadow:0 2px 12px rgba(15,23,42,.22)}
+.hero .meet b{color:var(--blue)} .hero .meet .q{display:block;margin:7px 0}
+
+section{margin:56px 0}
+.eyk{font-family:Consolas,"SF Mono",monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);font-weight:700;margin:0 0 4px}
+h2{font-size:26px;font-weight:800;margin:0 0 6px;letter-spacing:.3px}
+h2 .n{color:var(--blue);font-weight:800;margin-right:8px}
+h3{font-size:17px;margin:32px 0 10px;color:var(--ink);padding-left:11px;border-left:4px solid var(--blue)}
+.lead{color:var(--muted);font-size:15px;margin:0 0 22px;max-width:860px;line-height:1.75}
+p{margin:0 0 14px;max-width:880px;line-height:1.78}
+.small{font-size:13px;color:var(--muted);max-width:880px}
+
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:1fr 1fr 1fr}
+@media(max-width:820px){.g2,.g3{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid #e8eef8;border-radius:var(--radius);padding:18px 20px;
+  box-shadow:0 1px 2px rgba(15,23,42,.04),0 12px 30px -16px rgba(15,23,42,.2)}
+.tldr{border-left:4px solid var(--blue)}
+.tldr h4{font-size:15px;margin:0 0 6px} .tldr p{margin:0;color:var(--ink2);font-size:14px}
+
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}
+.kpi{background:#fff;border:1px solid #e8eef8;border-radius:12px;padding:20px 22px;border-top:3px solid var(--blue);
+  box-shadow:0 1px 2px rgba(15,23,42,.04),0 12px 30px -16px rgba(15,23,42,.2)}
+.kpi .big{font-size:25px;font-weight:800;color:var(--blue);line-height:1.1;letter-spacing:.5px}
+.kpi .big .u{font-size:14px;font-weight:600;color:var(--muted)}
+.kpi .lb{font-family:Consolas,monospace;font-size:11px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;margin:0 0 8px}
+.kpi p{font-size:13px;color:var(--muted);margin:8px 0 0;line-height:1.6}
+
+.shift{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0}
+.shift .col{background:#fff;border:1px solid #e8eef8;border-radius:12px;padding:20px 22px}
+.shift .col.old{opacity:.92} .shift .col.new{border:2px solid var(--blue);background:linear-gradient(180deg,#fff,#f6f9ff)}
+.shift h4{margin:0 0 12px;font-size:14px;letter-spacing:.5px}
+.shift .old h4{color:var(--muted)} .shift .new h4{color:var(--blue)}
+.shift ul{margin:0;padding-left:18px} .shift li{margin:8px 0;font-size:14.5px}
+
+.pains{background:var(--bg2);border-left:4px solid var(--blue);border-radius:8px;padding:14px 18px;margin:18px 0;font-size:14.5px;color:var(--blue-d)}
+.warn{background:#fff7ec;border-left:4px solid var(--orange);border-radius:8px;padding:14px 18px;margin:18px 0;font-size:14.5px;color:#9a5409}
+.danger{background:#fdeced;border-left:4px solid var(--red);border-radius:8px;padding:14px 18px;margin:18px 0;font-size:14.5px;color:#9b1c1c}
+.tip{background:#fffdf3;border-left:4px solid var(--orange);border-radius:8px;padding:14px 18px;margin:18px 0;font-size:14px;color:#7a5a12}
+.tip b{color:#9a5409}
+.callout{border-radius:var(--radius);padding:16px 18px;margin:16px 0;font-size:14.5px}
+.c-blue{background:var(--blue-s);border:1px solid #cfe0fd} .c-blue b{color:var(--blue-d)}
+.c-green{background:var(--green-s);border:1px solid #cbe8d6}
+.c-amber{background:var(--amber-s);border:1px solid #f0d9a8}
+
+.scroll{overflow-x:auto;margin:14px 0;border:1px solid #e8eef8;border-radius:var(--radius)}
+table{border-collapse:collapse;width:100%;font-size:13.8px;min-width:640px;background:#fff}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line2);vertical-align:top}
+th{background:#f4f7fd;font-weight:700;color:var(--ink);font-size:12.5px}
+tr:last-child td{border-bottom:none}
+td b{color:var(--ink)}
+tbody tr{transition:background .14s} tbody tr:hover td{background:#fafcff}
+.flag td{background:#f6f9ff} .flag td b{color:var(--blue)}
+.mono{font-family:"SF Mono",Consolas,monospace;font-size:12.5px}
+
+.pill{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:999px;white-space:nowrap}
+.p-must{background:var(--blue-s);color:var(--blue-d)}
+.p-good{background:var(--green-s);color:var(--green-d)}
+.p-niche{background:#eef1f6;color:var(--muted)}
+.p-warn{background:var(--amber-s);color:var(--amber)}
+.conf{font-size:11px;color:var(--muted)}
+
+.tg{display:inline-block;font-size:11px;font-weight:600;padding:1px 8px;border-radius:5px;white-space:nowrap;vertical-align:1px}
+.tg-hi{background:#dcefe0;color:#1c7a30} .tg-md{background:#fde8d3;color:#9a5409}
+.tg-lo{background:#eef1f6;color:var(--muted);border:1px solid var(--line)} .tg-vend{background:#f3e8ff;color:#7a3fb0;border:1px solid #e3cdf5}
+
+.mods{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}
+@media(max-width:820px){.mods,.kpis,.shift,.red{grid-template-columns:1fr}}
+.mod{background:#fff;border:1px solid #e8eef8;border-radius:12px;padding:18px 22px;border-top:3px solid var(--blue)}
+.mod.core{border-top-color:var(--orange);background:linear-gradient(180deg,#fffdf8,#fff)}
+.mod .h{font-size:15px;font-weight:700;margin:0 0 6px}
+.mod .h .id{color:var(--blue);margin-right:6px} .mod.core .h .id{color:var(--orange)}
+.mod .role{font-size:13.5px;margin:6px 0;color:var(--ink)} .mod .role b{color:var(--blue)}
+.rank{display:inline-block;font-family:Consolas,monospace;font-size:11px;font-weight:700;color:#fff;background:var(--blue);border-radius:5px;padding:1px 7px;margin-bottom:8px}
+.mod.core .rank{background:var(--orange)}
+
+.red{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:16px 0}
+.red .r{background:#fff;border:1px solid #e8eef8;border-left:4px solid var(--red);border-radius:10px;padding:14px 18px;font-size:14px}
+.red .r b{color:var(--red)}
+
+.steps{counter-reset:s;list-style:none;padding:0;margin:16px 0}
+.steps li{counter-increment:s;background:#fff;border:1px solid #e8eef8;border-radius:10px;padding:14px 18px 14px 58px;position:relative;margin-bottom:10px;font-size:14.5px}
+.steps li::before{content:counter(s);position:absolute;left:16px;top:12px;width:28px;height:28px;background:var(--blue);color:#fff;border-radius:50%;text-align:center;line-height:28px;font-weight:700;font-size:14px}
+.steps li b{color:var(--blue)}
+.steps li .who{font-family:Consolas,monospace;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.steps li .who.ai{color:var(--orange)} .steps li .who.hu{color:var(--green-d)}
+.gate{display:block;margin-top:6px;font-size:13px;color:var(--green-d)} .gate b{color:var(--green-d)}
+
+ul.clean{margin:8px 0;padding-left:20px} ul.clean li{margin:6px 0;color:var(--ink2)} ul.clean li b{color:var(--ink)}
+.x{color:var(--red);font-weight:700} .ok{color:var(--green-d);font-weight:700}
+
+.srcbtn{display:inline-block;font-size:10.5px;font-weight:700;color:var(--blue);background:#e9f0fc;
+  border:1px solid #c9dbf7;border-radius:5px;padding:0 7px;text-decoration:none;vertical-align:1.5px;margin-left:4px;white-space:nowrap}
+.srcbtn:hover{background:var(--blue);color:#fff;border-color:var(--blue);text-decoration:none}
+details{background:#fff;border:1px solid #e8eef8;border-radius:10px;margin:12px 0;padding:0 18px}
+details summary{cursor:pointer;padding:14px 0;font-size:14px;color:var(--blue);font-weight:600;list-style:none}
+details summary::before{content:"▸ ";color:var(--blue)} details[open] summary::before{content:"▾ "}
+details .inner{padding:4px 0 18px;font-size:13.5px;color:var(--ink)}
+.srctbl{width:100%;border-collapse:collapse;font-size:12.5px;min-width:0}
+.srctbl th{text-align:left;padding:8px 10px;color:var(--muted);border-bottom:1px solid var(--line);font-weight:600;background:none}
+.srctbl td{padding:8px 10px;border-bottom:1px solid #eef2f9;vertical-align:top}
+.srctbl tr:target td{background:#dbe7fb}
+.srctbl a{color:var(--blue);border-bottom:1px dashed #9db1d6;word-break:break-all}
+.srctbl a:hover{border-bottom-style:solid;text-decoration:none}
+
+footer{margin-top:56px;border-top:1px solid var(--line);padding-top:18px;font-size:12.5px;color:var(--muted)}
+footer b{color:var(--ink2)}
+@media(max-width:760px){.hero{padding:32px 24px}.hero h1{font-size:26px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="toc">
+    <a href="#tldr">一屏看懂</a>
+    <a href="#trend">趋势</a>
+    <a href="#cases">别家怎么做</a>
+    <a href="#method">核心方法</a>
+    <a href="#tools">工具栈</a>
+    <a href="#copyright">版权安全</a>
+    <a href="#learn">上哪学</a>
+    <a href="#styles">风格速查</a>
+    <a href="#donts">别踩的坑</a>
+    <a href="#honest">诚实边界</a>
+  </nav>
+
+  <div class="hero">
+    <div class="ey">AI FOR DESIGN · 行业落地指南 · 2026</div>
+    <h1>用 AI 做设计,到底怎么真正落地?</h1>
+    <p class="sub">这份指南只讲一件事:<b>已经跑通的团队,到底把 AI 放在了哪一段</b>。基于公开案例 + 独立实测,不是又一份趋势 PPT。每条都具名、带出处、标可信度,厂商自报的数字单独标注,并特意保留了<b>反向证据</b>。</p>
+    <div class="meet">
+      <b>它回答三件事:</b>
+      <span class="q">① 别家设计团队到底怎么用 AI、真提效多少(含翻车教训,不只报喜)</span>
+      <span class="q">② 大多数人卡住的那个坑(拿出图模型做精确 UI)根因是什么、怎么绕过去</span>
+      <span class="q">③ 一套能照着做的方法、该用哪些工具(含版权与商用安全)、别踩的坑</span>
+    </div>
+  </div>
+
+  <!-- ============ TL;DR ============ -->
+  <section id="tldr">
+    <p class="eyk">START HERE</p>
+    <h2>一屏看懂:6 条不随版本失效的判断</h2>
+    <p class="lead">模型每几个月换一代,但下面这 6 条决定「怎么学、怎么带团队、怎么用」的判断,穿越所有版本。</p>
+    <div class="grid g2">
+      <div class="card tldr"><h4>① 别再"炼咒语",要学"对话式指挥"</h4><p>前沿模型(GPT Image、Nano Banana、Flux.2)吃自然语言。SD1.5 时代那套超长负面提示词、权重微调、ComfyUI 节点图,对 2026 起步的人 <b>投入产出比极低</b>,不必先学。</p></div>
+      <div class="card tldr"><h4>② 护城河是"眼睛"和"方向"</h4><p>制作趋近免费,值钱的变成 <b>art direction(定方向)+ 策展(会筛)+ 迭代节奏</b>。有个真实张力值得知道:主流说"品味是唯一护城河",强反方说品味只是 alpha 不是 moat(默认水平每几个月被重置)。</p></div>
+      <div class="card tldr"><h4>③ 提效是真的,但只在"窄环节 + 人把关"</h4><p><b>本指南最重要的一条。</b>别家真正跑通的,都是把 AI 放进「已经很清楚该怎么做的那一段」;前面的判断和后面的把关仍是人。<b>全自动 / 替代人 = 翻车高发区。</b></p></div>
+      <div class="card tldr"><h4>④ 核心方法 = 资产 / 版式分离</h4><p><b>AI 产 PNG 内,设计工具管 PNG 外。</b>AI 只生成素材(插画/照片/纹理),文字、版式、间距、token 留在 Figma——文字是真文字层,永不被缩。见 <a href="#method">§4</a>。</p></div>
+      <div class="card tldr"><h4>⑤ 有结构或数字的,绝不生成扁平图</h4><p>凡是有结构(UI)或有数字(图表/仪表盘)的东西,生成<b>矢量图层</b>或<b>代码</b>(React/HTML/SVG)。就算出图模型文字清晰度上来了,它仍是扁平像素:字会缩、没法编辑、比例靠眼估。</p></div>
+      <div class="card tldr"><h4>⑥ 押可迁移的判断力,别押具体工具</h4><p>半年换一代(Nano Banana → Pro → 2)。把注押在"看得出好坏 + 说得清要什么 + 脑子里有风格词典"上,而不是某个 app 的操作。</p></div>
+    </div>
+    <div class="callout c-amber">
+      ⚠️ <b>关于时效:</b>本文凡涉及版本号、价格、发布日期,约 <b>30% 来自二手源</b>(厂商官网常是 JS 渲染 / 403 抓不到)。<b>做采购决策前,请对官方 /pricing 页当日复核一次。</b>各条已标可信度,详见 <a href="#honest">§10 诚实边界</a>。
+    </div>
+  </section>
+
+  <!-- ============ TREND ============ -->
+  <section id="trend">
+    <p class="eyk">SECTION 01 / LANDSCAPE</p>
+    <h2><span class="n">①</span>趋势:现在在发生什么 / 别学什么 / 大家在追什么</h2>
+    <p class="lead">技术日新月异,这一节把"仍在主线上的"和"已经被淘汰的"分开,别把时间投在会过期的技能上。</p>
+
+    <h3>主线范式:6 个正在发生的转变</h3>
+    <div class="grid g2">
+      <div class="card"><b>1. 从"炼提示词"→"对话式编辑"</b><br><span style="color:var(--ink2)">图像生成已内嵌进语言模型(原生多模态)。用大白话来回改("背景换成傍晚、她再笑一点"),而不是堆咒语。转折点:2025-03 GPT-4o 原生出图。<span class="conf">· 高可信</span></span></div>
+      <div class="card"><b>2. 图像模型开始"先想后画"</b><br><span style="color:var(--ink2)">2026-04 OpenAI gpt-image-2 号称首个"画前先推理":先规划构图、检查空间关系、校验文字,含 Thinking 模式。把 LLM 的 reasoning 带进出图。<span class="conf">· 中高</span></span></div>
+      <div class="card"><b>3. 一致性(consistency)成刚需</b><br><span style="color:var(--ink2)">角色/风格/人脸跨多图保持一致。Nano Banana Pro(2025-11)可融合 14 张参考图、保持 5 个人物一致、图内渲染清晰多语言文字。以前要训 LoRA,现在开箱即用。<span class="conf">· 高</span></span></div>
+      <div class="card"><b>4. 可控多图工作流 &gt; 单图抽卡</b><br><span style="color:var(--ink2)">关注点从"抽一张好图"转向"可控批量产出成套素材"(同角色多场景、多分镜、多尺寸)。面向漫画、故事板、品牌套图。<span class="conf">· 高</span></span></div>
+      <div class="card"><b>5. 实时生成(realtime)上台面</b><br><span style="color:var(--ink2)">Krea 的 Realtime Canvas 边画边出图,涂个草稿它实时补成成品。设计从"提交—等待—评审"变成"实时捏"。<span class="conf">· 中</span></span></div>
+      <div class="card"><b>6. 世界模型 / 3D / 视频"世界化"</b><br><span style="color:var(--ink2)">生成从平面扩到可交互 3D 世界(DeepMind Genie 3、World Labs Marble)。视频侧原生带声(Veo 3.1)、原生 4K 多镜头(Kling 3.0)、Sora 2 已成常规。<span class="conf">· 中高</span></span></div>
+    </div>
+
+    <div class="grid g2" style="margin-top:18px">
+      <div>
+        <h3 style="border-color:var(--red)">🚫 已过时 / 别浪费时间</h3>
+        <ul class="clean">
+          <li><b>SD1.5 "咒语学"</b> —— 超长负面提示词、booru 标签堆砌、<code>(keyword:1.4)</code> 权重微调,是为绕开老模型的崩坏。前沿模型基本不吃。</li>
+          <li><b>一上来钻 ComfyUI / ControlNet 节点图</b> —— 技术仍有效,但"管工具链比出图还费时"。除非做本地化/隐私/大批量微调,否则别先学。</li>
+          <li><b>迷信"负面提示词万能"和固定咒语模板</b> —— SDXL 起就对负面词不敏感,抄"魔法提示词大全"边际价值在衰减。</li>
+          <li><b>把某个单一 app/模型当成要 all-in 学的东西</b> —— 半年换一代。押注可迁移的判断力,别押注具体工具。</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="border-color:var(--green)">🔥 2026 大家在追什么</h3>
+        <ul class="clean">
+          <li><b>推理型出图</b>(reasoning / "thinking" image gen)</li>
+          <li><b>世界模型</b>(Genie 3、NVIDIA Cosmos、World Labs Marble)—— 会不会盖过纯 LLM 是热议</li>
+          <li><b>原生多模态统一模型</b>(底层 MMDiT,把图像块当"词")</li>
+          <li><b>节点式 / agentic 创意工作流</b>(Freepik Spaces、ComfyAgent —— 用 AI 帮你搭工作流)</li>
+          <li><b>"taste is the moat"大讨论</b> —— 品味到底是护城河还是只是暂时领先,这个张力值得持续关注。</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout c-blue">
+      <b>真正拉开差距的能力:</b>艺术指导(定义"为什么"和情绪)、策展与筛选(知道留什么砍什么)、迭代节奏(用对话式/实时工具快速收敛)、系统化(把一致性、品牌 token、成套素材做成可复用工作流)。制作层被自动化后,这四件事才是价值所在。
+    </div>
+  </section>
+
+  <!-- ============ CASES ============ -->
+  <section id="cases">
+    <p class="eyk">SECTION 02 / EVIDENCE</p>
+    <h2><span class="n">②</span>别家怎么做——先看真数据,也看翻车</h2>
+    <p class="lead">看外面不是追热闹,是搞清「提效」到底是真的还是话术。下面每条都具名、带出处、标了可信度,厂商自报的单独标 <span class="tg tg-vend">厂商自报</span>。</p>
+
+    <div class="kpis">
+      <div class="kpi">
+        <p class="lb">Pentagram · Midjourney</p>
+        <div class="big">1,500 <span class="u">图标</span></div>
+        <p>5–6 名设计师,先手绘一小套原创风格,再用 Midjourney 按此风格铺满整个图标库——替代的是原本请不起的插画师预算。<span class="tg tg-hi">高</span></p>
+      </div>
+      <div class="kpi">
+        <p class="lb">Coca-Cola 2025 圣诞广告</p>
+        <div class="big">~20 <span class="u">人 vs 传统 50+</span></div>
+        <p>Secret Level 制片方明确:这支 AI 广告约 20 人完成,传统同类需 50+ 人(≈−60% 剧组)。<span class="tg tg-hi">高</span></p>
+      </div>
+      <div class="kpi">
+        <p class="lb">Superside · 单项目</p>
+        <div class="big">−37%~−57% <span class="u">设计工时</span></div>
+        <p>跨 500+ AI 设计项目自报:Ava Labs 省 37.5% 工时、Unigloves 少 57% 工时。数字未经独立审计。<span class="tg tg-vend">厂商自报</span></p>
+      </div>
+    </div>
+
+    <div class="scroll">
+    <table>
+      <thead><tr><th>公司 / 团队</th><th>工具</th><th>流程怎么变</th><th>可测量结果</th><th>可信度 · 出处</th></tr></thead>
+      <tbody>
+        <tr class="flag"><td><b>Pentagram</b><br>Paula Scher 团队(Performance.gov)</td><td>Midjourney</td><td>手绘小样定风格 → Midjourney 按风格生成整库图标,替代插画师岗</td><td><b>1,500 图标</b>／5–6 人／预算内不可能靠人力完成</td><td><span class="tg tg-hi">高</span><a class="srcbtn" href="#S01">S01</a></td></tr>
+        <tr><td><b>Coca-Cola</b>「Create Real Magic」</td><td>GPT-4 + DALL·E(Bain×OpenAI,Azure)</td><td>把品牌资产开放成 prompt 输入,内容生产「从数周压到数天」</td><td>60 天上线;3 周内 43 国、100 万+ 互动、26 语言</td><td><span class="tg tg-md">中</span> 官方+微软案例<a class="srcbtn" href="#S02">S02</a></td></tr>
+        <tr><td><b>Coca-Cola</b> 2025 圣诞广告</td><td>多个生成式视频模型(Secret Level)</td><td>动物拟人+自有 Sundblom 圣诞老人授权画作,绕开去年「真人」争议</td><td>剧组 ~20 vs 50+;内测「史上测得最好之一」(未公开数字)</td><td><span class="tg tg-hi">高</span> 具名高管<a class="srcbtn" href="#S03">S03</a></td></tr>
+        <tr><td><b>Duolingo</b> 学习设计团队</td><td>LLM + 模板化 prompt(Birdbrain 质检)</td><td>把「已系统化的出题环节」自动化:设计师填结构化模板→AI 出多变体→人选审</td><td><b>12 年 100 门课 → 约 1 年 148 门课</b>(CEO 在案)</td><td><span class="tg tg-hi">高</span> 官方<a class="srcbtn" href="#S04">S04</a></td></tr>
+        <tr><td><b>Shopify</b> 设计组(~170 人)</td><td>Cursor + 内部工具 Artifact</td><td>设计师直接写代码原型(vibe coding),评审围绕可跑原型而非静态稿</td><td>超 50% 设计师产出上线代码,半年 <b>1,800+ PR</b></td><td><span class="tg tg-md">中</span> 高管访谈<a class="srcbtn" href="#S05">S05</a></td></tr>
+        <tr><td><b>Intercom</b> 设计团队</td><td>Cursor / Figma Make / Lovable / Claude Code</td><td>设计师自己改代码里的 UI bug;客户通话间隙 30 分钟改原型再测</td><td>定性(消化了低优 UI bug 积压);无硬数字</td><td><span class="tg tg-md">中</span> 官方博客·定性<a class="srcbtn" href="#S06">S06</a></td></tr>
+        <tr><td><b>Koto</b>(Stack Overflow 改版)</td><td>基于 Claude 自建生成工具</td><td>品牌资产库从「一堆文件」变成「有护栏的生成工具」,团队自助生成合规变体</td><td>过程公开+社区投票;无时间/成本数字</td><td><span class="tg tg-md">中</span> 设计媒体<a class="srcbtn" href="#S07">S07</a></td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3>诚实的另一面:反向证据(这块最值钱)</h3>
+    <div class="warn">
+      <b>提效是真的,但只在「已系统化的窄环节 + 人把关」。全自动 / 替代人 = 翻车高发区。</b>
+      <ul style="margin:8px 0 0;padding-left:18px">
+        <li><b>可乐 2024 AI 广告被大面积骂「没有灵魂」</b>(NBC/Forbes 独立报道)。<a class="srcbtn" href="#S08">S08</a></li>
+        <li><b>METR 2025 RCT:有经验的开发者用 AI 反而慢 19%</b>——证伪「用了一定提速」的想当然。<a class="srcbtn" href="#S09">S09</a></li>
+        <li><b>INFORMS《生成式 AI 在创意流程中的双刃角色》</b>:既能拉高产量,也可能让产出趋同、削弱原创。<a class="srcbtn" href="#S10">S10</a></li>
+        <li><b>Duolingo「AI-first」把 AI 使用纳入绩效打分,2026-04 被 CEO 撤回</b>——员工「为凑数而用」而非做更好的活。<a class="srcbtn" href="#S11">S11</a></li>
+        <li><b>「可乐因 AI 广告营收增长 5%/6%」是谣言</b>:被可乐自家财报证伪(增长来自价格/结构,非该活动)。<a class="srcbtn" href="#S02">S02</a></li>
+      </ul>
+    </div>
+    <p class="pains">🎯 <b>本节 takeaway:</b>别家真正跑通的,都是把 AI 放进「已经很清楚该怎么做的那一段」,前面的判断和后面的把关仍然是人。一句流传的创意圈说法——「AI 抬高的是<b>判断力</b>的门槛」。要抄的是这个姿势,不是「让 AI 替我做设计」。</p>
+  </section>
+
+  <!-- ============ METHOD ============ -->
+  <section id="method">
+    <p class="eyk">SECTION 03 / THE METHOD</p>
+    <h2><span class="n">③</span>核心方法:资产 / 版式分离</h2>
+    <p class="lead">最常见的坑:拿 ChatGPT / 出图模型做精确 UI,每次都把字号缩小、版式重排——这不是 prompt 写得不够狠,是工具选错了层。</p>
+
+    <div class="pains">💡 <b>知识卡 · 为什么出图模型的「文字」总在漂移?</b><br>扩散/像素模型每次生成都在<b>重新采样整张图</b>,所谓「文字」只是一片像素,不是文字层。所以字号、字形、措辞每一版都会变。就算 Nano Banana Pro 的文字渲染是业界最好的,那也是<b>烤进图里的像素</b>——做海报可以,做「要能改的 UI 文案」就是用错了。8px 网格、精确 hex、固定字阶,这些是<b>结构属性</b>,扩散模型根本不具备,再硬的 prompt 也约束不出来。</p>
+
+    <div class="shift">
+      <div class="col old">
+        <h4>✗ 旧打法:让 AI 出整屏 UI</h4>
+        <ul>
+          <li>文字被当图像重绘 → 字号缩小、措辞乱变</li>
+          <li>版式每次重排,改一个字要重生成整屏</li>
+          <li>输出是扁平像素:无图层、无组件、无层级</li>
+          <li>换肤/本地化/改文案 = 从头再来</li>
+          <li>越写越硬的 prompt,治标不治本</li>
+        </ul>
+      </div>
+      <div class="col new">
+        <h4>✓ 新打法:资产 / 版式分离</h4>
+        <ul>
+          <li>AI 只生产「PNG 里的东西」(插画/照片/纹理/去背素材)</li>
+          <li>设计工具拥有「PNG 以外的一切」:位置/尺寸/文字/间距/token</li>
+          <li>文字是<b>真文字层</b>,永不被缩——因为这条回路里没有模型</li>
+          <li>改文案 = 直接改文字层;换肤 = 换 Variables</li>
+          <li>需要一致的一组图 → 对素材「局部改」,不整屏重生成</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>SOP:一条能照着做的流水线</h3>
+    <p class="lead">以「一组 App onboarding 插画放进卡片」为例,逐步走。<span class="who ai mono">AI</span> = 交给模型;<span class="who hu mono" style="color:var(--green-d)">人</span> = 在 Figma 里做。</p>
+    <ol class="steps">
+      <li><span class="who hu">人 · Figma</span> — <b>先定约束。</b>确认插画配色/圆角/卡片规格已经是 <b>Variables</b>(品牌主色等存为 token);备好 2–3 张品牌参考图 + logo + 色板图 = 一个 reference kit。</li>
+      <li><span class="who ai">AI · 生成模型</span> — <b>生成原始插画。</b>喂 Reference Stack,<b>只描述插画本身</b>(主体/风格/配色/透明或纯底)——不要 UI、不要卡片、不要按钮、不要文字标签;要 2K 以上。</li>
+      <li><span class="who ai">AI · 同模型局部改</span> — <b>做成一致的一组。</b>要成套(如 3 屏)时,用「局部/增量改图」("同一角色同风格,现在拿着手机"),别从头重 prompt——这才锁得住跨图一致性。</li>
+      <li><span class="who hu">人 · Figma/PS</span> — <b>清理素材。</b>去背/压平 → 透明 PNG;需要就升分辨率;统一丢到一个 <b>Assets 页</b>,别污染排版文件。</li>
+      <li><span class="who hu">人 · Figma(核心步骤)</span> — <b>在画布搭真版式。</b>卡片 = auto-layout 帧绑 Variables(圆角/内距/填充);PNG 作为图层放进去;<b>每一句文案都是真文字层</b>、用库里的字体样式。文字在这里永不被缩,因为没有模型碰它。</li>
+      <li><span class="who ai">AI · 局部</span> — <b>只微调,不动像素。</b>插画要改色/光/裁切 → 只把<b>素材</b>送回模型做局部改 → 重导 → 换掉填充;版式、文字、间距一律不动。</li>
+      <li><span class="who hu">人 · 可选</span> — <b>要可点 demo 才用 Figma Make</b> 生成代码版,或走 Dev Mode 带 token 交付。放在成品下游,<b>别在里面做设计</b>(它出的是代码,不是可编辑图层)。</li>
+      <li><span class="who hu">人</span> — <b>一致性检查。</b>整组丢进 3×3 平铺,签字前肉眼过一遍配色 + 插画协调。</li>
+    </ol>
+    <p class="pains">🎯 <b>黄金律:</b>AI 在 PNG 里生产,设计工具管 PNG 以外的位置 / 尺寸 / 文字 / 间距 / token。任何时候拿不准,回到这一句。</p>
+
+    <h3>三个上手实验(验证这套方法,过关标准是二值的)</h3>
+    <p class="lead">不求一步到位,跑通一个就是真进展。过关标准都设计成「能 / 不能」,没有模糊地带。</p>
+    <ol class="steps">
+      <li><b>实验 A · 一致插画组进卡片。</b>用生成模型做 3 张同风格插画 → 放进 Figma auto-layout 卡片,配真文字层。<span class="gate">✅ <b>过关:</b>拿给一个没参与的人看,他一眼认得出这 3 张是「同一套」。</span></li>
+      <li><b>实验 B · 免费出 onboarding 首屏。</b>用 Google Stitch prompt 一版移动首屏 → Paste to Figma → 手工改上品牌色。<span class="gate">✅ <b>过关:</b>落回 Figma 的是<b>真图层不是图</b>,且能直接点开改文字。</span></li>
+      <li><b>实验 C · 真数据仪表盘环。</b>用 GaugeGarage 出可编辑矢量环,或让 v0 出 Recharts RadialBarChart 代码版。<span class="gate">✅ <b>过关:</b>环的扫过角度对应<b>真实数值</b>,不是眼睛估的。</span></li>
+    </ol>
+    <div class="tip">💡 <b>那种"数据仪表盘的进度环 / 仪表盘环"怎么办?</b> 诚实结论:2026 年<b>没有</b>「AI 直接生成数据准确的环形图」。两条真路——(1) 在 Figma 里用 <b>GaugeGarage</b> 插件画可编辑矢量环;(2) 让 <b>v0 / Claude 出 Recharts 的 RadialBarChart 代码</b>(真数据绑定,环的扫过角度对应真实数值)。<b>别用出图模型糊一个</b>,那是眼估的、改不动的。<a class="srcbtn" href="#S16">S16</a></div>
+  </section>
+
+  <!-- ============ TOOLS ============ -->
+  <section id="tools">
+    <p class="eyk">SECTION 04 / TOOLKIT</p>
+    <h2><span class="n">④</span>工具栈:五个赛道 + UI/素材怎么选</h2>
+    <p class="lead">每轨只列真正的领跑者。价格全部标「采购前复核」——这类产品定价每月都在变,写死会坑人。标签:<span class="pill p-must">必学 frontier</span> <span class="pill p-good">值得会</span> <span class="pill p-niche">小众</span> <span class="pill p-warn">留意</span>。</p>
+
+    <h3>① 图像生成 &amp; 美术指导</h3>
+    <div class="scroll"><table>
+      <tr><th>工具</th><th>最擅长</th><th>现状/版本</th><th>价位(复核)</th><th>标签</th></tr>
+      <tr class="flag"><td><b><a href="https://midjourney.com" target="_blank">Midjourney</a></b></td><td>电影感/艺术审美天花板</td><td>V8.1 默认(HD 2K,~4s)</td><td>$10/$30/$60/$120</td><td><span class="pill p-must">必学</span></td></tr>
+      <tr class="flag"><td><b><a href="https://firefly.adobe.com" target="_blank">Adobe Firefly</a></b></td><td>商用版权安全 + 深嵌 PS/Ai</td><td>Image Model 4/4 Ultra</td><td>免费25分/$9.99/$19.99</td><td><span class="pill p-must">必学</span></td></tr>
+      <tr class="flag"><td><b>Nano Banana(Gemini)</b></td><td>对话式精修 + 多图一致性,快又便宜</td><td>Gemini 家族(现 2/Pro)</td><td>含在 Google AI 订阅</td><td><span class="pill p-must">必学</span></td></tr>
+      <tr><td><b><a href="https://ideogram.ai" target="_blank">Ideogram</a></b></td><td>图内文字/排版最强,logo/招牌</td><td>4.0(2K,权重开源)</td><td>免费/$7/$15/$42</td><td><span class="pill p-good">值得会</span></td></tr>
+      <tr><td><b><a href="https://recraft.ai" target="_blank">Recraft</a></b></td><td>矢量/SVG/品牌系统(唯一生产级可编辑 SVG)</td><td>V4</td><td>~$10 起/$47</td><td><span class="pill p-good">值得会</span></td></tr>
+      <tr><td><b>Flux (BFL)</b></td><td>开源权重 + Kontext 指令式编辑</td><td>Flux.2(Klein/Pro/Max)</td><td>按像素计</td><td><span class="pill p-good">值得会</span></td></tr>
+      <tr><td><b><a href="https://krea.ai" target="_blank">Krea</a></b></td><td>实时画布 + 聚合 150+ 模型</td><td>Krea 1/2 + 聚合</td><td>免费/$9/$35/$105</td><td><span class="pill p-good">值得会</span> <span class="conf">学习沙盒极佳</span></td></tr>
+    </table></div>
+
+    <h3>② 视频 &amp; 动态</h3>
+    <div class="scroll"><table>
+      <tr><th>工具</th><th>最擅长</th><th>现状/版本</th><th>价位(复核)</th><th>标签</th></tr>
+      <tr class="flag"><td><b><a href="https://runwayml.com" target="_blank">Runway</a></b></td><td>影视级镜头连贯 + video-to-video 精修</td><td>Gen-4 / Aleph</td><td>~$12/$28/$76</td><td><span class="pill p-must">必学</span></td></tr>
+      <tr class="flag"><td><b>Google Veo</b></td><td>原生同步音频(对白+音效一次生成)</td><td>Veo 3.1(在 Gemini/Flow 内)</td><td>$7.99/$19.99/$249</td><td><span class="pill p-must">必学</span></td></tr>
+      <tr class="flag"><td><b>Kling 🇨🇳</b></td><td>物理/运动真实感,多镜头叙事</td><td>Kling 3.0(4K/原生音频)</td><td>免费/积分制,~$130 顶</td><td><span class="pill p-must">必学</span></td></tr>
+      <tr><td><b>OpenAI Sora</b></td><td>电影感文生视频(模型仍一线)</td><td><b>退场中</b>:API 2026-09-24 关停</td><td>仅剩 API</td><td><span class="pill p-warn">退场中</span></td></tr>
+      <tr><td><b>Hailuo/MiniMax 🇨🇳</b></td><td>高性价比 + 物理运动,速度快</td><td>Hailuo 02</td><td>$7.99–$199</td><td><span class="pill p-good">值得会</span></td></tr>
+      <tr><td><b>Luma Dream Machine</b></td><td>快速批量 + storyboard</td><td>Ray 3 线</td><td>$30/$90/$300</td><td><span class="pill p-good">值得会</span></td></tr>
+      <tr><td><b>Higgsfield</b></td><td>相机/镜头运动控制,50+ 运镜预设</td><td>Cinema Studio 3.5</td><td>免费/$15/$49/$129</td><td><span class="pill p-niche">小众</span></td></tr>
+    </table></div>
+    <p class="small">一线四强:<b>Runway · Veo 3.1 · Kling 3.0</b>(+ 处境特殊的 Sora)。中国系 Kling/Hailuo 在物理运动与性价比上已入全球第一梯队。</p>
+
+    <h3>③ UI / 网页 / 产品设计——要结构化输出,不要出图</h3>
+    <p>核心原则:凡是<b>有结构或有数字</b>的东西,生成<b>矢量图层</b>(Figma 插件)或<b>代码</b>(React/HTML/SVG),<b>绝不生成扁平图</b>。就算 2026 年出图模型的文字清晰度上来了,它仍是扁平像素:字会缩、没法编辑、比例靠眼估。</p>
+    <div class="scroll">
+    <table>
+      <thead><tr><th>工具</th><th>输出</th><th>文字/版式可编辑?</th><th>最适合</th><th>弱点</th><th>价位(复核)</th><th>源</th></tr></thead>
+      <tbody>
+        <tr class="flag"><td><b>Magic Patterns</b></td><td>React/Vue/Tailwind 代码 + 真·Figma 导出</td><td><b>两边都可编辑</b>;Figma 导出=可编辑图层(非 PNG)</td><td>回流 Figma、设计系统导入(上传品牌/组件后生成会遵守)</td><td>Figma 导出是「每状态静态快照」,交互会丢,每状态手动导</td><td>免费~50 额度;~$20;~$100/月</td><td><span class="tg tg-hi">高</span><a class="srcbtn" href="#S12">S12</a></td></tr>
+        <tr class="flag"><td><b>Google Stitch</b>(原 Galileo AI)</td><td>可编辑 UI + 前端代码;<b>Paste-to-Figma</b></td><td>是——粘进 Figma 保留命名图层、组件分组、Auto Layout、活文字</td><td><b>免费</b>、快速出移动首屏草稿并落回 Figma 真结构</td><td>无动效/原型;不能强制品牌系统;质量很吃 prompt</td><td>Google Labs <b>免费</b>(月约 350 次);付费预计年内</td><td><span class="tg tg-hi">高</span><a class="srcbtn" href="#S13">S13</a></td></tr>
+        <tr><td><b>UX Pilot</b></td><td>高保真屏/流程;导出 Figma 可编辑帧 + 代码</td><td>是——可编辑帧;导出保真度偶有波动</td><td>多屏 UX 流程;附注意力热区 + 自动设计评审</td><td>Figma 导出仅付费;额度计费;数据图需清理</td><td>试用~7 屏;~$12/~$22/月</td><td><span class="tg tg-md">中高</span><a class="srcbtn" href="#S14">S14</a></td></tr>
+        <tr><td><b>Figma Make</b></td><td>Code-first:Figma 内可跑的 React 应用</td><td>可编辑单位是<b>代码</b>;原生图层提取仍是闭测</td><td>从 prompt/文件出可点交互原型,复用团队库</td><td>心智是「写应用」不是「搬图层」;吃 AI 额度 + Full 席位</td><td>Starter 免费(限流);~$16/Full 席位/月</td><td><span class="tg tg-md">中高</span><a class="srcbtn" href="#S15">S15</a></td></tr>
+        <tr><td><b><a href="https://v0.app" target="_blank">Vercel v0</a></b></td><td>文字/截图→高质 React UI,可部署</td><td>是——代码即产物</td><td>偏开发者但设计师也能用;真数据图表/仪表盘</td><td>要点代码基础才能改深</td><td>$5/月起,Team $30/人</td><td><span class="tg tg-hi">高</span><a class="srcbtn" href="#S16">S16</a></td></tr>
+        <tr><td><b><a href="https://framer.com" target="_blank">Framer AI</a></b></td><td>生成可上线营销站/落地页(带托管+CMS)</td><td>可视化编辑,设计师友好</td><td>快速上线 landing page / 展示站</td><td>非产品级复杂 App</td><td>免费/$10/$30</td><td><span class="tg tg-md">中高</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="mods">
+      <div class="mod core"><span class="rank">#1 最贴</span><div class="h"><span class="id">▸</span>Magic Patterns</div><div class="role">唯一同时出<b>可编辑代码</b>又把<b>可编辑图层推回 Figma</b>——Figma 保持 source of truth。设计系统导入让生成守品牌。</div></div>
+      <div class="mod"><span class="rank">#2 免费起手</span><div class="h"><span class="id">▸</span>Google Stitch</div><div class="role">零成本 prompt 一版移动首屏,<b>Paste-to-Figma</b> 保留图层+auto-layout,再手工艺术指导。当起跑块用。</div></div>
+      <div class="mod"><span class="rank">#3 真数据</span><div class="h"><span class="id">▸</span>v0 / Figma Make</div><div class="role">要图表/仪表盘/带真实数值的组件,走代码路线(Recharts 等),角度、比例对应真数据,不靠眼估。</div></div>
+    </div>
+
+    <h3>④ 素材生成:插画 / 照片 / 图标 / 矢量</h3>
+    <div class="scroll">
+    <table>
+      <thead><tr><th>工具</th><th>最适合</th><th>品牌一致性手法</th><th>商用安全</th><th>价位(复核)</th><th>源</th></tr></thead>
+      <tbody>
+        <tr class="flag"><td><b>Nano Banana Pro</b><br>(Gemini 3 Pro Image, 2025-11)</td><td>一致的插画组、局部改图、高质量主视觉</td><td>Reference Stack(喂≤14 张参考)+ 增量局部改;锁最多 5 人/14 物</td><td>付费可商用,带 <b>SynthID</b> 隐形水印</td><td>Gemini 付费 / AI Studio / <b>PS 生成式填充里直接选</b></td><td><span class="tg tg-hi">高</span><a class="srcbtn" href="#S17">S17</a></td></tr>
+        <tr class="flag"><td><b>Adobe Firefly</b></td><td>对外正式 / 合规敏感素材</td><td>Firefly 自定义模型 + Boards</td><td><b>商用最稳(见 §5)</b>:授权数据训练 + 付费含 IP 赔付</td><td>随 Adobe CC / Firefly 订阅</td><td><span class="tg tg-hi">高</span><a class="srcbtn" href="#S18">S18</a></td></tr>
+        <tr><td><b>Recraft</b></td><td>品牌矢量、图标集、有「设计系统感」的图</td><td>可复用 brand styles + 品牌色控制 + <b>SVG/矢量导出</b></td><td>付费=完整所有权/商用;免费带水印且禁商用</td><td>Pro ~$20/月</td><td><span class="tg tg-hi">高</span><a class="srcbtn" href="#S19">S19</a></td></tr>
+        <tr><td><b>Ideogram</b></td><td>带文字的图、logo、排版类视觉</td><td>业界最强图内文字渲染</td><td>免费即可商用无水印;Plus 有完整商用授权</td><td>免费 / Plus</td><td><span class="tg tg-hi">高</span><a class="srcbtn" href="#S20">S20</a></td></tr>
+        <tr><td><b>Midjourney</b></td><td>美感/概念探索(灵感期)</td><td>--sref 风格参照</td><td><b>风险:训练数据爬全网、零 IP 赔付</b>(见 §5)</td><td>付费订阅</td><td><span class="tg tg-hi">高</span><a class="srcbtn" href="#S21">S21</a></td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3>⑤ 3D / 空间 &amp; 收口实用工具</h3>
+    <div class="scroll"><table>
+      <tr><th>工具</th><th>最擅长</th><th>价位(复核)</th><th>标签</th></tr>
+      <tr><td><b><a href="https://meshy.ai" target="_blank">Meshy</a></b></td><td>文/图生 3D 网格+贴图,通用资产主力(Meshy 6)</td><td>免费/$20/$60</td><td><span class="pill p-must">必学</span></td></tr>
+      <tr><td><b><a href="https://tripo3d.ai" target="_blank">Tripo</a></b></td><td>文/图生 3D,几何+拓扑质量高(3.0)</td><td>免费/$19.9</td><td><span class="pill p-good">值得会</span></td></tr>
+      <tr><td><b><a href="https://vizcom.ai" target="_blank">Vizcom</a></b></td><td>草图→写实渲染,工业/产品设计强相关(客户含 Ford/Honda)</td><td>免费/~$29–49</td><td><span class="pill p-good">值得会</span></td></tr>
+      <tr><td><b>Luma AI</b></td><td>手机拍照做 3D 实景捕捉(高斯泼溅)</td><td>捕捉免费/$30 起</td><td><span class="pill p-good">值得会</span></td></tr>
+      <tr><td><b>Photoshop 生成式填充</b> (Firefly)</td><td>局部生成/扩图/去除,嵌专业工作流(收口神器)</td><td>PS $22.99 / 摄影计划 $19.99</td><td><span class="pill p-must">必学</span></td></tr>
+      <tr><td><b><a href="https://magnific.com" target="_blank">Magnific AI</a></b></td><td>AI 升频 + Reimagine 增强(出海报级大图)</td><td>~$18–39 起</td><td><span class="pill p-good">值得会</span></td></tr>
+      <tr><td><b><a href="https://photoroom.com" target="_blank">Photoroom</a></b></td><td>电商/产品去背 + AI Relight,批量出图</td><td>免费/$7.99/$26.99</td><td><span class="pill p-good">值得会</span></td></tr>
+    </table></div>
+    <p class="small">另有一批<b>建筑/空间专用 AI</b>(Veras 深嵌 Revit/SketchUp/Rhino、ArkoAI 视口实时渲染、LookX、Maket 平面图)——若涉及建筑可视化,可单独展开。</p>
+
+    <div class="callout c-blue">
+      <b>🎒 起步只装 5 个(团队 rollout 版):</b>
+      <ol style="margin:8px 0 0;padding-left:20px;font-size:14px">
+        <li><b>Adobe Firefly / PS 生成式填充</b> —— 摩擦最小(团队多已在用 Adobe)+ 商用版权安全,adoption 从「已有软件多个 AI 按钮」开始成功率最高。</li>
+        <li><b>Midjourney</b> —— 美术审美天花板,主视觉/campaign/moodboard 主力。</li>
+        <li><b>Nano Banana</b> —— 对话式精修 + 多图一致性,补 MJ「难保持同一角色跨图一致」的短板,几乎零上手成本。</li>
+        <li><b>Figma Make</b> —— UI/网页轨唯一必装,从稿子直接出可交互原型+代码,设计师端阻力最低。</li>
+        <li><b>Runway 或 Veo 3.1</b> —— 覆盖视频。要「一次出带声成片」选 Veo,要专业剪辑/video-to-video 选 Runway。</li>
+      </ol>
+      <p style="margin:8px 0 0;font-size:13.5px">想一次试遍所有模型,再加 <b>Krea</b> 当聚合沙盒。</p>
+    </div>
+  </section>
+
+  <!-- ============ COPYRIGHT ============ -->
+  <section id="copyright">
+    <p class="eyk">SECTION 05 / RIGHTS &amp; SAFETY</p>
+    <h2><span class="n">⑤</span>版权与商用安全——尤其对外发资产的品牌</h2>
+    <p>对外发布资产的品牌(尤其金融、保险、医疗等合规敏感行业),不能用「有版权污点」的输出。这块单独拎出来说清楚。</p>
+    <div class="red">
+      <div class="r" style="border-left-color:var(--green)"><b style="color:var(--green-d)">⭐ 商用最稳 = Adobe Firefly</b><br>只用授权 Adobe Stock + 公有领域 + 开放授权内容训练;<b>付费 CC 计划含 IP 赔付</b>(有人告你侵权,Adobe 出面抗诉),企业版赔付上限更高。<span class="small">(小瑕疵:Firefly 现在也部分训练自 Adobe Stock 上的 AI 图,"纯净"叙事有杂质)</span></div>
+      <div class="r"><b>⚠️ Midjourney = 慎用于对外</b><br>训练数据爬全网 → 有诉讼风险;付费可商用、你拥有输出,但<b>零 IP 赔付</b>、公司明确免责;无企业版/SSO/API(截至 2026-04)。→ 只做灵感,别做对外终稿。</div>
+      <div class="r" style="border-left-color:var(--blue)"><b style="color:var(--blue-d)">Recraft / Ideogram</b><br>付费计划给完整商用权。Recraft 免费带水印且<b>禁</b>商用;Ideogram 免费即可商用无水印。</div>
+      <div class="r" style="border-left-color:var(--blue)"><b style="color:var(--blue-d)">Nano Banana Pro (Gemini)</b><br>付费可商用,输出带 SynthID 隐形水印。做一致性插画的主力,但对外合规敏感件仍优先 Firefly。</div>
+    </div>
+    <div class="danger">🔴 <b>法律灰区 + 采购红线:</b>纯 AI 生成物在美国<b>可能不受版权保护</b>(美版权局立场)→ 品牌资产一定要<b>保持人类作者在回路</b>(「资产/版式分离」天然满足:人做版式和最终编排)。<b>采购/上线前务必核对各家 2026 官方 ToS,价格全部现场复核。</b></div>
+    <div class="pains">🎯 <b>推荐默认栈:</b>对外正式/合规敏感 → <b>Firefly</b>;内部/灵感/一致性插画 → <b>Nano Banana Pro</b>;品牌矢量/图标/设计系统 → <b>Recraft</b>;带文字的图/logo → <b>Ideogram</b>;UI 结构 → <b>Magic Patterns / Stitch</b>。</div>
+  </section>
+
+  <!-- ============ LEARN ============ -->
+  <section id="learn">
+    <p class="eyk">SECTION 06 / WHERE TO LEARN</p>
+    <h2><span class="n">⑥</span>上哪学 · 跟谁学</h2>
+    <p class="lead">下面 25 个 handle <b>均已联网核实为真号、近期活跃</b>。系统学习其实很少发生在 X。</p>
+
+    <h3>跟谁学:各赛道权威博主</h3>
+    <div class="scroll"><table>
+      <tr><th>赛道</th><th>名字</th><th>Handle</th><th>覆盖 / 为什么权威</th></tr>
+      <tr><td rowspan="5"><b>AI 图像<br>/ MJ</b></td><td>Nick St. Pierre</td><td class="mono"><a href="https://x.com/nickfloats" target="_blank">@nickfloats</a></td><td>最系统的 Midjourney 教学者之一,版本更新出成套 guide</td></tr>
+      <tr><td>Linus Ekenstam</td><td class="mono"><a href="https://x.com/LinusEkenstam" target="_blank">@LinusEkenstam</a></td><td>~400k 粉,最活跃的西方 AI 内容创作者,偏"能上手"</td></tr>
+      <tr><td>Kris Kashtanova</td><td class="mono"><a href="https://x.com/icreatelife" target="_blank">@icreatelife</a></td><td>Adobe 高级 AI Evangelist,兼顾创作与版权议题</td></tr>
+      <tr><td>Javi Lopez</td><td class="mono"><a href="https://x.com/javilopen" target="_blank">@javilopen</a></td><td>Magnific AI 创始人,实操派,爱分享 prompt/资源</td></tr>
+      <tr><td>Heather Cooper</td><td class="mono"><a href="https://x.com/HBCoop_" target="_blank">@HBCoop_</a></td><td>Prime Video 创意总监兼 AI 教育者,工作流讲得极细</td></tr>
+      <tr><td rowspan="5"><b>AI 视频<br>/ 动态</b></td><td>Cristóbal Valenzuela</td><td class="mono"><a href="https://x.com/c_valenzuelab" target="_blank">@c_valenzuelab</a></td><td>Runway 联合创始人兼 CEO,赛道定调者本人</td></tr>
+      <tr><td>Justine Moore</td><td class="mono"><a href="https://x.com/venturetwins" target="_blank">@venturetwins</a></td><td>a16z 消费 AI 合伙人,持续梳理创意 AI 全景图</td></tr>
+      <tr><td>Caleb Ward / Curious Refuge</td><td class="mono"><a href="https://curiousrefuge.com" target="_blank">curiousrefuge.com</a></td><td>"全球第一个 AI 电影课",合作 Netflix/Adobe/Sony</td></tr>
+      <tr><td>PJ Ace</td><td class="mono"><a href="https://x.com/PJaccetturo" target="_blank">@PJaccetturo</a></td><td>病毒式 AI 广告,内容 275M+ 播放,Variety 报道</td></tr>
+      <tr><td>el.cine</td><td class="mono"><a href="https://x.com/EHuanglu" target="_blank">@EHuanglu</a></td><td>新视频模型出来第一时间出教程</td></tr>
+      <tr><td rowspan="4"><b>AI +<br>UI/产品</b></td><td>Jordan Singer</td><td class="mono"><a href="https://x.com/jsngr" target="_blank">@jsngr</a></td><td>用 GPT-3 做 Figma 插件引爆设计圈;创立 Diagram(被 Figma 收购)</td></tr>
+      <tr><td>Pietro Schirano</td><td class="mono"><a href="https://x.com/skirano" target="_blank">@skirano</a></td><td>MagicPath AI CEO(design-to-code),前 Anthropic</td></tr>
+      <tr><td>Guillermo Rauch</td><td class="mono"><a href="https://x.com/rauchg" target="_blank">@rauchg</a></td><td>Vercel 创始人兼 CEO,v0 背后的人,Next.js 作者</td></tr>
+      <tr><td>Amelia Wattenberger</td><td class="mono"><a href="https://x.com/wattenberger" target="_blank">@wattenberger</a></td><td>专攻"AI 时代新交互",设计+代码双修标杆</td></tr>
+      <tr><td rowspan="3"><b>AI 3D<br>/ 空间</b></td><td>Bilawal Sidhu</td><td class="mono"><a href="https://x.com/bilawalsidhu" target="_blank">@bilawalsidhu</a></td><td>前 Google XR/3D Maps PM,TED AI Show 主持,2.1M+ 受众</td></tr>
+      <tr><td>Martin Nebelong</td><td class="mono"><a href="https://x.com/MartinNebelong" target="_blank">@MartinNebelong</a></td><td>前 Luma 驻场艺术家,AI 概念/绘画最有辨识度之一</td></tr>
+      <tr><td>Don Allen Stevenson III</td><td class="mono"><a href="https://x.com/DonAllenIII" target="_blank">@DonAllenIII</a></td><td>AR/3D/XR 创意教学,MasterClass 讲师</td></tr>
+      <tr><td rowspan="4"><b>入门<br>通用</b></td><td>Matt Wolfe</td><td class="mono"><a href="https://x.com/mreflow" target="_blank">@mreflow</a></td><td>FutureTools 创办人,YouTube ~900k,最主流入门频道</td></tr>
+      <tr><td>Min Choi</td><td class="mono"><a href="https://x.com/minchoi" target="_blank">@minchoi</a></td><td>擅长把新能力翻译成"普通人怎么用"</td></tr>
+      <tr><td>Barsee</td><td class="mono"><a href="https://x.com/heyBarsee" target="_blank">@heyBarsee</a></td><td>272k 粉,AI Valley newsletter 创办人</td></tr>
+      <tr><td>Riley Brown</td><td class="mono">@rileybrown_ai</td><td>Vibecode 联创,vibe coding 教学代表人物</td></tr>
+    </table></div>
+
+    <details>
+      <summary>📬 值得订阅的 Newsletter(6 个,均已核实)</summary>
+      <div class="inner">
+        <b>The Rundown AI</b> · therundown.ai —— 2M+ 读者,最大的 AI newsletter<br>
+        <b>The Neuron</b> · theneuron.ai —— 700k+,讲人话<br>
+        <b>Ben's Bites</b> · bensbites.com —— 面向 builder 的 AI 创业动态<br>
+        <b>Visually AI</b>(Heather Cooper)· heatherbcooper.substack.com —— 创意方向最实用<br>
+        <b>The AI Valley</b>(Barsee)· theaivalley.com —— 3 分钟读懂当日突破<br>
+        <b>AI Art Weekly</b>(Dreaming Tulpa)· aiartweekly.com —— 目前最佳 AI 艺术专属刊
+      </div>
+    </details>
+
+    <h3>上哪学:权威平台与社区(系统学习不在 X)</h3>
+    <div class="callout c-green">
+      <b>X 只占一小块。</b>真正系统学习发生在三类地方 ——<br>
+      ① <b>Discord + 工具的 "Explore" 页</b>:Midjourney Explore、Krea 实时 feed、Banodoco(AI 视频)、Firefly Gallery(<b>悬停即看别人作品背后的完整 prompt</b>);<br>
+      ② <b>少数 Reddit</b>:r/StableDiffusion 最实战;<br>
+      ③ <b>课程/媒体</b>:Domestika + IxDF + Creative Bloq + AI Art Weekly。<br>
+      而且 —— <b>Adobe / Figma / Canva 这些"老设计软件"现在都内置了原生 AI</b>(Firefly / Figma agent / Magic Studio),各自运营社区和第一方学习中心。<b>对刚入门的设计师,这恰恰是门槛最低、最"商用安全"的起点 —— 从这里进,再往 Discord/Explore 的前沿延伸。</b>
+    </div>
+    <div class="grid g3">
+      <div class="card"><b>软件原生 AI 生态</b><ul class="clean" style="font-size:13.5px">
+        <li>Adobe Firefly + Adobe Learn + Behance</li>
+        <li>Figma AI/Make + Figma Community + Config</li>
+        <li>Canva Magic Studio + Design School(免费证书,适合团队 rollout)</li>
+      </ul></div>
+      <div class="card"><b>前沿实战社区</b><ul class="clean" style="font-size:13.5px">
+        <li>Midjourney Explore + Discord(审美标杆)</li>
+        <li>Banodoco(开源 AI 视频最前沿,纯 Discord)</li>
+        <li>r/StableDiffusion(开源工作流中心)</li>
+        <li>Krea(最快实时创作循环)· PromptHero</li>
+      </ul></div>
+      <div class="card"><b>课程 / 媒体</b><ul class="clean" style="font-size:13.5px">
+        <li>Domestika(项目制,正对设计师)</li>
+        <li>Interaction Design Foundation(UX 向系统课)</li>
+        <li>Creative Bloq(选工具最有用)· It's Nice That(品味风向标)</li>
+      </ul></div>
+    </div>
+    <div class="callout c-amber" style="font-size:13.5px">
+      ⚠️ <b>几个易踩的坑:</b> ① <b>Cara</b>(cara.app)是<b>反 AI</b> 艺术家社区,禁 AI 作品——别当成找 AI 灵感的地方。 ② <b>Playground</b> 已退出 AI 艺术展示赛道,别再引用为画廊。 ③ 被封 AI 的是主流 <b>r/Art</b>,<b>不是</b> r/aiArt(后者活着)。 ④ School of Motion ≠ Motion Design School(AI 动效课在后者)。 ⑤ Dribbble/Behance 对纯 AI 作品有披露/限制政策。
+    </div>
+  </section>
+
+  <!-- ============ STYLES ============ -->
+  <section id="styles">
+    <p class="eyk">SECTION 07 / STYLE CHEAT SHEET</p>
+    <h2><span class="n">⑦</span>风格速查(当 Prompt 词典用,英文名即关键词)</h2>
+    <p class="lead">出图前先想清楚要哪个流派,英文名直接进 prompt。配合每个风格的看图链接,先建一本自己的"风格词典"。</p>
+    <div class="scroll"><table>
+      <tr><th>组</th><th>风格(英文=prompt 词)</th><th>长什么样</th><th>什么时候用</th></tr>
+      <tr><td rowspan="7"><b>平面<br>品牌</b></td><td>Bauhaus</td><td>几何形+三原色+无衬线+白底,功能主义</td><td>理性、现代、"有设计感"的海报/基调</td></tr>
+      <tr><td><b>Swiss / International Typographic</b></td><td>严格网格+大量留白+Helvetica+不对称平衡</td><td><b>正式 B2B / 金融科技 deck 的默认安全底色</b></td></tr>
+      <tr><td>Constructivism</td><td>红黑对角线动态构图+粗无衬线</td><td>强冲击力、运动感的 campaign 主视觉</td></tr>
+      <tr><td>Art Deco</td><td>对称+放射 sunburst+锯齿+金黑,奢华几何</td><td>高端复古奢华,金融/珠宝/酒店调性</td></tr>
+      <tr><td>Mid-century Modern</td><td>暖色(芥末黄/橙/墨绿)+有机原子造型</td><td>温暖有品味的生活方式品牌</td></tr>
+      <tr><td>Memphis</td><td>撞色+波点/波浪/几何碎片,80s 玩味</td><td>年轻活泼、社媒抓眼球</td></tr>
+      <tr><td>Editorial</td><td>杂志式强字体层级+大标题+图文网格</td><td>深度内容、社媒长图、白皮书</td></tr>
+      <tr><td rowspan="3"><b>插画<br>艺术</b></td><td>Vaporwave</td><td>粉紫青霓虹渐变+罗马雕像+网格+故障</td><td>复古未来、反讽、潮流</td></tr>
+      <tr><td>Cyberpunk</td><td>霓虹雨夜+青橙撞色+高科技低生活</td><td>科技/未来/酷炫 campaign</td></tr>
+      <tr><td>Flat / corporate illustration</td><td>扁平+简化几何人物+品牌色</td><td><b>SaaS/科技/B2B 官网插画(最实用)</b></td></tr>
+      <tr><td rowspan="3"><b>3D<br>空间</b></td><td>Isometric</td><td>等轴测 2.5D,干净几何体块</td><td>流程图、信息图</td></tr>
+      <tr><td>Claymation / soft 3D render</td><td>黏土质感+圆润+柔光(C4D/Blender 风)</td><td>可爱亲和的 3D 主视觉(当下最流行)</td></tr>
+      <tr><td>Parametric / organic architecture</td><td>参数化流动曲面(Zaha Hadid 风)</td><td>未来高端、强空间感背景</td></tr>
+      <tr><td rowspan="4"><b>摄影<br>影调</b></td><td>Golden hour / natural light</td><td>黄金时刻暖光+柔和长影</td><td>温暖真实的人像/生活方式</td></tr>
+      <tr><td>Rembrandt lighting</td><td>单侧光+脸颊三角光,戏剧明暗</td><td>高级、有戏剧性的肖像</td></tr>
+      <tr><td>Kodak Portra 400 (film)</td><td>胶片+柔暖肤色+低对比</td><td><b>去"AI 塑料感",真实质感人像</b></td></tr>
+      <tr><td>Teal &amp; orange (cinematic)</td><td>青橙调色,高质感电影感</td><td>广告大片、品牌 hero 图/视频</td></tr>
+    </table></div>
+    <div class="callout c-blue">
+      <b>🔎 看图参考(📖 = 讲解 · 🔍 = 一键看几十张实例)</b>
+      <div class="grid g2" style="margin-top:10px;font-size:13.5px">
+        <div>
+          <p style="margin:0 0 4px;color:var(--muted);font-weight:700">平面 / 品牌</p>
+          <ul class="clean" style="margin:0">
+            <li><b>Bauhaus</b> — <a href="https://en.wikipedia.org/wiki/Bauhaus" target="_blank">📖</a> · <a href="https://www.pinterest.com/search/pins/?q=bauhaus%20graphic%20design%20poster" target="_blank">🔍</a></li>
+            <li><b>Swiss / Int'l Typographic</b> — <a href="https://en.wikipedia.org/wiki/International_Typographic_Style" target="_blank">📖</a> · <a href="https://www.pinterest.com/search/pins/?q=swiss%20international%20typographic%20poster%20design" target="_blank">🔍</a></li>
+            <li><b>Constructivism</b> — <a href="https://en.wikipedia.org/wiki/Constructivism_(art)" target="_blank">📖</a> · <a href="https://www.pinterest.com/search/pins/?q=russian%20constructivism%20poster%20design" target="_blank">🔍</a></li>
+            <li><b>Art Deco</b> — <a href="https://en.wikipedia.org/wiki/Art_Deco" target="_blank">📖</a> · <a href="https://www.pinterest.com/search/pins/?q=art%20deco%20graphic%20poster" target="_blank">🔍</a></li>
+            <li><b>Mid-century Modern</b> — <a href="https://en.wikipedia.org/wiki/Mid-century_modern" target="_blank">📖</a> · <a href="https://www.pinterest.com/search/pins/?q=mid%20century%20modern%20graphic%20design" target="_blank">🔍</a></li>
+            <li><b>Memphis</b> — <a href="https://en.wikipedia.org/wiki/Memphis_Group" target="_blank">📖</a> · <a href="https://www.pinterest.com/search/pins/?q=memphis%20design%2080s%20pattern" target="_blank">🔍</a></li>
+            <li><b>Editorial</b> — <a href="https://www.pinterest.com/search/pins/?q=editorial%20magazine%20layout%20design" target="_blank">🔍 看实例</a></li>
+          </ul>
+        </div>
+        <div>
+          <p style="margin:0 0 4px;color:var(--muted);font-weight:700">插画 / 艺术</p>
+          <ul class="clean" style="margin:0 0 10px">
+            <li><b>Vaporwave</b> — <a href="https://en.wikipedia.org/wiki/Vaporwave" target="_blank">📖</a> · <a href="https://www.pinterest.com/search/pins/?q=vaporwave%20aesthetic%20design" target="_blank">🔍</a></li>
+            <li><b>Cyberpunk</b> — <a href="https://en.wikipedia.org/wiki/Cyberpunk" target="_blank">📖</a> · <a href="https://www.pinterest.com/search/pins/?q=cyberpunk%20neon%20city%20design" target="_blank">🔍</a></li>
+            <li><b>Flat / corporate illustration</b> — <a href="https://www.pinterest.com/search/pins/?q=corporate%20flat%20illustration%20alegria" target="_blank">🔍 看实例</a></li>
+          </ul>
+          <p style="margin:0 0 4px;color:var(--muted);font-weight:700">3D / 空间</p>
+          <ul class="clean" style="margin:0 0 10px">
+            <li><b>Isometric</b> — <a href="https://en.wikipedia.org/wiki/Isometric_projection" target="_blank">📖</a> · <a href="https://www.pinterest.com/search/pins/?q=isometric%20illustration%20design" target="_blank">🔍</a></li>
+            <li><b>Claymation / soft 3D</b> — <a href="https://www.pinterest.com/search/pins/?q=3d%20clay%20render%20illustration%20c4d" target="_blank">🔍 看实例</a></li>
+            <li><b>Parametric architecture</b> — <a href="https://en.wikipedia.org/wiki/Parametricism" target="_blank">📖</a> · <a href="https://www.pinterest.com/search/pins/?q=zaha%20hadid%20parametric%20architecture" target="_blank">🔍</a></li>
+          </ul>
+          <p style="margin:0 0 4px;color:var(--muted);font-weight:700">摄影 / 影调</p>
+          <ul class="clean" style="margin:0">
+            <li><b>Golden hour</b> — <a href="https://www.pinterest.com/search/pins/?q=golden%20hour%20portrait%20photography" target="_blank">🔍 看实例</a></li>
+            <li><b>Rembrandt lighting</b> — <a href="https://en.wikipedia.org/wiki/Rembrandt_lighting" target="_blank">📖</a> · <a href="https://www.pinterest.com/search/pins/?q=rembrandt%20lighting%20portrait" target="_blank">🔍</a></li>
+            <li><b>Kodak Portra 400</b> — <a href="https://en.wikipedia.org/wiki/Kodak_Portra" target="_blank">📖</a> · <a href="https://www.pinterest.com/search/pins/?q=kodak%20portra%20400%20film%20photography" target="_blank">🔍</a></li>
+            <li><b>Teal &amp; orange</b> — <a href="https://www.pinterest.com/search/pins/?q=teal%20and%20orange%20cinematic%20color%20grade" target="_blank">🔍 看实例</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DON'TS ============ -->
+  <section id="donts">
+    <p class="eyk">SECTION 08 / DON'TS</p>
+    <h2><span class="n">⑧</span>别踩的坑(贴墙上那种)</h2>
+    <div class="red">
+      <div class="r"><b>别</b>让任何出图模型输出成品 UI——全是无结构像素,没有真文字层/组件/层级。</div>
+      <div class="r"><b>别</b>指望文字留住——每次重绘都漂移或糊,再好的文字也只是烤进图里的像素。</div>
+      <div class="r"><b>别</b>靠重 prompt 整屏来迭代——会重排版式;只对<b>素材</b>做局部改。</div>
+      <div class="r"><b>别</b>想 prompt 约束出 8px 网格/精确 hex/固定字阶——那是结构属性,模型不具备。</div>
+      <div class="r"><b>别</b>把插画连卡片/按钮/文字一起生成——之后没法换文案、换肤、本地化。</div>
+      <div class="r"><b>别</b>把 Figma Make 当排版工具——它出代码,重 prompt 一样会重排。</div>
+      <div class="r"><b>别</b>跳过设计系统绑定——不绑 Variables/auto-layout,就丢了这套流程<b>唯一</b>的价值。</div>
+      <div class="r"><b>别</b>拿 Midjourney 这类无 IP 赔付的输出直接上对外正式物料。</div>
+    </div>
+  </section>
+
+  <!-- ============ HONEST ============ -->
+  <section id="honest">
+    <p class="eyk">SECTION 09 / HONEST BOUNDARY</p>
+    <h2><span class="n">⑨</span>诚实边界 &amp; 可信度</h2>
+    <p class="lead">立场:宁可标"不确定",不给假的确定。以下是需要留意的部分。</p>
+    <div class="grid g2">
+      <div class="card c-amber" style="background:var(--amber-s);border:1px solid #f0d9a8">
+        <b>⚠️ 采购前必须复核</b>
+        <ul class="clean" style="font-size:13.5px">
+          <li>约 <b>30% 的价格/版本号来自二手源</b>(官网多为 JS 渲染 / 403 抓不到)。Midjourney/Firefly/Ideogram 定价、v0/Lovable 分层、Magnific 分层均属此类。</li>
+          <li><b>Firefly 版本冲突</b>:图像轨确认 Image Model 4/4 Ultra;PS 内 Image Model 5 来自二手源,以 Adobe 官方 release notes 为准。</li>
+          <li><b>Sora 退场</b>:API 2026-09-24 关停已官方确认;消费端具体下线日期未直验。</li>
+          <li>Kling 3.0 / Luma Ray / Nano Banana 2 的<b>具体发布日期</b>多来自第三方,方向可信、精确日期存疑。</li>
+          <li>厂商自报的提效数字(Superside 等)<b>未经独立审计</b>。</li>
+        </ul>
+      </div>
+      <div class="card c-green" style="background:var(--green-s);border:1px solid #cbe8d6">
+        <b>✅ 高可信(已直取一手源)</b>
+        <ul class="clean" style="font-size:13.5px">
+          <li><b>25 个博主 handle 全部联网确认为真号</b>、近期活跃,无一凭记忆。</li>
+          <li>Nano Banana Pro 能力(官方 Google 博客)· Midjourney V8.1 默认(官方更新页)· Sora API 关停(OpenAI 官方)· Ideogram 4.0 开源。</li>
+          <li>3D/建筑轨工具(Veras/Meshy/Tripo/LookX/Maket)均官网直取。</li>
+          <li>案例与反向证据均带具名出处,详见溯源总表。</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout c-blue" style="font-size:13.5px">
+      <b>底层判断(不会因版本变化而失效):</b>别押注具体工具,押注可迁移的判断力 —— art direction、策展、迭代节奏、系统化。模型每几个月换代,但"看得出好坏 + 说得清要什么 + 脑子里有风格词典"这三件事,穿越所有版本。
+    </div>
+  </section>
+
+  <footer>
+    <p><b>用 AI 做设计 · 2026 行业落地指南</b> · 基于公开数据 + 独立实测整理</p>
+    <p>边界声明:工具能力与价格均为 2026-07 联网核实,产品迭代快,<b>采购前请复核官方页面</b>;标「厂商自报」的数字未经独立审计。本文整理公开信息与落地建议,判断供参考、欢迎指正。</p>
+    <details id="src-table">
+      <summary>📎 溯源总表(点开查每条出处)</summary>
+      <div class="inner scroll">
+        <table class="srctbl">
+          <thead><tr><th>#</th><th>内容</th><th>出处链接</th></tr></thead>
+          <tbody>
+            <tr id="S01"><td>S01</td><td>Pentagram / Performance.gov / Midjourney 1,500 图标</td><td><a href="https://www.pentagram.com/news/performance-gov" target="_blank">pentagram.com/news/performance-gov</a> · <a href="https://www.fastcompany.com/91240809/pentagram-partner-paula-scher-unapologetically-defends-using-generative-ai" target="_blank">Fast Company(Scher 访谈)</a></td></tr>
+            <tr id="S02"><td>S02</td><td>Coca-Cola「Create Real Magic」+ 营收谣言证伪</td><td><a href="https://www.coca-colacompany.com/media-center/coca-cola-invites-digital-artists-to-create-real-magic-using-new-ai-platform" target="_blank">coca-colacompany.com(官方)</a> · <a href="https://www.microsoft.com/en/customers/story/22668-coca-cola-company-azure-ai-and-machine-learning" target="_blank">Microsoft 案例</a></td></tr>
+            <tr id="S03"><td>S03</td><td>Coca-Cola 2025 圣诞广告剧组 ~20 vs 50+</td><td><a href="https://www.hollywoodreporter.com/business/digital/coke-new-ai-holiday-ad-video-1236416491/" target="_blank">Hollywood Reporter</a> · <a href="https://www.marketingdive.com/news/why-coca-cola-keeps-pushing-limits-generative-ai-despite-backlash/804739/" target="_blank">Marketing Dive</a></td></tr>
+            <tr id="S04"><td>S04</td><td>Duolingo 12 年→1 年 148 门课</td><td><a href="https://investors.duolingo.com/news-releases/news-release-details/duolingo-launches-148-new-language-courses" target="_blank">investors.duolingo.com(官方)</a> · <a href="https://blog.duolingo.com/large-language-model-duolingo-lessons/" target="_blank">Duolingo blog</a></td></tr>
+            <tr id="S05"><td>S05</td><td>Shopify 170 设计师 6 个月 1,800+ PR</td><td><a href="https://doublediamondnyc.substack.com/p/carl-rivera-chief-design-officer" target="_blank">Double Diamond(Rivera 访谈)</a></td></tr>
+            <tr id="S06"><td>S06</td><td>Intercom 设计团队 3 点框架</td><td><a href="https://ideas.fin.ai/p/intercoms-3-point-framework-for-ai" target="_blank">ideas.fin.ai(Intercom 官方)</a></td></tr>
+            <tr id="S07"><td>S07</td><td>Koto × Stack Overflow 生成式品牌工具(Claude)</td><td><a href="https://www.designweek.co.uk/koto-redesigns-stack-overflow-to-champion-human-knowledge-in-the-ai-era/" target="_blank">Design Week</a></td></tr>
+            <tr id="S08"><td>S08</td><td>可乐 2024 AI 广告翻车("没有灵魂")</td><td><a href="https://www.nbcnews.com/tech/innovation/coca-cola-causes-controversy-ai-made-ad-rcna180665" target="_blank">NBC News</a></td></tr>
+            <tr id="S09"><td>S09</td><td>METR 2025 RCT:老手用 AI 慢 19%</td><td>METR《Measuring the Impact of Early-2025 AI on Experienced Developers》· <a href="https://metr.org" target="_blank">metr.org(发布方主页)</a></td></tr>
+            <tr id="S10"><td>S10</td><td>INFORMS《生成式 AI 在创意流程中的双刃角色》</td><td>INFORMS <i>Information Systems Research</i>, "The Double-Edged Roles of Generative AI in the Creative Process" · <a href="https://pubsonline.informs.org/journal/isre" target="_blank">pubsonline.informs.org(期刊主页)</a></td></tr>
+            <tr id="S11"><td>S11</td><td>Duolingo AI 绩效打分被 CEO 撤回</td><td><a href="https://fortune.com/2026/04/13/duolingo-ceo-luis-von-ahn-ai-usage-requirement-employee-performance-evaluations/" target="_blank">Fortune</a></td></tr>
+            <tr id="S12"><td>S12</td><td>Magic Patterns · Figma 导出</td><td><a href="https://www.magicpatterns.com/docs/documentation/get-started/figma-plugin" target="_blank">magicpatterns.com/docs</a></td></tr>
+            <tr id="S13"><td>S13</td><td>Google Stitch · Paste-to-Figma</td><td><a href="https://stitch.withgoogle.com/" target="_blank">stitch.withgoogle.com</a></td></tr>
+            <tr id="S14"><td>S14</td><td>UX Pilot · Figma 插件</td><td><a href="https://www.figma.com/community/plugin/1257688030051249633/" target="_blank">Figma Community 插件</a></td></tr>
+            <tr id="S15"><td>S15</td><td>Figma Make / Config 2026 / Code Layers</td><td><a href="https://www.figma.com/blog/config-2026-recap/" target="_blank">figma.com/blog/config-2026-recap</a> · <a href="https://help.figma.com/hc/en-us/articles/24004542669463-Make-or-edit-an-image-with-AI" target="_blank">Make/edit image with AI</a></td></tr>
+            <tr id="S16"><td>S16</td><td>数据准确的环形图:Recharts RadialBarChart / v0</td><td><a href="https://ui.shadcn.com/charts/radial" target="_blank">ui.shadcn.com/charts/radial</a> · <a href="https://v0.app" target="_blank">v0.app</a></td></tr>
+            <tr id="S17"><td>S17</td><td>Nano Banana Pro (Gemini 3 Pro Image)</td><td><a href="https://deepmind.google/models/gemini-image/pro/" target="_blank">deepmind.google(Pro)</a> · <a href="https://blog.google/technology/ai/nano-banana-pro/" target="_blank">Google blog</a></td></tr>
+            <tr id="S18"><td>S18</td><td>Adobe Firefly 商用安全 + IP 赔付</td><td>business.adobe.com(Firefly approach)</td></tr>
+            <tr id="S19"><td>S19</td><td>Recraft 商用权 / 矢量 / 品牌一致</td><td><a href="https://www.recraft.ai/docs/plans-and-billing/commercial-rights-ownership-and-copyright" target="_blank">recraft.ai/docs(commercial rights)</a></td></tr>
+            <tr id="S20"><td>S20</td><td>Ideogram 授权 / 商用</td><td><a href="https://ideogram.ai/licensing/" target="_blank">ideogram.ai/licensing</a></td></tr>
+            <tr id="S21"><td>S21</td><td>Midjourney vs Firefly 训练数据 / 赔付对比</td><td><a href="https://neuronad.com/adobe-firefly-vs-midjourney/" target="_blank">Firefly vs Midjourney(2026)</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+  </footer>
+</div>
+<script>
+const links=document.querySelectorAll('nav.toc a');
+const secs=[...links].map(a=>document.querySelector(a.getAttribute('href')));
+addEventListener('scroll',()=>{let i=secs.findIndex(s=>s&&s.getBoundingClientRect().top>90)-1;
+if(i<-1)i=secs.length-1;if(i<0)i=0;links.forEach((a,j)=>a.classList.toggle('on',j===i));},{passive:true});
+function openSrcTable(){var d=document.getElementById('src-table');if(d&&!d.open)d.open=true;}
+document.querySelectorAll('.srcbtn').forEach(a=>a.addEventListener('click',openSrcTable));
+addEventListener('hashchange',()=>{if(/^#S\d/.test(location.hash))openSrcTable();});
+</script>
+</body>
+</html>

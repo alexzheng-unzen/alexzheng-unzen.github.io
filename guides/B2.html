@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta name="robots" content="noindex, noai, noimageai, noarchive">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 上手第一课 · 什么活交给什么模型</title>
+<style>
+:root{
+  --blue:#3966CA; --blue-d:#27406e; --cyan:#00D4F1; --orange:#F08519;
+  --green:#2BB346; --red:#E6252F; --bg:#EBF0FA; --bg2:#E0F1FF;
+  --ink:#0F172A; --muted:#64748b; --line:#dde5f2; --card:#fff;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"OPPO Sans","Microsoft YaHei",-apple-system,Arial,sans-serif;font-size:16px;line-height:1.7}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px 72px}
+
+nav{position:sticky;top:0;z-index:20;background:rgba(235,240,250,.95);backdrop-filter:blur(6px);
+  display:flex;gap:6px;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid var(--line);margin-bottom:8px}
+nav a{font-size:13px;color:var(--muted);text-decoration:none;padding:5px 11px;border-radius:8px}
+nav a:hover,nav a.on{background:#fff;color:var(--blue)}
+.langsw{margin-left:auto;display:flex;align-items:center}
+.langtoggle{position:relative;display:inline-flex;padding:3px;border:1px solid var(--blue);
+  border-radius:999px;background:#fff;cursor:pointer;font-family:inherit;line-height:1;
+  -webkit-tap-highlight-color:transparent}
+.langtoggle span{position:relative;z-index:1;display:inline-block;min-width:32px;text-align:center;
+  font-size:12.5px;font-weight:700;padding:4px 12px;border-radius:999px;color:var(--blue);transition:color .22s}
+.langtoggle .knob{position:absolute;z-index:0;top:3px;bottom:3px;left:3px;width:calc(50% - 3px);
+  background:var(--blue);border-radius:999px;transition:transform .22s ease}
+.langtoggle[data-lang="en"] .knob{transform:translateX(100%)}
+.langtoggle[data-lang="cn"] span.cn{color:#fff}
+.langtoggle[data-lang="en"] span.en{color:#fff}
+[hidden]{display:none!important}
+
+.hero{background:linear-gradient(135deg,#3966CA 0%,#27406e 100%);color:#fff;border-radius:16px;
+  padding:44px 40px;margin:18px 0 30px;position:relative;overflow:hidden}
+.hero .ey{font-size:12px;letter-spacing:3px;color:#bcd2ff;font-weight:600}
+.hero h1{font-size:34px;line-height:1.25;margin:12px 0 14px;letter-spacing:.5px}
+.hero .sub{font-size:17px;color:#dde9ff;max-width:820px;margin:0}
+.hero .sub b{color:#fff}
+.hero .tags{margin-top:20px;display:flex;gap:8px;flex-wrap:wrap}
+.hero .tags span{font-size:12.5px;background:rgba(255,255,255,.14);color:#eaf2ff;padding:4px 12px;border-radius:20px}
+
+section{margin:44px 0}
+h2{font-size:24px;margin:0 0 4px;letter-spacing:.3px}
+h2 .n{color:var(--blue);font-weight:800;margin-right:8px}
+h3{font-size:17px;margin:28px 0 6px;color:var(--ink)}
+.lead{color:var(--muted);font-size:15px;margin:0 0 18px;max-width:820px}
+p{margin:0 0 14px;max-width:860px}
+.small{font-size:13px;color:var(--muted);max-width:840px}
+kbd{font-family:Consolas,"SF Mono",monospace;background:#fff;border:1px solid var(--line);
+  border-bottom-width:2px;border-radius:5px;padding:1px 7px;font-size:13px;font-weight:600;color:var(--blue-d)}
+
+/* 提问式开场 */
+.ask{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:22px 0}
+.ask .q{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 22px;font-size:15px}
+.ask .q .icn{font-size:26px}
+.ask .q b{color:var(--blue-d);display:block;margin:8px 0 4px;font-size:15.5px}
+.ask .q span{color:var(--muted);font-size:13.5px}
+
+/* 放大版核心洞察 */
+.big-insight{background:linear-gradient(135deg,#f6f9ff,#eaf1ff);border:2px solid var(--blue);border-radius:16px;padding:30px 34px;margin:26px 0}
+.big-insight .kt{font-size:13px;letter-spacing:2px;color:var(--blue);font-weight:700}
+.big-insight h3{font-size:24px;margin:8px 0 16px;color:var(--blue-d)}
+.big-insight .two{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:6px}
+.big-insight .two .b{background:#fff;border-radius:12px;padding:18px 20px}
+.big-insight .two .b .h{font-weight:700;font-size:15.5px;margin-bottom:6px}
+.big-insight .two .b .h .no{color:var(--red)} .big-insight .two .b .h .yes{color:var(--green)}
+.big-insight .two .b p{font-size:14px;margin:0;color:var(--muted)}
+.big-insight .punch{font-size:19px;font-weight:800;color:var(--blue-d);margin:20px 0 0;text-align:center}
+
+/* 数字磁贴 */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}
+.stat{background:#fff;border:1px solid var(--line);border-top:4px solid var(--blue);border-radius:12px;padding:20px;text-align:center}
+.stat .big{font-size:38px;font-weight:800;color:var(--blue);line-height:1.1}
+.stat .cap{font-size:13.5px;color:var(--ink);margin-top:6px}
+.stat .src{font-size:11.5px;color:var(--muted);margin-top:4px}
+
+/* 柱状图 */
+.bars{background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px 26px;margin:18px 0}
+.bar-row{display:grid;grid-template-columns:132px 1fr 104px;align-items:center;gap:12px;margin:11px 0}
+.bar-row .lb{font-size:13.5px;text-align:right;color:var(--ink)}
+.bar-track{background:#e3ebf8;border-radius:6px;height:24px;overflow:hidden}
+.bar-fill{height:100%;background:linear-gradient(90deg,#3966CA,#5b86e0);border-radius:6px}
+.bar-row .val{font-size:13.5px;font-weight:700;color:var(--blue);white-space:nowrap}
+
+/* 九宫格 */
+.grid9{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+.gc{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 14px;text-align:center;border-top:3px solid var(--blue)}
+.gc .em{font-size:30px;line-height:1}
+.gc .task{font-weight:700;font-size:14.5px;margin:8px 0 5px}
+.gc .mdl{font-size:12.5px;color:var(--blue);line-height:1.5}
+.gc .mdl b{color:var(--blue-d)}
+
+/* Tab 切页 */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:22px 0 0}
+.tab-btn{padding:9px 18px;border:1px solid var(--line);background:#fff;border-radius:10px 10px 0 0;cursor:pointer;
+  font-size:14.5px;color:var(--muted);font-family:inherit;border-bottom:none;position:relative;top:1px}
+.tab-btn.on{color:var(--blue);border-color:var(--blue);font-weight:700;background:#f6f9ff}
+.tab-panel{display:none;border:1px solid var(--blue);border-radius:0 12px 12px 12px;padding:24px 26px;background:#fff}
+.tab-panel.on{display:block}
+.tab-panel .flow{font-size:15px;margin:0 0 14px}
+.tab-panel .pick{background:#f6f9ff;border-radius:10px;padding:14px 18px;margin:14px 0;font-size:14.5px}
+.tab-panel .pick b{color:var(--blue-d)}
+.tab-panel ul{margin:8px 0;padding-left:20px} .tab-panel li{margin:6px 0;font-size:14.5px}
+
+/* 表格 */
+.dec{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:14.5px;margin:16px 0}
+.dec th{background:#f4f7fd;text-align:left;padding:11px 14px;font-size:12.5px;color:var(--muted);border-bottom:1px solid var(--line);font-weight:600}
+.dec td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.dec tr:last-child td{border-bottom:none}
+.dec .flag td{background:#f6f9ff} .dec .flag td b{color:var(--blue)}
+.scroll{overflow-x:auto}
+
+/* 成本档位条 */
+.tiers{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:18px 0}
+.tier{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.tier .tag{display:inline-block;font-size:12px;font-weight:700;border-radius:20px;padding:3px 12px;margin-bottom:10px}
+.tier.cheap .tag{background:#e6f6ea;color:#1c7a30}
+.tier.mid .tag{background:#e7effc;color:var(--blue)}
+.tier.top .tag{background:#fff3e2;color:#9a5409}
+.tier .mm{font-size:14px;margin:0 0 6px;font-weight:600}
+.tier .u{font-size:13px;color:var(--muted);margin:0}
+
+.pains{background:var(--bg2);border-left:4px solid var(--blue);border-radius:8px;padding:14px 18px;margin:18px 0;font-size:14.5px;color:var(--blue-d)}
+.warn{background:#fff7ec;border-left:4px solid var(--orange);border-radius:8px;padding:14px 18px;margin:18px 0;font-size:14.5px;color:#9a5409}
+
+.motto{background:var(--blue);color:#fff;border-radius:12px;padding:18px 26px;margin:22px 0 0;font-size:16.5px;font-weight:600;text-align:center;line-height:1.6}
+
+.steps{counter-reset:s;list-style:none;padding:0;margin:16px 0}
+.steps li{counter-increment:s;background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 18px 14px 58px;position:relative;margin-bottom:10px;font-size:14.5px}
+.steps li::before{content:counter(s);position:absolute;left:16px;top:12px;width:28px;height:28px;background:var(--blue);color:#fff;border-radius:50%;text-align:center;line-height:28px;font-weight:700;font-size:14px}
+.steps li b{color:var(--blue)}
+
+/* 命令框：只放命令，正文一律不进蓝底 */
+.cmd{font-family:Consolas,"SF Mono",monospace;font-size:13.5px;background:#1e293b;color:#e2e8f0;padding:14px 18px;border-radius:8px;line-height:1.9;margin:12px 0;white-space:pre-wrap;word-break:break-word}
+.cmd .c{color:#94a3b8}
+
+details{background:#fff;border:1px solid var(--line);border-radius:12px;padding:0 18px;margin:18px 0}
+details summary{cursor:pointer;padding:14px 0;font-weight:700;font-size:14.5px;color:var(--blue-d)}
+details[open] summary{border-bottom:1px solid var(--line);margin-bottom:14px}
+
+footer{margin-top:50px;border-top:1px solid var(--line);padding-top:18px;font-size:12px;color:var(--muted)}
+footer a{color:var(--blue);text-decoration:none}
+@media(max-width:760px){.ask,.stats,.grid9,.tiers,.big-insight .two{grid-template-columns:1fr}.hero h1{font-size:26px}.hero{padding:32px 24px}}
+
+/* 打印/导 PDF：展开所有 Tab 页与折叠块，保留配色，避免尴尬分页 */
+@media print{
+  body{background:#fff}
+  nav{display:none}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .tabs{display:none}
+  .tab-panel{display:block!important;border-radius:12px;margin:12px 0;page-break-inside:avoid}
+  .tab-panel::before{content:attr(data-title);display:block;font-weight:800;color:var(--blue);font-size:15px;margin:-6px 0 10px}
+  details{border:1px solid var(--line)}
+  details>summary{display:none}
+  details>*{display:revert!important}
+  section{page-break-inside:avoid;margin:26px 0}
+  .hero{page-break-after:avoid}
+  h2,h3{page-break-after:avoid}
+  .big-insight,.bars,.grid9,.tiers,.dec,.stats{page-break-inside:avoid}
+  a{color:var(--blue-d);text-decoration:none}
+  @page{margin:14mm 12mm}
+}
+</style>
+</head>
+<body>
+<div class="doc" id="doc-cn">
+<div class="wrap">
+
+  <nav>
+    <a href="#c0">⓪ 先别怕</a>
+    <a href="#c1">① 大家在用什么</a>
+    <a href="#c2">② 你的活用什么</a>
+    <a href="#c3">③ 花多少钱</a>
+    <a href="#c4">④ 两个误区</a>
+    <a href="#c5">⑤ 看得见花销</a>
+    <a href="#c6">⑥ 少踩几个坑</a>
+    <a href="#c7">⑦ 回去做</a>
+    <span class="langsw"><button type="button" class="langtoggle" data-lang="cn" onclick="toggleLang()" role="switch" aria-label="切换语言 / switch language"><span class="cn">中</span><span class="en">EN</span><span class="knob"></span></button></span>
+  </nav>
+
+  <div class="hero">
+    <div class="ey">集团 AI 上手第一课 · 2026-07</div>
+    <h1>什么活，交给什么模型</h1>
+    <p class="sub">这一课只帮你解决一件事：<b>手上的活，该用哪个 AI、哪个产品去干</b>。选对了，又快又省；今天就迈出这一步。</p>
+    <div class="tags"><span>零基础友好</span><span>按任务查，用不着全看</span><span>请带电脑</span></div>
+  </div>
+
+  <!-- ⓪ 先别怕 -->
+  <section id="c0">
+    <h2><span class="n">⓪</span>开场：先问你三个问题</h2>
+    <div class="ask">
+      <div class="q"><div class="icn">🤔</div><b>想用，但不知道从哪下手？</b><span>听说 AI 能干活，可轮到自己就不知道第一句该问什么。</span></div>
+      <div class="q"><div class="icn">🧩</div><b>用了，但不确定用得对不对？</b><span>同一个活，别人几秒钟搞定，自己捣鼓半天还不满意。</span></div>
+      <div class="q"><div class="icn">💸</div><b>担心一不小心花太多钱？</b><span>怕点几下就烧掉一笔，干脆不敢碰。</span></div>
+    </div>
+    <p>如果你中了任意一条——这一课就是为你准备的。<strong>公司希望大家放心用、多用</strong>，AI 是来替我们干活的。真正要学的不是"省着用"，而是<strong>把对的活交给对的工具</strong>。</p>
+
+    <h3>先记住一件事：AI 很健忘</h3>
+    <p>它没有记忆。你和它说的每句话、发给它的每个文件，都记在一个<strong>「工作本子」</strong>里。<strong>你每发一条消息，它都要把整个本子从头读一遍</strong>，才知道该干嘛——读的每一页都要花钱。所以本子越厚、越乱，每句话就越贵，它还越容易看花眼。今天的所有技巧，说白了就是：<strong>把对的活交给对的工具，再让本子保持薄而干净。</strong></p>
+    <div class="motto">AI 是来干活的，放心用。这一课教你用得又快又省。</div>
+  </section>
+
+  <!-- ① 大家在用什么 -->
+  <section id="c1">
+    <h2><span class="n">①</span>先看看：大家都在拿 AI 干什么</h2>
+    <p class="lead">不是"要不要用"的问题——同行早就用上了。看看有没有你每天在做的活。</p>
+
+    <div class="stats">
+      <div class="stat"><div class="big">91%</div><div class="cap">医生每周至少用一次 AI</div><div class="src">医脉通 2026，3,038 名医生</div></div>
+      <div class="stat"><div class="big">50%</div><div class="cap">每天都在用</div><div class="src">同上</div></div>
+      <div class="stat"><div class="big">人均 3 款</div><div class="cap">同时在用的 AI 工具数</div><div class="src">同上</div></div>
+    </div>
+
+    <h3>高频场景排行（采用率越高，说明越多人靠它省时间）</h3>
+    <div class="bars">
+      <div class="bar-row"><div class="lb">查资料 / 看文献</div><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><div class="val">最高</div></div>
+      <div class="bar-row"><div class="lb">写文书 / 记录</div><div class="bar-track"><div class="bar-fill" style="width:78%"></div></div><div class="val">高</div></div>
+      <div class="bar-row"><div class="lb">做患教 / 说明材料</div><div class="bar-track"><div class="bar-fill" style="width:77%"></div></div><div class="val">高</div></div>
+      <div class="bar-row"><div class="lb">整理数据 / 表格</div><div class="bar-track"><div class="bar-fill" style="width:62%"></div></div><div class="val">中高</div></div>
+      <div class="bar-row"><div class="lb">翻译</div><div class="bar-track"><div class="bar-fill" style="width:46%"></div></div><div class="val">中</div></div>
+      <div class="bar-row"><div class="lb">做 PPT / 汇报</div><div class="bar-track"><div class="bar-fill" style="width:40%"></div></div><div class="val">中</div></div>
+    </div>
+    <p class="small">条形长短为国内外医疗从业者场景采用率的相对高低（综合医脉通、AMA、Doximity 等公开调研），帮你快速看清"哪些活最多人在用 AI 干"。</p>
+
+    <div class="pains">📌 <strong>这一节的用处</strong>：先在上面找到你每天在做的活；下一节直接告诉你——这个活该用哪个 AI。<br>我们内部也已经跑通不少：运营做理赔数据批处理、医疗团队建价格知识库、市场部做舆情监测和报告、设计组做品牌插画。你想起步，都有现成的路可以抄。</div>
+  </section>
+
+  <!-- ② 你的活用什么 -->
+  <section id="c2">
+    <h2><span class="n">②</span>你的活，用什么模型</h2>
+    <p class="lead">先看一眼总表，再点下面的标签查你最常做的那类活。用不着全看，挑自己的。</p>
+
+    <h3>一眼看完：常见的活配什么</h3>
+    <div class="grid9">
+      <div class="gc"><div class="em">✍️</div><div class="task">写文档 / 改稿</div><div class="mdl"><b>Sonnet</b> · DeepSeek</div></div>
+      <div class="gc"><div class="em">🌐</div><div class="task">翻译（量大）</div><div class="mdl"><b>DeepSeek</b> · 通义千问</div></div>
+      <div class="gc"><div class="em">🎨</div><div class="task">做 PPT / 设计</div><div class="mdl"><b>Claude Design</b></div></div>
+      <div class="gc"><div class="em">📊</div><div class="task">整理数据 / 表格</div><div class="mdl"><b>Claude Code</b></div></div>
+      <div class="gc"><div class="em">🔍</div><div class="task">查资料 / 找文献</div><div class="mdl">带联网的<b>网页版</b></div></div>
+      <div class="gc"><div class="em">💬</div><div class="task">日常问答 / 起草</div><div class="mdl"><b>豆包</b> · Kimi 网页版</div></div>
+      <div class="gc"><div class="em">🤖</div><div class="task">批量重复活</div><div class="mdl">Claude Code + <b>便宜档</b></div></div>
+      <div class="gc"><div class="em">📚</div><div class="task">建知识库 / 问答库</div><div class="mdl">Embedding + <b>主力档</b></div></div>
+      <div class="gc"><div class="em">🧮</div><div class="task">复杂方案 / 深度分析</div><div class="mdl"><b>Opus</b> · GPT 旗舰</div></div>
+    </div>
+
+    <h3>按任务查：点标签看细节</h3>
+    <div class="tabs">
+      <button class="tab-btn on" data-tab="t1">📄 文档处理</button>
+      <button class="tab-btn" data-tab="t2">🌐 翻译</button>
+      <button class="tab-btn" data-tab="t3">🎨 设计 / PPT</button>
+      <button class="tab-btn" data-tab="t4">📊 数据 / 表格</button>
+      <button class="tab-btn" data-tab="t5">📚 知识库 / 问答</button>
+    </div>
+
+    <div class="tab-panel on" id="t1" data-title="📄 文档处理">
+      <p class="flow"><b>写周报、改稿、总结长文、整理会议纪要</b>——这类日常文字活，占大家用量的大头。</p>
+      <div class="pick"><b>用什么：</b>网页版就够（claude.ai / 豆包 / Kimi）。要动本地文件（一堆 Word 批量改）才开 Claude Code。<br><b>哪档模型：</b>主力档 <b>Sonnet</b> 或 <b>DeepSeek</b>，够快够好；简单的活便宜档就行。</div>
+      <ul>
+        <li>一次把要求说全：改哪里、改成什么样、口吻保持不变。</li>
+        <li>让它参考现成的好稿子，别让它凭空自由发挥。</li>
+        <li>换一个新任务，就开一个新对话（别在一个窗口里从周一聊到周五）。</li>
+      </ul>
+    </div>
+
+    <div class="tab-panel" id="t2" data-title="🌐 翻译">
+      <p class="flow"><b>翻文献、翻涉外文书、整批文件翻译</b>——翻译是最典型的"量大、单件简单"的活。</p>
+      <div class="pick"><b>哪档模型：</b>直接上<b>便宜档</b>（DeepSeek、通义千问 turbo）。翻译这种活，最贵的模型和便宜的差别很小，价钱却能差几十倍。<br><b>关键：</b>中文内容优先用国产模型——又便宜，中文还算得省。</div>
+      <ul>
+        <li><b>先拿 1 个文件试翻</b>，看质量满不满意、大概花多少钱，再决定要不要整批放量。</li>
+        <li>一个文件一个对话，别把几十个文件堆进同一个窗口（否则每翻一个，前面所有文件都被重读一遍，钱就这么烧的）。</li>
+        <li>术语表 / 要求放在开头固定不动，能省钱。</li>
+      </ul>
+    </div>
+
+    <div class="tab-panel" id="t3" data-title="🎨 设计 / PPT">
+      <p class="flow"><b>做 PPT、一页纸、海报、营销物料</b>——需要出"好看的东西"的活。</p>
+      <div class="pick"><b>用什么：</b>首选 <b>Claude Design</b>（网页里对话就能生成设计稿，可以导出成 PPT / PDF）。<br><b>别这么干：</b>把 PPT 丢进写代码的工具，让最贵的模型反复"美化"——又贵又不对路（第④节细讲）。</div>
+      <ul>
+        <li>专门做设计的产品，比让通用模型硬凑排版，效果好得多。</li>
+        <li>复杂视觉可以先让它出几版草稿，你挑一版再细调。</li>
+        <li>公司有品牌规范和插画包，做对外物料先套用，风格才统一。</li>
+      </ul>
+    </div>
+
+    <div class="tab-panel" id="t4" data-title="📊 数据 / 表格">
+      <p class="flow"><b>汇总表格、清洗数据、对账、生成报表</b>——运营和财务的高频活。</p>
+      <div class="pick"><b>用什么：</b>要处理本地 Excel / 一堆文件，用 <b>Claude Code</b>（能直接读写你电脑里的文件）。一次性的小表格，网页版发上去也行。<br><b>哪档模型：</b>主力档起步；每周都要跑的固定活，让它帮你做成一个小工具，之后一键复用。</div>
+      <ul>
+        <li>把文件的<b>完整路径</b>直接给它，别让它自己满电脑找。</li>
+        <li>说清楚要什么结果（汇总哪一列、按什么分组），别只说"帮我处理一下"。</li>
+        <li>重复三次以上的活，就值得固定成工具——做一次，以后近乎免费。</li>
+      </ul>
+    </div>
+
+    <div class="tab-panel" id="t5" data-title="📚 知识库 / 问答">
+      <p class="flow"><b>把一堆资料变成"能问答的知识库"</b>——比如保险条款库、产品手册问答。</p>
+      <div class="pick"><b>用什么：</b>两个零件配合——<b>Embedding 模型</b>负责"找得准"（把资料变成能被检索的形式，超便宜），<b>主力档模型</b>负责"答得好"。<br><b>最关键的一步：</b>资料先清洗干净再入库。答得准不准，八成定在这一步。</div>
+      <ul>
+        <li>图片版 PDF、格式乱的文件，先转成干净文本再入库。</li>
+        <li>Embedding 是"检索零件"，不是用来聊天的——别搞混。</li>
+        <li>这类项目建议找懂的同事一起起步，公司已经有跑通的例子。</li>
+      </ul>
+    </div>
+
+    <div class="pains">💡 拿不准某个活用什么？丢到 AI 群里问一句——大概率有同事已经趟过这条路。</div>
+  </section>
+
+  <!-- ③ 花多少钱 -->
+  <section id="c3">
+    <h2><span class="n">③</span>花多少钱，心里有个数</h2>
+    <p class="lead">不用记价格表，记住两件事就够：模型分档，越难的活才用越贵的档。</p>
+
+    <h3>先建立一个体感</h3>
+    <p>AI 按"字数"收费（术语叫 token，1 个汉字约合 1 个 token 上下）。一个直观的参照：<strong>让旗舰模型读完约 700 页 A4 文档，大概 ¥30。</strong>单看不贵——真正烧钱的是两件事：<strong>让最贵的模型干便宜活</strong>，和<strong>让它把没用的内容反复重读</strong>。</p>
+
+    <h3>模型就三档，按活的难度选</h3>
+    <div class="tiers">
+      <div class="tier cheap"><span class="tag">便宜档 · 跑量</span><p class="mm">DeepSeek · 通义千问 turbo · Haiku · 豆包 mini</p><p class="u">翻译、格式转换、批量摘要、打标。量大、单件简单的活全用它，比旗舰便宜几十倍。</p></div>
+      <div class="tier mid"><span class="tag">主力档 · 日常</span><p class="mm">Sonnet · DeepSeek 旗舰 · 文心 · 豆包</p><p class="u">写文书、整理报表、改稿、邮件。日常绝大多数活的主力，够快够好。</p></div>
+      <div class="tier top"><span class="tag">旗舰档 · 硬活</span><p class="mm">Opus · GPT 旗舰 · 通义千问 max</p><p class="u">复杂方案、深度分析、重要对外文稿。一天也就几件，好钢用在刀刃上。</p></div>
+    </div>
+    <div class="pains">📌 一句话记牢：<strong>中文的活优先国产模型</strong>——牌价便宜，中文还算得省，双重划算。</div>
+
+    <details>
+      <summary>想看完整的模型清单和价格？点开（截至 2026-07-03，采购前请复核官网）</summary>
+      <div class="scroll">
+      <table class="dec">
+        <tr><th>模型</th><th>擅长</th><th>大概多贵</th></tr>
+        <tr class="flag"><td><b>DeepSeek</b></td><td>代码、推理、中文、通用</td><td>很便宜（跑量首选）</td></tr>
+        <tr><td><b>通义千问 Qwen</b></td><td>翻译/多语言、长文、型号最全</td><td>便宜到旗舰都有</td></tr>
+        <tr><td><b>豆包 Doubao</b></td><td>多模态（图/视频）、飞书生态</td><td>中等，配套最全</td></tr>
+        <tr><td><b>文心 Ernie</b></td><td>中文知识、企业合规</td><td>中等</td></tr>
+        <tr><td><b>Kimi</b></td><td>长文阅读、编程、中文写作</td><td>中等，读多写少划算</td></tr>
+        <tr><td><b>GLM 智谱</b></td><td>编程、长程任务</td><td>中等（有免费档）</td></tr>
+        <tr><td><b>MiniMax</b></td><td>语音合成、长任务</td><td>便宜</td></tr>
+        <tr><td><b>讯飞星火</b></td><td>语音、教育办公、国产化</td><td>有永久免费档</td></tr>
+        <tr class="flag"><td><b>Claude</b>（我们主力）</td><td>综合质量标杆、代码、Agent</td><td>主力 Sonnet 中等，旗舰 Opus 偏贵</td></tr>
+        <tr><td><b>GPT</b></td><td>通用、多模态、生态广</td><td>档位跨度大，选错档最伤</td></tr>
+        <tr><td><b>Codex</b>（GPT 编程版）</td><td>写代码、终端自动化</td><td>可含在订阅内</td></tr>
+        <tr><td><b>Gemini</b></td><td>多模态、超长文档</td><td>旗舰性价比高</td></tr>
+        <tr><td><b>Embedding</b>（检索零件）</td><td>知识库检索、语义搜索</td><td>白菜价，不用来聊天</td></tr>
+      </table>
+      </div>
+      <p class="small">完整输入/输出牌价与来源见随包《调研底稿》。价格变动频繁，做预算前请再看一眼官网定价页。</p>
+    </details>
+  </section>
+
+  <!-- ④ 两个误区 -->
+  <section id="c4">
+    <h2><span class="n">④</span>两个最常见的误区</h2>
+    <p class="lead">都是刚上手时容易踩的坑，换个开法就能省一大截。</p>
+
+    <div class="big-insight">
+      <div class="kt">一句话看懂</div>
+      <h3>钱，基本都烧在这两件事上</h3>
+      <div class="two">
+        <div class="b"><div class="h"><span class="no">✗</span> 让最贵的模型干便宜活</div><p>翻译、美化这类活，便宜档就干得很好；用旗舰档，价钱翻几十倍，效果差不多。</p></div>
+        <div class="b"><div class="h"><span class="no">✗</span> 让它把没用的内容反复重读</div><p>几十个文件挤在一个对话里，每问一次，全部内容都被从头读一遍——本子越厚，每句话越贵。</p></div>
+      </div>
+      <p class="punch">同样的翻译量：换对模型 + 分开处理，从几百块 → 一块多。</p>
+    </div>
+
+    <h3>误区一 · 把 PPT 丢进写代码的工具，让最贵的模型反复"美化"</h3>
+    <table class="dec">
+      <tr><th>❌ 容易踩的开法</th><th>✅ 正确的开法</th></tr>
+      <tr><td>用最贵的旗舰模型，对着整份 PPT 反复"再美化一下"，每改一次全文重写一遍——一个下午几百块。</td><td>用 <b>Claude Design</b>：对话式改设计、直接导出 PPT，含在订阅里。真要改代码，也让它<b>只改样式、别重写全文</b>，用主力档就够。</td></tr>
+    </table>
+
+    <h3>误区二 · 一大堆文件一次丢进去，用最贵的模型逐个翻</h3>
+    <table class="dec">
+      <tr><th>❌ 容易踩的开法</th><th>✅ 正确的开法</th></tr>
+      <tr><td>几十个文件塞进同一个对话，用旗舰档一个个翻——每翻一个，前面所有文件都被重读一遍，钱成倍烧。</td><td>先拿 1 个文件用<b>便宜档</b>试翻、看质量；满意后<b>一个文件一个对话</b>，或让 Claude Code 写个脚本自动挨个跑。</td></tr>
+    </table>
+
+    <div class="motto">先想在哪干、用哪档，再拿一个小样试跑——三步走完再放量。</div>
+  </section>
+
+  <!-- ⑤ 看得见花销 -->
+  <section id="c5">
+    <h2><span class="n">⑤</span>让花销看得见</h2>
+    <p class="lead">看得见，才管得住。按你用的工具，把"计价器"打开就行。</p>
+
+    <h3>用网页版（claude.ai / 豆包 / Kimi）</h3>
+    <p>订阅制，不按次收费，<strong>随便用</strong>，不用盯着花销——这是最省心的起点。想知道额度用了多少，看账号页的用量条即可。</p>
+
+    <h3>用 VS Code 插件挂 API（Cline / Roo Code）</h3>
+    <p>这类工具<strong>按量付费</strong>，界面顶部会实时显示每次请求花了多少钱。习惯就一个：<strong>每提交一轮，抬头扫一眼那个金额</strong>。前面两个误区，只要当时看了这个数，第三轮就会停下来。</p>
+
+    <h3>用 Claude Code</h3>
+    <p>三条命令帮你看清账：</p>
+    <div class="cmd">/context   <span class="c">看本子里都装了什么、还剩多少</span>
+/usage     <span class="c">看这次花了多少、额度还剩多少</span>
+/statusline <span class="c">配一次，让花销常驻显示在底部，不用反复敲</span></div>
+    <p class="small">界面上的金额是估算，用来建立体感；真实账单以各平台后台（Anthropic / OpenAI / 火山 / DeepSeek 的用量页）为准。</p>
+
+    <h3>token 体感速查</h3>
+    <table class="dec">
+      <tr><th>东西</th><th>大概多少 token</th></tr>
+      <tr><td>一页 A4 中文（约 800 字）</td><td>约 500 ～ 1,500</td></tr>
+      <tr><td>一个 30 页 PPT 的文字</td><td>约几千（按图片喂进去会贵得多）</td></tr>
+      <tr class="flag"><td>一个从头聊到尾的长对话</td><td>越聊越贵——换任务就开新对话，是最省钱的习惯</td></tr>
+    </table>
+  </section>
+
+  <!-- ⑥ 少踩几个坑 -->
+  <section id="c6">
+    <h2><span class="n">⑥</span>顺手改掉几个烧钱习惯</h2>
+    <p class="lead">判断标准只有一条：这段内容会不会一直留在"本子"里被反复重读。</p>
+    <div class="scroll">
+    <table class="dec">
+      <tr><th>习惯</th><th>换成</th></tr>
+      <tr><td>一个问题拆成三五条短句发</td><td>想清楚，一次说全</td></tr>
+      <tr><td>让它找文件却不给路径</td><td>把完整路径直接给它</td></tr>
+      <tr><td>"帮我优化一下"这种模糊指令</td><td>说清改哪里、改成什么样</td></tr>
+      <tr class="flag"><td>答错了就一直追加"不对、再改"</td><td>连按两下 <kbd>Esc</kbd> 回退，换个说法重来</td></tr>
+      <tr class="flag"><td>一个对话从周一用到周五</td><td>换任务就 <kbd>/clear</kbd> 开新对话</td></tr>
+      <tr><td>图片版 PDF / PPT 原件直接喂</td><td>先转成纯文本再发</td></tr>
+      <tr><td>几千行内容全选粘贴让它找一处</td><td>先筛出相关的那一段再贴</td></tr>
+    </table>
+    </div>
+    <div class="pains">⭐ 想看这七条的详细展开（每条带正反示例）+ 更多进阶技巧，找 Alex 拿上一期《Context Engineering 课件》。</div>
+  </section>
+
+  <!-- ⑦ 回去做 -->
+  <section id="c7">
+    <h2><span class="n">⑦</span>回去做三件事</h2>
+    <ol class="steps">
+      <li><strong>挑一个你每天在做的活，今天就用 AI 试一次</strong>——对照第②节，用推荐的工具开个头。迈出第一步最重要。</li>
+      <li><strong>把第②节的九宫格存一份</strong>——下次接到活，先扫一眼："这个活该用谁？"</li>
+      <li><strong>大批量的活，先拿一个小样试跑</strong>——看质量、看花销，满意再放量。</li>
+    </ol>
+    <div class="motto">放心用、多用——把对的活交给对的工具，又快又省。</div>
+  </section>
+
+  <footer>
+    <p><strong>数据说明。</strong>行业数字与模型价格均于 2026-07-03 核验，完整来源见随包《调研底稿》。价格变动频繁，采购前请复核官网。</p>
+    <p>延伸阅读：<a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">Anthropic · Context Engineering</a> · <a href="https://code.claude.com/docs/en/costs">Claude Code 成本管理</a> · <a href="https://github.com/ryoppippi/ccusage">ccusage</a></p>
+    <p style="margin-top:18px">健康险 TPA · 集团 AI 培训 · 2026-07 · 内部分享</p>
+  </footer>
+
+</div>
+</div><!-- /doc-cn -->
+
+<div class="doc" id="doc-en" hidden>
+<div class="wrap">
+
+  <nav>
+    <a href="#e0">⓪ Don't worry</a>
+    <a href="#e1">① What people use</a>
+    <a href="#e2">② Which model</a>
+    <a href="#e3">③ What it costs</a>
+    <a href="#e4">④ Two mistakes</a>
+    <a href="#e5">⑤ See the cost</a>
+    <a href="#e6">⑥ Fix habits</a>
+    <a href="#e7">⑦ Do this</a>
+    <span class="langsw"><button type="button" class="langtoggle" data-lang="en" onclick="toggleLang()" role="switch" aria-label="切换语言 / switch language"><span class="cn">中</span><span class="en">EN</span><span class="knob"></span></button></span>
+  </nav>
+
+  <div class="hero">
+    <div class="ey">Group AI · first lesson · 2026-07</div>
+    <h1>Which job goes to which model</h1>
+    <p class="sub">This lesson solves one thing: for the work in front of you, <b>which AI and which product should do it</b>. Pick right and it runs fast and cheap. Take the first step today.</p>
+    <div class="tags"><span>Beginner-friendly</span><span>Look up your task, skip the rest</span><span>Bring your laptop</span></div>
+  </div>
+
+  <!-- ⓪ -->
+  <section id="e0">
+    <h2><span class="n">⓪</span>Start here: three questions</h2>
+    <div class="ask">
+      <div class="q"><div class="icn">🤔</div><b>Want to use it but don't know where to start?</b><span>You have heard AI can do real work, but when it is your turn you don't know what to type first.</span></div>
+      <div class="q"><div class="icn">🧩</div><b>Using it, but not sure you do it right?</b><span>The same task takes a colleague a few seconds. You fiddle for ages and still aren't happy.</span></div>
+      <div class="q"><div class="icn">💸</div><b>Worried you will spend too much by accident?</b><span>Afraid a few clicks will burn through money, so you avoid it altogether.</span></div>
+    </div>
+    <p>If any of these is you, this lesson is for you. <strong>The company wants everyone to use AI freely and often.</strong> AI is here to do the work for us. What you actually need to learn is not how to use less, it is <strong>how to give the right job to the right tool</strong>.</p>
+
+    <h3>First, one thing to remember: AI forgets</h3>
+    <p>It keeps no memory of past chats, and it only works with what is in the current chat and the files you attach. Picture that as one <strong>"notebook."</strong> <strong>Every message and file you add goes into the notebook, and each time you send something the model works through the notebook again to answer</strong>, so every page in it adds to the cost. The thicker and messier the notebook, the more each message costs, and the easier it is for the model to lose track. Every technique today comes down to this: <strong>give the right job to the right tool, and keep the notebook thin and clean.</strong></p>
+    <div class="motto">AI is here to do the work. Use it freely. This lesson shows you how to do it fast and cheap.</div>
+  </section>
+
+  <!-- ① -->
+  <section id="e1">
+    <h2><span class="n">①</span>First look: what people already do with AI</h2>
+    <p class="lead">This is not a question of whether to use it. Your peers already do. See if any of this is your daily work.</p>
+
+    <div class="stats">
+      <div class="stat"><div class="big">80%+</div><div class="cap">of US physicians use AI</div><div class="src">AMA 2026 (66% in 2024)</div></div>
+      <div class="stat"><div class="big">69%</div><div class="cap">of AI users use it daily</div><div class="src">Doximity 2026, 3,151 physicians</div></div>
+      <div class="stat"><div class="big">91%</div><div class="cap">of China physicians use it weekly</div><div class="src">Menet 2026, 3,038 physicians</div></div>
+    </div>
+
+    <h3>Top tasks by adoption (higher adoption means more people rely on it to save time)</h3>
+    <div class="bars">
+      <div class="bar-row"><div class="lb">Look up info / read papers</div><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><div class="val">Highest</div></div>
+      <div class="bar-row"><div class="lb">Write documents / notes</div><div class="bar-track"><div class="bar-fill" style="width:78%"></div></div><div class="val">High</div></div>
+      <div class="bar-row"><div class="lb">Patient-education material</div><div class="bar-track"><div class="bar-fill" style="width:77%"></div></div><div class="val">High</div></div>
+      <div class="bar-row"><div class="lb">Organize data / tables</div><div class="bar-track"><div class="bar-fill" style="width:62%"></div></div><div class="val">Medium-high</div></div>
+      <div class="bar-row"><div class="lb">Translation</div><div class="bar-track"><div class="bar-fill" style="width:46%"></div></div><div class="val">Medium</div></div>
+      <div class="bar-row"><div class="lb">Make slides / reports</div><div class="bar-track"><div class="bar-fill" style="width:40%"></div></div><div class="val">Medium</div></div>
+    </div>
+    <p class="small">Bar length shows the relative adoption of each scenario among clinicians (combined from AMA, Doximity, and Menet public surveys), so you can see at a glance which tasks the most people already hand to AI.</p>
+
+    <div class="pains">📌 <strong>What this section is for</strong>: find your daily work above; the next section tells you which AI to use for it.<br>Inside our company we have already done plenty: operations runs batch claims data, the medical team built a pricing knowledge base, marketing runs social listening and reports, and design produces brand illustration. If you want to start, there is a path to copy.</div>
+  </section>
+
+  <!-- ② -->
+  <section id="e2">
+    <h2><span class="n">②</span>Your work, and which model to use</h2>
+    <p class="lead">Scan the grid first, then tap the tab for the work you do most. You don't need to read all of it. Pick your own.</p>
+
+    <h3>At a glance: common tasks and what fits</h3>
+    <div class="grid9">
+      <div class="gc"><div class="em">✍️</div><div class="task">Write / edit docs</div><div class="mdl"><b>Sonnet</b> · DeepSeek</div></div>
+      <div class="gc"><div class="em">🌐</div><div class="task">Translate (high volume)</div><div class="mdl"><b>DeepSeek</b> · Qwen</div></div>
+      <div class="gc"><div class="em">🎨</div><div class="task">Slides / design</div><div class="mdl"><b>Claude Design</b></div></div>
+      <div class="gc"><div class="em">📊</div><div class="task">Data / tables</div><div class="mdl"><b>Claude Code</b></div></div>
+      <div class="gc"><div class="em">🔍</div><div class="task">Research / find sources</div><div class="mdl">the <b>web app</b> with search</div></div>
+      <div class="gc"><div class="em">💬</div><div class="task">Q&amp;A / first drafts</div><div class="mdl"><b>Doubao</b> · Kimi (web)</div></div>
+      <div class="gc"><div class="em">🤖</div><div class="task">Repetitive batch work</div><div class="mdl">Claude Code + <b>low-cost tier</b></div></div>
+      <div class="gc"><div class="em">📚</div><div class="task">Knowledge base / Q&amp;A</div><div class="mdl">Embedding + <b>workhorse tier</b></div></div>
+      <div class="gc"><div class="em">🧮</div><div class="task">Complex plans / deep analysis</div><div class="mdl"><b>Opus</b> · GPT flagship</div></div>
+    </div>
+
+    <h3>Look up your task: tap a tab for details</h3>
+    <div class="tabs">
+      <button class="tab-btn on" data-tab="te1">📄 Documents</button>
+      <button class="tab-btn" data-tab="te2">🌐 Translation</button>
+      <button class="tab-btn" data-tab="te3">🎨 Design / slides</button>
+      <button class="tab-btn" data-tab="te4">📊 Data / tables</button>
+      <button class="tab-btn" data-tab="te5">📚 Knowledge base</button>
+    </div>
+
+    <div class="tab-panel on" id="te1" data-title="📄 Documents">
+      <p class="flow"><b>Weekly reports, edits, long summaries, meeting notes.</b> This everyday text work is the bulk of what people use AI for.</p>
+      <div class="pick"><b>What to use:</b> the web app is enough (claude.ai / Doubao / Kimi). Open Claude Code only when you need to touch local files, such as editing a batch of Word docs.<br><b>Which tier:</b> the workhorse tier, <b>Sonnet</b> or <b>DeepSeek</b>, is fast and good; simple jobs run fine on the low-cost tier.</div>
+      <ul>
+        <li>Say the whole request at once: what to change, how, and keep the tone the same.</li>
+        <li>Give it a good draft to follow. Don't let it invent freely.</li>
+        <li>New task, new chat. Don't run one window from Monday to Friday.</li>
+      </ul>
+    </div>
+
+    <div class="tab-panel" id="te2" data-title="🌐 Translation">
+      <p class="flow"><b>Papers, foreign-language documents, whole batches of files.</b> Translation is the classic high-volume, low-difficulty job.</p>
+      <div class="pick"><b>Which tier:</b> go straight to the <b>low-cost tier</b> (DeepSeek, Qwen Turbo). For translation the priciest model and the low-cost one differ little in quality, but the price differs by tens of times.<br><b>Note:</b> for Chinese text the Chinese models are both cheaper and count Chinese more efficiently.</div>
+      <ul>
+        <li><b>Test-translate one file first.</b> Check the quality and the rough cost before you run the whole batch.</li>
+        <li>One file, one chat. Don't pile dozens of files into a single window, or every earlier file gets reread each time you translate the next one. That is how the money burns.</li>
+        <li>Keep the glossary and instructions at the top, unchanged. That saves money.</li>
+      </ul>
+    </div>
+
+    <div class="tab-panel" id="te3" data-title="🎨 Design / slides">
+      <p class="flow"><b>Slides, one-pagers, posters, marketing material.</b> Work where the output has to look good.</p>
+      <div class="pick"><b>What to use:</b> start with <b>Claude Design</b>, Claude's tool for turning a chat into design drafts (then export to slides or PDF), included in the subscription.<br><b>Don't do this:</b> drop a slide deck into a coding tool and have the priciest model "polish" it again and again. It costs a lot and it is wrong for the job (section ④ has the detail).</div>
+      <ul>
+        <li>A product built for design beats forcing a general model to lay out a page.</li>
+        <li>For complex visuals, have it draft a few versions, pick one, then refine.</li>
+        <li>The company has brand guidelines and an illustration pack. Use them for outward-facing material so the style stays consistent.</li>
+      </ul>
+    </div>
+
+    <div class="tab-panel" id="te4" data-title="📊 Data / tables">
+      <p class="flow"><b>Summarizing tables, cleaning data, reconciling accounts, building reports.</b> High-frequency work for operations and finance.</p>
+      <div class="pick"><b>What to use:</b> for local Excel or a batch of files, use <b>Claude Code</b> (it reads and writes files on your computer directly). For a one-off small table, the web app is fine.<br><b>Which tier:</b> start with the workhorse tier; for a fixed job you run every week, have it build you a small tool, then reuse it in one click.</div>
+      <ul>
+        <li>Give it the <b>full file path</b> directly. Don't make it hunt around your computer.</li>
+        <li>Say what result you want (which column to sum, how to group). Don't just say "help me sort this out."</li>
+        <li>Any job you repeat more than three times is worth turning into a tool. Build it once, then it is nearly free.</li>
+      </ul>
+    </div>
+
+    <div class="tab-panel" id="te5" data-title="📚 Knowledge base">
+      <p class="flow"><b>Turning a pile of documents into a knowledge base you can ask questions of</b>, such as a policy-terms library or a product-manual Q&amp;A.</p>
+      <div class="pick"><b>What to use:</b> two parts work together. An <b>embedding model</b> handles "find the right passage" (it turns documents into a searchable form, very cheap); a <b>workhorse model</b> handles "answer well."<br><b>The step that matters most:</b> clean the documents before you load them. Roughly eight in ten of your answer quality is decided here.</div>
+      <ul>
+        <li>Scanned PDFs and messy files: convert them to clean text before loading.</li>
+        <li>Embedding is the retrieval part, not a chat model. Don't mix the two up.</li>
+        <li>Start this kind of project with a colleague who knows it. The company already has working examples.</li>
+      </ul>
+    </div>
+
+    <div class="pains">💡 Not sure what to use for a task? Ask in the AI group chat. Chances are a colleague has already walked that path.</div>
+  </section>
+
+  <!-- ③ -->
+  <section id="e3">
+    <h2><span class="n">③</span>Know roughly what it costs</h2>
+    <p class="lead">You don't need to memorize a price list. Two things are enough: models come in tiers, and only harder work needs a pricier tier.</p>
+
+    <h3>Build a feel for it first</h3>
+    <p>AI charges by text volume (the term is <strong>token</strong>: one English word is about 1.3 tokens, one Chinese character about 0.6 to 2 depending on the model). A simple reference: <strong>having a flagship model read about 700 pages of A4 costs roughly US$4.4 (about ¥30).</strong> On its own that is not much. The real money goes to two things: <strong>making the priciest model do cheap work</strong>, and <strong>making it reread useless content over and over</strong>.</p>
+
+    <h3>Just three tiers, chosen by difficulty</h3>
+    <div class="tiers">
+      <div class="tier cheap"><span class="tag">Low-cost · volume</span><p class="mm">DeepSeek · Qwen Turbo · Haiku · Doubao mini</p><p class="u">Translation, format conversion, batch summaries, tagging. Use it for anything high-volume and simple. Tens of times cheaper than a flagship.</p></div>
+      <div class="tier mid"><span class="tag">Workhorse · daily</span><p class="mm">Sonnet · DeepSeek flagship · Ernie · Doubao</p><p class="u">Writing documents, tidying reports, editing, email. The workhorse for most daily work. Fast and good.</p></div>
+      <div class="tier top"><span class="tag">Flagship · hard jobs</span><p class="mm">Opus · GPT flagship · Qwen Max</p><p class="u">Complex plans, deep analysis, important outward-facing writing. A few a day at most. Use it only when the job genuinely needs it.</p></div>
+    </div>
+    <div class="pains">📌 One line to remember: <strong>for Chinese-language work, use the Chinese models</strong>. Their list price is lower and they count Chinese more efficiently. Two savings at once.</div>
+
+    <details>
+      <summary>Want the full model list and prices? Open this (as of 2026-07-03, re-check vendor pricing before you buy)</summary>
+      <div class="scroll">
+      <table class="dec">
+        <tr><th>Model</th><th>Good at</th><th>Roughly how pricey</th></tr>
+        <tr class="flag"><td><b>DeepSeek</b></td><td>Code, reasoning, Chinese, general</td><td>Very cheap (first choice for volume)</td></tr>
+        <tr><td><b>Qwen</b></td><td>Translation/multilingual, long text, widest range</td><td>Cheap up to flagship</td></tr>
+        <tr><td><b>Doubao</b></td><td>Multimodal (image/video), Feishu ecosystem</td><td>Mid, most complete kit</td></tr>
+        <tr><td><b>Ernie (Wenxin)</b></td><td>Chinese knowledge, enterprise compliance</td><td>Mid</td></tr>
+        <tr><td><b>Kimi</b></td><td>Long-doc reading, coding, Chinese writing</td><td>Mid, best when you read more than you write</td></tr>
+        <tr><td><b>GLM (Zhipu)</b></td><td>Coding, long-running tasks</td><td>Mid (has a free tier)</td></tr>
+        <tr><td><b>MiniMax</b></td><td>Voice synthesis, long tasks</td><td>Cheap</td></tr>
+        <tr><td><b>iFlytek Spark</b></td><td>Voice, education/office, domestic stack</td><td>Has a permanent free tier</td></tr>
+        <tr class="flag"><td><b>Claude</b> (our main)</td><td>Quality benchmark, code, agents</td><td>Sonnet mid, flagship Opus pricier</td></tr>
+        <tr><td><b>GPT</b></td><td>General, multimodal, wide ecosystem</td><td>Wide tier range; the wrong tier hurts most</td></tr>
+        <tr><td><b>Codex</b> (GPT for coding)</td><td>Code, terminal automation</td><td>Can be inside a subscription</td></tr>
+        <tr><td><b>Gemini</b></td><td>Multimodal, very long documents</td><td>Flagship good value</td></tr>
+        <tr><td><b>Embedding</b> (retrieval part)</td><td>KB retrieval, semantic search</td><td>Dirt cheap, not for chatting</td></tr>
+      </table>
+      </div>
+      <p class="small">Full input/output list prices and sources are in the bundled research notes. Prices change often. Check the vendor's pricing page again before you budget.</p>
+    </details>
+  </section>
+
+  <!-- ④ -->
+  <section id="e4">
+    <h2><span class="n">④</span>The two most common mistakes</h2>
+    <p class="lead">Both are easy traps when you start. A different approach saves a big chunk.</p>
+
+    <div class="big-insight">
+      <div class="kt">In one line</div>
+      <h3>This is where the money goes</h3>
+      <div class="two">
+        <div class="b"><div class="h"><span class="no">✗</span> Making the priciest model do cheap work</div><p>Translation and polishing run fine on the low-cost tier. On a flagship the price multiplies by tens of times for about the same result.</p></div>
+        <div class="b"><div class="h"><span class="no">✗</span> Making it reread useless content over and over</div><p>Dozens of files crammed into one chat. Every question rereads all of it. The thicker the notebook, the more each message costs.</p></div>
+      </div>
+      <p class="punch">Same translation volume, right model and separate chats: from a few hundred RMB down to about ¥1. That is roughly 64 times cheaper.</p>
+    </div>
+
+    <h3>Mistake 1 · Dropping slides into a coding tool and having the priciest model "polish" over and over</h3>
+    <table class="dec">
+      <tr><th>❌ The easy wrong way</th><th>✅ The right way</th></tr>
+      <tr><td>Use the priciest flagship, tell it to "polish this some more" across a whole deck, and rewrite the full text each pass. A few hundred RMB in one afternoon.</td><td>Use <b>Claude Design</b>: edit the design by chat, export straight to slides, included in the subscription. If you really must edit code, have it <b>change only the styling, not rewrite the text</b>, and the workhorse tier is enough.</td></tr>
+    </table>
+
+    <h3>Mistake 2 · Dumping a pile of files in at once and translating them one by one on the priciest model</h3>
+    <table class="dec">
+      <tr><th>❌ The easy wrong way</th><th>✅ The right way</th></tr>
+      <tr><td>Dozens of files in one chat, translated one at a time on a flagship. Each translation rereads every earlier file, so the cost compounds.</td><td>Test one file on the <b>low-cost tier</b> first and check the quality. Once happy, <b>one file per chat</b>, or have Claude Code write a script to run through them automatically.</td></tr>
+    </table>
+
+    <div class="motto">Decide where to run it and which tier, test a small sample, then scale. Three steps, in that order.</div>
+  </section>
+
+  <!-- ⑤ -->
+  <section id="e5">
+    <h2><span class="n">⑤</span>Make spending visible</h2>
+    <p class="lead">You can only control what you can see. Turn on the meter for whatever tool you use.</p>
+
+    <h3>Web app (claude.ai / Doubao / Kimi)</h3>
+    <p>Subscription, not pay-per-use, so <strong>use it freely</strong> without watching the cost. This is the easiest place to start. To see how much of your quota is left, check the usage bar on your account page.</p>
+
+    <h3>VS Code extensions on an API key (Cline / Roo Code)</h3>
+    <p>These tools are <strong>pay-per-use</strong>, and the top of the interface shows in real time what each request cost. One habit: <strong>after every round you submit, glance at that number.</strong> For the two mistakes above, seeing that number at the time would have made you stop by the third round.</p>
+
+    <h3>Claude Code</h3>
+    <p>Three commands help you read the bill:</p>
+    <div class="cmd">/context: <span class="c">see what is in the notebook and how much room is left</span>
+/usage: <span class="c">see the estimated cost and remaining quota</span>
+/statusline: <span class="c">keep the cost visible at the bottom (set once)</span></div>
+    <p class="small">The number on screen is an estimate, for building a feel. The real bill is in each platform's dashboard (the usage pages for Anthropic / OpenAI / Volcano Engine / DeepSeek).</p>
+
+    <h3>Quick token feel</h3>
+    <table class="dec">
+      <tr><th>Thing</th><th>Roughly how many tokens</th></tr>
+      <tr><td>One page of A4 Chinese (about 800 characters)</td><td>about 500 to 1,500</td></tr>
+      <tr><td>The text of a 30-page slide deck</td><td>a few thousand (feeding it as images costs much more)</td></tr>
+      <tr class="flag"><td>A single chat run from start to finish</td><td>the longer it runs, the pricier; new task, new chat is the cheapest habit</td></tr>
+    </table>
+  </section>
+
+  <!-- ⑥ -->
+  <section id="e6">
+    <h2><span class="n">⑥</span>Fix a few money-burning habits</h2>
+    <p class="lead">One test decides it: will this content stay in the notebook and get reread over and over?</p>
+    <div class="scroll">
+    <table class="dec">
+      <tr><th>Habit</th><th>Swap it for</th></tr>
+      <tr><td>Splitting one question into three or five short messages</td><td>Think it through, say it all at once</td></tr>
+      <tr><td>Asking it to find a file without giving the path</td><td>Give it the full path directly</td></tr>
+      <tr><td>Vague instructions like "optimize this"</td><td>Say what to change and how</td></tr>
+      <tr class="flag"><td>Answered wrong, so you keep adding "no, redo it"</td><td>Press <kbd>Esc</kbd> twice to back up, then rephrase and retry</td></tr>
+      <tr class="flag"><td>One chat from Monday to Friday</td><td>New task, <kbd>/clear</kbd>, new chat</td></tr>
+      <tr><td>Feeding a scanned PDF or raw slide file directly</td><td>Convert it to plain text first</td></tr>
+      <tr><td>Pasting thousands of lines to find one spot</td><td>Filter out the relevant passage first, then paste</td></tr>
+    </table>
+    </div>
+    <div class="pains">⭐ Want these seven expanded, each with a right and wrong example, plus more advanced tips? Ask Alex for the earlier <em>Context Engineering</em> deck.</div>
+  </section>
+
+  <!-- ⑦ -->
+  <section id="e7">
+    <h2><span class="n">⑦</span>Three things to do when you get back</h2>
+    <ol class="steps">
+      <li><strong>Pick one task you do every day and try it with AI today.</strong> Use the tool section ② recommends and just start. Taking the first step matters most.</li>
+      <li><strong>Save a copy of the section ② grid.</strong> Next time work lands, glance at it: who should do this?</li>
+      <li><strong>For any large batch, test a small sample first.</strong> Check the quality and the cost, then scale.</li>
+    </ol>
+    <div class="motto">Use it freely and often. Give the right job to the right tool, and it runs fast and cheap.</div>
+  </section>
+
+  <footer>
+    <p><strong>Data note.</strong> Industry figures and model prices were verified on 2026-07-03. Full sources are in the bundled research notes. Prices change often, so re-check vendor pricing before purchase.</p>
+    <p>Further reading: <a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">Anthropic · Context Engineering</a> · <a href="https://code.claude.com/docs/en/costs">Claude Code cost management</a> · <a href="https://github.com/ryoppippi/ccusage">ccusage</a></p>
+    <p style="margin-top:18px">A health insurance TPA · Group AI Training · 2026-07 · internal</p>
+  </footer>
+
+</div>
+</div><!-- /doc-en -->
+<script>
+// Tab 切页（按 doc 作用域隔离，两份副本互不干扰）
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const id=btn.dataset.tab;
+    const doc=btn.closest('.doc');
+    doc.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('on',b===btn));
+    doc.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('on',p.id===id));
+  });
+});
+// 锚点高亮（只处理当前可见的 doc）
+function updateNav(){
+  document.querySelectorAll('.doc').forEach(doc=>{
+    if(doc.hidden) return;
+    const links=doc.querySelectorAll('nav a');
+    const secs=[...links].map(a=>doc.querySelector(a.getAttribute('href')));
+    let i=secs.findIndex(s=>s&&s.getBoundingClientRect().top>90)-1;
+    if(i<-1)i=secs.length-1;if(i<0)i=0;
+    links.forEach((a,j)=>a.classList.toggle('on',j===i));
+  });
+}
+addEventListener('scroll',updateNav,{passive:true});
+// 语言切换（滑块 toggle）
+function setLang(l){
+  document.getElementById('doc-cn').hidden = (l!=='cn');
+  document.getElementById('doc-en').hidden = (l!=='en');
+  document.documentElement.lang = (l==='en'?'en':'zh-CN');
+  document.querySelectorAll('.langtoggle').forEach(t=>t.dataset.lang=l);
+  try{localStorage.setItem('trainingLang',l);}catch(e){}
+  scrollTo(0,0);
+  updateNav();
+}
+function toggleLang(){
+  setLang(document.getElementById('doc-cn').hidden ? 'cn' : 'en');
+}
+// 初始化：默认中文，记住上次选择
+(function(){
+  let l='cn';
+  try{l=localStorage.getItem('trainingLang')||'cn';}catch(e){}
+  setLang(l==='en'?'en':'cn');
+})();
+</script>
+</body>
+</html>
