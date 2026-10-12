@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Copyright (c) 2026 Alex Zheng (郑晓琪). All rights reserved.  https://alexzheng-unzen.github.io/ -->
 <html lang="zh-CN">
 <head>
 <meta name="robots" content="noindex, noai, noimageai, noarchive">
@@ -145,6 +146,27 @@ footer .grp-links{margin:10px 0}
 
 @media(max-width:760px){.shift,.mods,.doors{grid-template-columns:1fr}.hero h1{font-size:27px}.hero{padding:32px 24px}}
 @media print{body{background:#fff}.wrap{padding:0 16px}.hero{-webkit-print-color-adjust:exact;print-color-adjust:exact}.watermark{position:static}section{page-break-inside:avoid}}
+</style>
+<meta name="copyright" content="Copyright (c) 2026 Alex Zheng (郑晓琪). All rights reserved.">
+<meta name="author" content="Alex Zheng">
+<style id="cg">
+/* content guard */
+html{-webkit-touch-callout:none}
+body{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+/* whitelist: everything a recruiter legitimately needs to copy stays selectable */
+footer .links,footer .links a,a[href^="mailto:"],input,textarea,select,[contenteditable]{
+-webkit-user-select:text;-moz-user-select:text;-ms-user-select:text;user-select:text}
+img,picture,svg,canvas{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
+</style>
+<style id="gwm">
+/* guide watermark */
+#gwm-tile{position:fixed;inset:-50%;z-index:2147483646;pointer-events:none;
+background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='220'><text x='10' y='120' transform='rotate(-24 210 110)' font-family='Arial,sans-serif' font-size='18' fill='%23000' fill-opacity='0.055'>&#169; 2026 Alex Zheng &#183; alexzheng-unzen.github.io</text></svg>");
+background-repeat:repeat}
+#gwm-line{position:fixed;right:12px;bottom:10px;z-index:2147483647;pointer-events:none;
+font:12px/1.4 Arial,"Microsoft YaHei",sans-serif;color:#444;background:rgba(255,255,255,.82);
+padding:3px 8px;border-radius:4px;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
+@media print{#gwm-tile,#gwm-line{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 </style>
 </head>
 <body>
@@ -469,6 +491,33 @@ const links=document.querySelectorAll('nav.anchors a[href^="#"]');
 const secs=[...links].map(a=>document.querySelector(a.getAttribute('href')));
 addEventListener('scroll',()=>{let i=secs.findIndex(s=>s&&s.getBoundingClientRect().top>90)-1;
 if(i<-1)i=secs.length-1;if(i<0)i=0;links.forEach((a,j)=>a.classList.toggle('on',j===i));},{passive:true});
+</script>
+<div id="gwm-tile" aria-hidden="true"></div><div id="gwm-line" aria-hidden="true">&#169; 2026 Alex Zheng &#183; alexzheng-unzen.github.io &#183; redacted copy, not for redistribution</div>
+<script id="cg-js">
+(function(){
+  var OPEN = 'a[href^="mailto:"], footer .links, input, textarea, select, [contenteditable]';
+  var CREDIT = "Copyright (c) 2026 Alex Zheng (\u90d1\u6653\u742a). All rights reserved. https://alexzheng-unzen.github.io/";
+  function allowed(n){
+    while (n && n.nodeType !== 1) n = n.parentNode;
+    return !!(n && n.closest && n.closest(OPEN));
+  }
+  document.addEventListener('contextmenu', function(e){
+    if (!allowed(e.target)) e.preventDefault();
+  }, true);
+  document.addEventListener('dragstart', function(e){
+    var n = e.target;
+    if (n && n.nodeType === 1 && /^(IMG|PICTURE|SVG|CANVAS)$/i.test(n.tagName)) e.preventDefault();
+  }, true);
+  /* anything that does get copied carries the source with it */
+  document.addEventListener('copy', function(e){
+    try {
+      var sel = String(window.getSelection());
+      if (!sel || sel.length < 24 || !e.clipboardData) return;
+      e.clipboardData.setData('text/plain', sel + '\n\n' + CREDIT);
+      e.preventDefault();
+    } catch (err) {}
+  });
+})();
 </script>
 </body>
 </html>

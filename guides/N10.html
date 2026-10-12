@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<!-- Copyright (c) 2026 Alex Zheng (郑晓琪). All rights reserved.  https://alexzheng-unzen.github.io/ -->
+<html lang="zh-CN">
+<head>
+<meta name="robots" content="noindex, noai, noimageai, noarchive">
+<meta charset="UTF-8">
+<title>Kimi Code 国内版安装与配置教程</title>
+<style>
+  @page {
+    size: A4;
+    margin: 2.5cm 2cm 2.5cm 2cm;
+    @bottom-center {
+      content: counter(page);
+      font-size: 10pt;
+      color: #888;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 11pt;
+    line-height: 1.8;
+    color: #222;
+    background: #fff;
+  }
+  h1 {
+    font-size: 28pt;
+    text-align: center;
+    margin-top: 6cm;
+    margin-bottom: 0.5cm;
+    color: #111;
+    letter-spacing: 1px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 14pt;
+    color: #555;
+    margin-bottom: 8cm;
+  }
+  .meta {
+    text-align: center;
+    font-size: 10pt;
+    color: #777;
+  }
+  h2 {
+    font-size: 16pt;
+    color: #1a1a1a;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 6px;
+    margin-top: 1.5cm;
+    margin-bottom: 0.6cm;
+    page-break-after: avoid;
+  }
+  h3 {
+    font-size: 13pt;
+    color: #333;
+    margin-top: 0.8cm;
+    margin-bottom: 0.4cm;
+    page-break-after: avoid;
+  }
+  p { margin: 0.4cm 0; text-align: justify; }
+  ul, ol { margin: 0.4cm 0; padding-left: 1.2cm; }
+  li { margin: 0.15cm 0; }
+  .code-block {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 10pt;
+    line-height: 1.6;
+    overflow-wrap: break-word;
+    margin: 0.5cm 0;
+    page-break-inside: avoid;
+  }
+  .code-block .comment { color: #6a9955; }
+  .code-block .kw { color: #569cd6; }
+  .code-block .str { color: #ce9178; }
+  .code-block .num { color: #b5cea8; }
+  .inline-code {
+    background: #f4f4f4;
+    color: #c7254e;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 10pt;
+  }
+  .tip {
+    background: #eef6ff;
+    border-left: 4px solid #4a9eff;
+    padding: 12px 16px;
+    margin: 0.5cm 0;
+    border-radius: 0 6px 6px 0;
+    page-break-inside: avoid;
+  }
+  .tip strong { color: #2a7bd7; }
+  .warning {
+    background: #fff8e6;
+    border-left: 4px solid #ffc107;
+    padding: 12px 16px;
+    margin: 0.5cm 0;
+    border-radius: 0 6px 6px 0;
+    page-break-inside: avoid;
+  }
+  .warning strong { color: #b78a00; }
+  .step {
+    display: flex;
+    align-items: flex-start;
+    margin: 0.5cm 0;
+  }
+  .step-num {
+    min-width: 28px;
+    height: 28px;
+    background: #111;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12pt;
+    font-weight: bold;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+  .step-content { flex: 1; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.5cm 0;
+    font-size: 10.5pt;
+    page-break-inside: avoid;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+  }
+  th {
+    background: #f8f8f8;
+    font-weight: 600;
+  }
+  tr:nth-child(even) { background: #fafafa; }
+  .toc a {
+    color: #333;
+    text-decoration: none;
+    border-bottom: 1px dotted #999;
+  }
+  .toc li { margin: 0.25cm 0; }
+  .page-break { page-break-before: always; }
+  .screenshot-figure {
+    margin: 0.6cm 0;
+    page-break-inside: avoid;
+  }
+  .screenshot-figure img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+  .screenshot-figure figcaption {
+    margin-top: 8px;
+    color: #666;
+    font-size: 9.5pt;
+    text-align: center;
+  }
+</style>
+<meta name="copyright" content="Copyright (c) 2026 Alex Zheng (郑晓琪). All rights reserved.">
+<meta name="author" content="Alex Zheng">
+<style id="cg">
+/* content guard */
+html{-webkit-touch-callout:none}
+body{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+/* whitelist: everything a recruiter legitimately needs to copy stays selectable */
+footer .links,footer .links a,a[href^="mailto:"],input,textarea,select,[contenteditable]{
+-webkit-user-select:text;-moz-user-select:text;-ms-user-select:text;user-select:text}
+img,picture,svg,canvas{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
+</style>
+<style id="gwm">
+/* guide watermark */
+#gwm-tile{position:fixed;inset:-50%;z-index:2147483646;pointer-events:none;
+background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='220'><text x='10' y='120' transform='rotate(-24 210 110)' font-family='Arial,sans-serif' font-size='18' fill='%23000' fill-opacity='0.055'>&#169; 2026 Alex Zheng &#183; alexzheng-unzen.github.io</text></svg>");
+background-repeat:repeat}
+#gwm-line{position:fixed;right:12px;bottom:10px;z-index:2147483647;pointer-events:none;
+font:12px/1.4 Arial,"Microsoft YaHei",sans-serif;color:#444;background:rgba(255,255,255,.82);
+padding:3px 8px;border-radius:4px;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
+@media print{#gwm-tile,#gwm-line{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+
+<!-- 封面 -->
+<div style="text-align:center; padding-top: 4cm;">
+  <div style="font-size: 42pt; font-weight: bold; color: #111; margin-bottom: 0.8cm;">Kimi Code 国内版</div>
+  <div style="font-size: 22pt; color: #444; margin-bottom: 2cm;">VS Code 与 CLI 安装配置教程</div>
+  <div style="width: 80px; height: 4px; background: #111; margin: 0 auto 2cm auto;"></div>
+  <div style="font-size: 12pt; color: #666; line-height: 2;">
+    从零开始 · 先装 VS Code · 图文并茂<br>
+    中文语言包 / Kimi Code 扩展 / 会员登录 / CLI 完整指南
+  </div>
+  <div style="margin-top: 6cm; font-size: 10pt; color: #888;">
+    生成日期：2026年4月21日
+  </div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- 目录 -->
+<h2>目录</h2>
+<ol class="toc">
+  <li><a href="#sec1">Kimi Code 是什么</a></li>
+  <li><a href="#sec2">先安装 VS Code、扩展与会员</a></li>
+  <li><a href="#sec3">Windows 安装详解</a></li>
+  <li><a href="#sec4">macOS 安装详解</a></li>
+  <li><a href="#sec5">VS Code 端使用技巧</a></li>
+  <li><a href="#sec6">快速上手指南</a></li>
+</ol>
+
+<div class="page-break"></div>
+
+<!-- 第1章 -->
+<h2 id="sec1">1. Kimi Code 是什么</h2>
+<p>Kimi Code 是由<strong>月之暗面（Moonshot AI）</strong>推出的 AI 编程助手能力，国内版可以通过 VS Code 扩展和命令行 CLI 两种方式使用。它能够：</p>
+<ul>
+  <li><strong>阅读和编辑代码</strong>：自动分析项目结构，实现新功能、修复 Bug、重构代码</li>
+  <li><strong>执行 Shell 命令</strong>：在你授权后运行构建、测试、批量处理等操作</li>
+  <li><strong>搜索与抓取网页</strong>：获取最新文档、API 参考、技术资料</li>
+  <li><strong>自主规划行动</strong>：根据任务目标自动拆解步骤并执行</li>
+</ul>
+
+<p>它支持三种使用方式：</p>
+<table>
+  <tr><th>方式</th><th>命令</th><th>适用场景</th></tr>
+  <tr><td>交互式命令行</td><td><span class="inline-code">kimi</span></td><td>日常开发、快速问答、代码修改</td></tr>
+  <tr><td>浏览器界面</td><td><span class="inline-code">kimi web</span></td><td>需要图形界面、会话管理、代码高亮</td></tr>
+  <tr><td>Agent 服务</td><td><span class="inline-code">kimi acp</span></td><td>集成到 IDE（如 VS Code、Cursor）中</td></tr>
+</table>
+
+<div class="tip">
+  <strong>提示：</strong>如果你在安装或使用过程中遇到问题，欢迎前往 <a href="https://github.com/MoonshotAI/kimi-cli/issues">GitHub Issues</a> 反馈。
+</div>
+
+<!-- 第2章 -->
+<h2 id="sec2">2. 先安装 VS Code、扩展与会员</h2>
+
+<h3>2.1 系统要求</h3>
+<table>
+  <tr><th>项目</th><th>最低要求</th><th>推荐配置</th></tr>
+  <tr><td>操作系统</td><td>Windows 10 / macOS 11 / Ubuntu 20.04</td><td>Windows 11 / macOS 14 / Ubuntu 22.04+</td></tr>
+  <tr><td>VS Code</td><td colspan="2">建议先安装最新版 Visual Studio Code，再安装中文语言包与 Kimi Code 扩展</td></tr>
+  <tr><td>Kimi 账号</td><td colspan="2">需要一个国内版 Kimi / Moonshot AI 账号，并使用同一账号开通会员与登录扩展</td></tr>
+  <tr><td>Python 版本</td><td>Python 3.12</td><td>Python 3.13（CLI 方式最佳兼容性）</td></tr>
+  <tr><td>网络</td><td colspan="2">能访问 <span class="inline-code">https://code.kimi.com</span>、VS Code Marketplace 和 PyPI</td></tr>
+  <tr><td>磁盘空间</td><td>500 MB</td><td>1 GB 以上（含缓存）</td></tr>
+  <tr><td>内存</td><td>2 GB</td><td>4 GB 以上</td></tr>
+</table>
+
+<h3>2.2 第一步：下载并安装 VS Code</h3>
+<p>先打开 VS Code 官网下载页面，选择与你电脑系统匹配的安装包。Windows 用户一般选择 Windows 版安装器，安装完成后直接启动 VS Code。</p>
+<figure class="screenshot-figure">
+  <img src="N10-images/02_1_vscode_download.png" alt="中文 VS Code 下载页截图">
+  <figcaption>图 2.2：先下载并安装 VS Code</figcaption>
+</figure>
+
+<h3>2.3 第二步：在 VS Code 商城安装中文语言包</h3>
+<p>打开 VS Code 后，先安装中文语言包，后续所有菜单和扩展操作会更容易跟着做。</p>
+<ol>
+  <li>点击左侧活动栏的<strong>扩展</strong>图标，或按 <span class="inline-code">Ctrl + Shift + X</span>。</li>
+  <li>搜索 <span class="inline-code">Chinese (Simplified) Language Pack</span> 或 <span class="inline-code">中文（简体）语言包</span>。</li>
+  <li>选择发布者为 <span class="inline-code">MS-CEINTL</span> 的中文语言包，点击<strong>安装</strong>。</li>
+  <li>安装完成后，如果 VS Code 提示重启或重新加载窗口，点击确认。</li>
+</ol>
+<figure class="screenshot-figure">
+  <img src="N10-images/02_2_vscode_chinese_language_pack.png" alt="VS Code 商城中文语言包安装按钮截图">
+  <figcaption>图 2.3：在 VS Code 商城安装中文（简体）语言包</figcaption>
+</figure>
+
+<h3>2.4 第三步：在 VS Code 商城安装 Kimi Code 扩展</h3>
+<p>中文界面准备好后，在同一个 VS Code 扩展商城里安装 Kimi Code。</p>
+<ol>
+  <li>仍然停留在 VS Code 的<strong>扩展</strong>视图。</li>
+  <li>搜索 <span class="inline-code">Kimi Code</span>。</li>
+  <li>选择官方发布者 <span class="inline-code">moonshot-ai</span> 的 <span class="inline-code">Kimi Code</span> 扩展。</li>
+  <li>点击<strong>安装</strong>，安装完成后建议重新加载 VS Code。</li>
+</ol>
+<figure class="screenshot-figure">
+  <img src="N10-images/02_3_vscode_kimi_code_extension.png" alt="VS Code 商城 Kimi Code 扩展安装按钮截图">
+  <figcaption>图 2.4：在 VS Code 商城安装 Kimi Code 扩展</figcaption>
+</figure>
+
+<h3>2.5 第四步：新建并选择工作文件夹（不要放 C 盘）</h3>
+<p>安装 Kimi Code 扩展后，先给后续项目准备一个专门的工作文件夹。不要直接把项目放在 C 盘、桌面、下载目录或系统目录里。Kimi Code 后续会读取项目文件，项目依赖、缓存、日志也可能越来越大，放在系统盘容易占满空间或让电脑变卡。</p>
+<ol>
+  <li>在 D 盘或 E 盘新建一个总目录，例如 <span class="inline-code">D:\Dev\kimi-projects</span>。</li>
+  <li>在这个目录下为每个项目再建一个独立文件夹，例如 <span class="inline-code">D:\Dev\kimi-projects\my-first-project</span>。</li>
+  <li>回到 VS Code，点击菜单 <strong>文件 → 打开文件夹</strong>，选择刚刚新建的项目文件夹。</li>
+  <li>确认 VS Code 左侧资源管理器显示的是这个 D 盘/E 盘项目目录，再开始使用 Kimi Code。</li>
+</ol>
+<figure class="screenshot-figure">
+  <img src="N10-images/02_4_vscode_workspace_folder.png" alt="VS Code 新建并选择 D 盘工作文件夹截图">
+  <figcaption>图 2.5：在 VS Code 中选择 D 盘或 E 盘的项目工作文件夹</figcaption>
+</figure>
+<div class="warning">
+  <strong>不要放 C 盘：</strong>尤其不要选择 <span class="inline-code">C:\Windows</span>、<span class="inline-code">C:\Program Files</span>、桌面、下载目录这类位置。推荐固定使用 <span class="inline-code">D:\Dev</span>、<span class="inline-code">D:\Projects</span> 或 <span class="inline-code">E:\Projects</span> 这类数据盘目录。
+</div>
+
+<h3>2.6 第五步：开通 Kimi Code 月度会员</h3>
+<p>Kimi Code 国内版需要可用的 Kimi 会员权益。进入 Kimi Code 国内版购买页，登录你的 Kimi 账号，选择<strong>月度会员</strong>并确认人民币 <strong>49 元/月</strong> 的套餐，然后使用页面支持的付款方式完成支付。</p>
+<ol>
+  <li>打开 <span class="inline-code">https://www.kimi.com/code/zh</span> 或 Kimi Code 购买入口。</li>
+  <li>登录你准备用于 VS Code 的同一个 Kimi 账号。</li>
+  <li>选择 Kimi Code 可用的<strong>月度会员</strong>，确认价格为 <strong>¥49/月</strong>。</li>
+  <li>使用微信、支付宝或页面支持的方式付款。</li>
+  <li>付款完成后，不要切换账号；后续 VS Code 端登录必须使用这个已开通会员的账号。</li>
+</ol>
+<figure class="screenshot-figure">
+  <img src="N10-images/02_5_kimi_code_membership.png" alt="Kimi Code 国内版 49 元月度会员购买按钮截图">
+  <figcaption>图 2.6：购买 Kimi Code 国内版 49 元月度会员</figcaption>
+</figure>
+<div class="warning">
+  <strong>注意：</strong>会员档位、价格和付款方式可能随活动变化，请以 Kimi 购买页最终展示为准。这里按当前国内购买入口的 49 元月度会员流程说明。
+</div>
+
+<h3>2.7 第六步：在 VS Code 端登录 Kimi Code 会员账号</h3>
+<p>安装扩展并开通会员后，需要在 VS Code 里登录同一个 Kimi 账号，Kimi Code 扩展才能识别你的会员权益。</p>
+<ol>
+  <li>在 VS Code 中打开第 2.5 节创建的 D 盘/E 盘项目文件夹。</li>
+  <li>点击左侧活动栏里的 <strong>Kimi</strong> 图标；如果没有看到图标，可以按 <span class="inline-code">Ctrl + Shift + P</span> 打开命令面板，搜索 <span class="inline-code">Kimi Code</span> 并打开面板。</li>
+  <li>在 Kimi Code 面板中点击<strong>登录</strong>或 <strong>Sign in</strong>。</li>
+  <li>浏览器会自动打开 Kimi 授权页，确认是刚刚购买 49 元月度会员的账号，然后点击<strong>授权</strong>。</li>
+  <li>授权完成后回到 VS Code，等待 Kimi Code 面板显示已登录状态，再发送一个简单问题测试是否可用。</li>
+</ol>
+<figure class="screenshot-figure">
+  <img src="N10-images/04_2_browser_auth.png" alt="Kimi Code 浏览器授权页中授权按钮截图">
+  <figcaption>图 2.7：VS Code 端登录会员账号时，在浏览器中点击“授权”</figcaption>
+</figure>
+<div class="tip">
+  <strong>提示：</strong>如果 VS Code 里仍提示未开通或额度不可用，优先检查两个地方：付款账号和 VS Code 登录账号是否一致；扩展是否安装的是官方 <span class="inline-code">moonshot-ai.kimi-code</span>。必要时退出登录后重新登录。
+</div>
+
+<h3>2.8 后续命令行安装还需要什么</h3>
+<ul>
+  <li>终端/命令行工具（Windows 用 PowerShell，macOS/Linux 用 Terminal）</li>
+  <li>CLI 方式需要安装 <span class="inline-code">kimi-cli</span>；如果你只在 VS Code 里使用，可以先跳过第 3～7 章的命令行安装。</li>
+</ul>
+
+<div class="warning">
+  <strong>注意：</strong>后续 CLI 安装脚本会自动下载并安装 <span class="inline-code">uv</span>（Python 包管理工具）。如果你的系统已经安装了 uv，脚本会跳过这一步。uv 会被安装到用户目录下，不会污染系统全局 Python 环境。
+</div>
+
+<!-- 第3章 -->
+<h2 id="sec3">3. Windows 安装详解</h2>
+
+<h3>3.1 打开 PowerShell</h3>
+<p>在 Windows 上，Kimi Code CLI 的安装通过 <strong>PowerShell</strong> 完成。</p>
+<div class="step">
+  <div class="step-num">1</div>
+  <div class="step-content">
+    按下 <span class="inline-code">Win + X</span>，在弹出的菜单中选择 <strong>"终端(管理员)"</strong> 或 <strong>"Windows PowerShell"</strong>。<br>
+    如果没有管理员权限，普通用户模式也可以安装，只是 uv 会安装到用户目录。
+  </div>
+</div>
+<div class="step">
+  <div class="step-num">2</div>
+  <div class="step-content">
+    在 PowerShell 窗口中，复制并粘贴以下命令，然后按 <span class="inline-code">Enter</span> 执行：
+  </div>
+</div>
+
+<div class="code-block">Invoke-RestMethod https://code.kimi.com/install.ps1 | Invoke-Expression</div>
+
+<h3>3.2 安装过程详解</h3>
+<p>执行上述命令后，脚本会依次完成以下操作：</p>
+<ol>
+  <li><strong>下载安装脚本</strong>：从 <span class="inline-code">https://code.kimi.com/install.ps1</span> 获取 PowerShell 安装脚本</li>
+  <li><strong>检查 uv</strong>：如果系统中没有 <span class="inline-code">uv</span>，脚本会自动下载并安装到 <span class="inline-code">%USERPROFILE%\.local\bin</span> 或 <span class="inline-code">%LOCALAPPDATA%\uv</span></li>
+  <li><strong>安装 Kimi CLI</strong>：通过 uv 创建独立的 Python 环境，并安装 <span class="inline-code">kimi-cli</span> 包</li>
+  <li><strong>添加环境变量</strong>：将 uv 和 kimi 的可执行文件路径添加到用户 PATH 中</li>
+</ol>
+
+<div class="tip">
+  <strong>提示：</strong>如果 PowerShell 提示"无法加载脚本，因为在此系统上禁止运行脚本"，请先用以下命令调整执行策略（仅限当前用户）：<br>
+  <span class="inline-code">Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser</span>
+</div>
+
+<h3>3.3 安装完成后的检查</h3>
+<p>安装完成后，<strong>重新打开</strong>一个 PowerShell 窗口（让环境变量生效），运行：</p>
+<div class="code-block">kimi --version</div>
+<p>如果看到版本号输出（例如 <span class="inline-code">kimi 1.x.x</span>），说明安装成功。</p>
+
+<!-- 第4章 -->
+<h2 id="sec4">4. macOS 安装详解</h2>
+
+<h3>4.1 打开终端</h3>
+<p>在 macOS 上，你可以通过以下任一方式打开终端：</p>
+<ul>
+  <li>按 <span class="inline-code">Cmd + 空格</span> 打开 Spotlight，输入 <span class="inline-code">Terminal</span> 回车</li>
+  <li>在"启动台"中找到"终端"应用</li>
+  <li>在 VS Code 中按 <span class="inline-code">Ctrl + `</span> 打开内置终端</li>
+</ul>
+
+<h3>4.2 执行安装命令</h3>
+<p>在终端中复制并粘贴以下命令，按 <span class="inline-code">Enter</span> 执行：</p>
+<div class="code-block">curl -LsSf https://code.kimi.com/install.sh | bash</div>
+
+<h3>4.3 安装过程详解</h3>
+<ol>
+  <li><strong>下载脚本</strong>：<span class="inline-code">curl</span> 从远程获取安装脚本</li>
+  <li><strong>检测平台</strong>：脚本会自动识别 macOS 的架构（Intel 或 Apple Silicon）</li>
+  <li><strong>安装 uv</strong>：如果没有 uv，会下载对应架构的 uv 二进制文件到 <span class="inline-code">~/.local/bin</span></li>
+  <li><strong>安装 kimi-cli</strong>：通过 uv 安装到独立的工具环境中</li>
+  <li><strong>配置 PATH</strong>：修改 <span class="inline-code">~/.bashrc</span>、<span class="inline-code">~/.zshrc</span> 或 <span class="inline-code">~/.config/fish/config.fish</span> 等配置文件</li>
+</ol>
+
+<div class="warning">
+  <strong>macOS 安全提示：</strong>由于 macOS 的安全检查机制，首次运行 <span class="inline-code">kimi</span> 命令可能需要较长时间（系统在验证应用）。你可以在<strong>系统设置 → 隐私与安全性 → 开发者工具</strong>中添加你的终端应用（如 Terminal、iTerm2、VS Code），以加速后续启动。
+</div>
+
+<h3>4.4 验证安装</h3>
+<p>安装完成后，<strong>新开一个终端窗口</strong>或运行 <span class="inline-code">source ~/.zshrc</span>（如果你用 zsh），然后执行：</p>
+<div class="code-block">kimi --version</div>
+
+<!-- 第5章 -->
+<h2 id="sec5">5. VS Code 端使用技巧</h2>
+<p>安装并登录 Kimi Code 扩展后，日常开发主要在 VS Code 的 Kimi 面板里完成。下面几个技巧最常用，建议先掌握。</p>
+<figure class="screenshot-figure">
+  <img src="N10-images/05_1_vscode_usage_tips.png" alt="VS Code 端 Kimi Code 使用技巧截图">
+  <figcaption>图 5.1：VS Code 端常用输入技巧：@ 文件、/ 命令、截图输入</figcaption>
+</figure>
+
+<h3>5.1 用 <span class="inline-code">@</span> 精准引用文件、文件夹和代码行</h3>
+<p>在 Kimi Code 输入框里输入 <span class="inline-code">@</span>，然后选择你要让 Kimi 阅读的文件或文件夹。这样比笼统地说“看看我的代码”更准确，也能减少误读。</p>
+<p>常见写法：</p>
+<table>
+  <tr><th>写法</th><th>作用</th></tr>
+  <tr><td><span class="inline-code">@src/app.ts</span></td><td>引用单个文件</td></tr>
+  <tr><td><span class="inline-code">@src/handlers/</span></td><td>引用整个文件夹</td></tr>
+  <tr><td><span class="inline-code">@src/app.ts:10-20</span></td><td>只引用某个文件的第 10 到 20 行</td></tr>
+</table>
+<p>如果你正在编辑某个文件，也可以按 <span class="inline-code">Alt+K</span>，快速把当前文件或选中的代码插入为引用。</p>
+
+<h3>5.2 用 <span class="inline-code">/</span> 打开命令菜单和计划模式</h3>
+<p>在输入框里输入 <span class="inline-code">/</span> 可以打开 Kimi Code 的命令菜单。常见命令包括：</p>
+<table>
+  <tr><th>命令</th><th>作用</th></tr>
+  <tr><td><span class="inline-code">/init</span></td><td>扫描当前项目并生成项目说明文档</td></tr>
+  <tr><td><span class="inline-code">/compact</span></td><td>当上下文太长时压缩上下文</td></tr>
+  <tr><td><span class="inline-code">/plan</span></td><td>如果当前版本显示该命令，可进入计划模式，先看步骤再执行</td></tr>
+</table>
+<p>如果你的版本没有显示 <span class="inline-code">/plan</span>，可以点击输入框左侧或附近的“计划模式”图标。开启后，Kimi 会先给出执行计划，你确认方向没问题后再让它继续动手，适合重构、批量修改、排查复杂问题。</p>
+
+<h3>5.3 发截图给 Kimi 分析界面问题</h3>
+<p>Kimi Code 支持把图片作为输入。遇到报错弹窗、插件界面异常、网页样式错位时，可以直接截图发给它分析。</p>
+<p>常用方式：</p>
+<ol>
+  <li>Windows 可以按 <span class="inline-code">Win + Shift + S</span> 截图；macOS 可以按 <span class="inline-code">Cmd + Shift + 4</span> 截图。</li>
+  <li>回到 VS Code 的 Kimi 输入框，直接粘贴截图。</li>
+  <li>也可以把图片拖进输入框，或点击输入框旁边的 <span class="inline-code">+</span> 添加图片。</li>
+  <li>发送时把问题说清楚，例如：“帮我看这张截图里为什么登录失败，该点哪里？”</li>
+</ol>
+<div class="tip">
+  <strong>提示：</strong>截图里如果有手机号、邮箱、订单号、API Key 等敏感信息，先打码再发送。
+</div>
+
+<h3>5.4 让 Kimi 改代码前先看 diff</h3>
+<p>Kimi Code 在 VS Code 里修改文件后，会通过 diff 视图展示变更。建议每次都先看一遍改动，再决定保留或回退。</p>
+<ul>
+  <li><strong>小改动</strong>：可以直接查看 diff 后保留。</li>
+  <li><strong>多文件改动</strong>：先让 Kimi 解释每个文件为什么改，再逐个确认。</li>
+  <li><strong>不确定的改动</strong>：不要急着接受，可以让 Kimi 重新规划或缩小范围。</li>
+</ul>
+
+<h3>5.5 常用快捷键</h3>
+<table>
+  <tr><th>快捷键</th><th>作用</th></tr>
+  <tr><td><span class="inline-code">Ctrl+Shift+K</span> / <span class="inline-code">Cmd+Shift+K</span></td><td>聚焦 Kimi 输入框</td></tr>
+  <tr><td><span class="inline-code">Alt+K</span></td><td>插入当前文件或选中代码作为引用</td></tr>
+  <tr><td><span class="inline-code">↑</span> / <span class="inline-code">↓</span></td><td>在输入框中浏览历史消息</td></tr>
+</table>
+
+<!-- 第6章 -->
+<h2 id="sec6">6. 快速上手指南</h2>
+
+<h3>6.1 常用斜杠命令</h3>
+<p>在 Kimi Code CLI 的交互界面中，以 <span class="inline-code">/</span> 开头的命令称为"斜杠命令"：</p>
+<table>
+  <tr><th>命令</th><th>作用</th></tr>
+  <tr><td><span class="inline-code">/help</span></td><td>查看所有可用命令和快捷键</td></tr>
+  <tr><td><span class="inline-code">/login</span></td><td>配置或切换 API 平台账号</td></tr>
+  <tr><td><span class="inline-code">/init</span></td><td>为当前项目生成 AGENTS.md</td></tr>
+  <tr><td><span class="inline-code">/clear</span></td><td>清空当前会话的上下文</td></tr>
+  <tr><td><span class="inline-code">/exit</span></td><td>退出 Kimi Code CLI</td></tr>
+</table>
+
+<h3>6.2 常用 CLI 参数</h3>
+<table>
+  <tr><th>参数</th><th>作用</th></tr>
+  <tr><td><span class="inline-code">kimi --version</span></td><td>查看版本</td></tr>
+  <tr><td><span class="inline-code">kimi web</span></td><td>在浏览器中打开图形界面</td></tr>
+  <tr><td><span class="inline-code">kimi acp</span></td><td>启动 Agent Client Protocol 服务</td></tr>
+  <tr><td><span class="inline-code">kimi -v</span></td><td>启用详细日志模式</td></tr>
+</table>
+
+<h3>6.3 最佳实践</h3>
+<ul>
+  <li><strong>在项目目录中启动</strong>：始终在你要工作的项目根目录运行 <span class="inline-code">kimi</span>，这样 AI 才能正确分析代码库</li>
+  <li><strong>维护 AGENTS.md</strong>：大型项目或团队项目务必维护好 AGENTS.md，它决定了 AI 对项目的理解深度</li>
+  <li><strong>及时清理上下文</strong>：长时间会话后，如果 AI 出现"健忘"，用 <span class="inline-code">/clear</span> 清空上下文重新开始</li>
+  <li><strong>善用浏览器界面</strong>：对于需要查看大量代码、多文件对比的场景，<span class="inline-code">kimi web</span> 的体验比终端更好</li>
+</ul>
+
+<div class="tip">
+  <strong>恭喜！</strong>到这里，你已经完成了 Kimi Code CLI 的安装、配置和入门。现在可以开始享受终端 AI 带来的高效开发体验了！
+</div>
+
+<div id="gwm-tile" aria-hidden="true"></div><div id="gwm-line" aria-hidden="true">&#169; 2026 Alex Zheng &#183; alexzheng-unzen.github.io &#183; redacted copy, not for redistribution</div>
+<script id="cg-js">
+(function(){
+  var OPEN = 'a[href^="mailto:"], footer .links, input, textarea, select, [contenteditable]';
+  var CREDIT = "Copyright (c) 2026 Alex Zheng (\u90d1\u6653\u742a). All rights reserved. https://alexzheng-unzen.github.io/";
+  function allowed(n){
+    while (n && n.nodeType !== 1) n = n.parentNode;
+    return !!(n && n.closest && n.closest(OPEN));
+  }
+  document.addEventListener('contextmenu', function(e){
+    if (!allowed(e.target)) e.preventDefault();
+  }, true);
+  document.addEventListener('dragstart', function(e){
+    var n = e.target;
+    if (n && n.nodeType === 1 && /^(IMG|PICTURE|SVG|CANVAS)$/i.test(n.tagName)) e.preventDefault();
+  }, true);
+  /* anything that does get copied carries the source with it */
+  document.addEventListener('copy', function(e){
+    try {
+      var sel = String(window.getSelection());
+      if (!sel || sel.length < 24 || !e.clipboardData) return;
+      e.clipboardData.setData('text/plain', sel + '\n\n' + CREDIT);
+      e.preventDefault();
+    } catch (err) {}
+  });
+})();
+</script>
+</body>
+</html>

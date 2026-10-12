@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<!-- Copyright (c) 2026 Alex Zheng (郑晓琪). All rights reserved.  https://alexzheng-unzen.github.io/ -->
+<html lang="zh-CN">
+<head>
+<meta name="robots" content="noindex, noai, noimageai, noarchive">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Social Listening System 复刻说明 · 集团医院板块版</title>
+<style>
+:root{
+  --blue:#3966CA; --blue-d:#27406e; --cyan:#00D4F1; --orange:#F08519;
+  --green:#2BB346; --red:#E6252F; --bg:#EBF0FA; --bg2:#E0F1FF;
+  --ink:#0F172A; --muted:#64748b; --line:#dde5f2; --card:#fff;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"OPPO Sans","Microsoft YaHei",-apple-system,Arial,sans-serif;font-size:16px;line-height:1.7}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px 72px}
+
+nav{position:sticky;top:0;z-index:10;background:rgba(235,240,250,.95);backdrop-filter:blur(6px);
+  display:flex;gap:6px;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid var(--line);margin-bottom:8px}
+nav a{font-size:13px;color:var(--muted);text-decoration:none;padding:5px 11px;border-radius:8px}
+nav a:hover,nav a.on{background:#fff;color:var(--blue)}
+
+.hero{background:linear-gradient(135deg,#3966CA 0%,#27406e 100%);color:#fff;border-radius:16px;
+  padding:44px 40px;margin:18px 0 36px;position:relative;overflow:hidden}
+.hero .ey{font-size:12px;letter-spacing:3px;color:#bcd2ff;font-weight:600}
+.hero h1{font-size:34px;line-height:1.25;margin:12px 0 14px;letter-spacing:.5px}
+.hero .sub{font-size:17px;color:#dde9ff;max-width:820px;margin:0 0 18px}
+.hero .sub b{color:#fff}
+.hero .meet{font-size:14.5px;background:#fff;padding:16px 20px;border-radius:10px;
+  color:var(--ink);max-width:820px;line-height:1.85;box-shadow:0 2px 12px rgba(15,23,42,.22)}
+.hero .meet b{color:var(--blue)}
+
+section{margin:44px 0}
+h2{font-size:24px;margin:0 0 4px;letter-spacing:.3px}
+h2 .n{color:var(--blue);font-weight:800;margin-right:8px}
+h3{font-size:17px;margin:30px 0 6px;color:var(--ink)}
+.lead{color:var(--muted);font-size:15px;margin:0 0 20px;max-width:820px}
+p{margin:0 0 14px;max-width:840px}
+.small{font-size:13px;color:var(--muted);max-width:840px}
+
+.shift{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0}
+.shift .col{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+.shift .col.old{opacity:.9}
+.shift .col.new{border:2px solid var(--blue);background:linear-gradient(180deg,#fff,#f6f9ff)}
+.shift h4{margin:0 0 12px;font-size:14px;letter-spacing:.5px}
+.shift .old h4{color:var(--muted)} .shift .new h4{color:var(--blue)}
+.shift ul{margin:0;padding-left:18px} .shift li{margin:8px 0;font-size:14.5px}
+
+.pains{background:var(--bg2);border-left:4px solid var(--blue);border-radius:8px;padding:14px 18px;margin:18px 0;font-size:14.5px;color:var(--blue-d)}
+.warn{background:#fff7ec;border-left:4px solid var(--orange);border-radius:8px;padding:14px 18px;margin:18px 0;font-size:14.5px;color:#9a5409}
+.danger{background:#fef2f2;border-left:4px solid var(--red);border-radius:8px;padding:14px 18px;margin:18px 0;font-size:14.5px;color:#8a1a1a}
+
+.ex{background:#fff;border:2px solid var(--orange);border-radius:12px;padding:20px 24px;margin:18px 0}
+.ex .tag{display:inline-block;background:#fef0dc;color:#9a5409;font-size:12px;font-weight:700;padding:3px 10px;border-radius:6px;margin-bottom:10px}
+.ex .gut{color:var(--muted);text-decoration:line-through;font-size:14.5px}
+.ex .data{font-size:16px;font-weight:600;margin-top:6px} .ex .data b{color:var(--blue)}
+
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 22px;border-top:3px solid var(--blue)}
+.kpi .big{font-size:26px;font-weight:800;color:var(--blue);line-height:1.1;letter-spacing:.5px}
+.kpi .big .u{font-size:15px;font-weight:600;color:var(--muted)}
+.kpi p{font-size:13px;color:var(--muted);margin:8px 0 0;line-height:1.6}
+
+.mods{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:18px 0}
+.flow{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}
+.mod{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 22px;border-top:3px solid var(--blue)}
+.mod.core{border-top-color:var(--orange);background:linear-gradient(180deg,#fffdf8,#fff)}
+.mod .h{font-size:16px;font-weight:700;margin:0 0 6px}
+.mod .h .id{color:var(--blue);margin-right:6px} .mod.core .h .id{color:var(--orange)}
+.mod .role{font-size:14px;margin:6px 0;color:var(--ink)} .mod .role b{color:var(--blue)}
+.mod .serve{font-size:13px;color:var(--muted)}
+.mod details{margin-top:12px;border-top:1px dashed var(--line);padding-top:10px}
+.mod summary{cursor:pointer;font-size:12px;font-weight:700;color:var(--blue);list-style:none;letter-spacing:.3px}
+.mod summary::-webkit-details-marker{display:none}
+.mod summary::before{content:"▸ "}
+.mod details[open] summary::before{content:"▾ "}
+.mod details ul{margin:8px 0 0;padding-left:16px}
+.mod details li{font-size:12.5px;color:var(--muted);margin:5px 0;line-height:1.65}
+.mod details li b{color:var(--ink)}
+
+.steps{counter-reset:s;list-style:none;padding:0;margin:16px 0}
+.steps li{counter-increment:s;background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 18px 14px 58px;position:relative;margin-bottom:10px;font-size:14.5px}
+.steps li::before{content:counter(s);position:absolute;left:16px;top:12px;width:28px;height:28px;background:var(--blue);color:#fff;border-radius:50%;text-align:center;line-height:28px;font-weight:700;font-size:14px}
+.steps li b{color:var(--blue)}
+
+.pend{background:#fff;border:2px dashed var(--blue);border-radius:12px;padding:18px 22px;margin:18px 0;font-size:14.5px}
+.pend .ph{font-weight:700;color:var(--blue);font-size:15px;margin:0 0 8px}
+.pend ul{margin:6px 0 0;padding-left:18px} .pend li{font-size:14px;margin:6px 0}
+
+/* 表格（紧凑、不塞长句） */
+.tblwrap{background:#fff;border:1px solid var(--line);border-radius:12px;padding:4px 14px;margin:18px 0;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-size:12px;color:var(--muted);text-align:left;font-weight:700;letter-spacing:.5px;padding:12px 10px 8px;border-bottom:2px solid var(--line);white-space:nowrap}
+td{padding:10px;border-bottom:1px solid #eef2f9;vertical-align:top;line-height:1.6}
+tr:last-child td{border-bottom:none}
+td b{color:var(--blue)}
+.ok{color:var(--green);font-weight:700} .mid{color:var(--orange);font-weight:700} .no{color:var(--red);font-weight:700}
+
+/* 信息流路线图（静态卡片链） */
+.stgflow{margin:18px 0}
+.stg{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 20px;position:relative}
+.stg .sh{display:flex;align-items:baseline;gap:10px;margin-bottom:8px}
+.stg .sn{flex:none;width:30px;height:30px;background:var(--blue);color:#fff;border-radius:50%;text-align:center;line-height:30px;font-weight:800;font-size:14px;align-self:center}
+.stg.s0 .sn{background:var(--blue-d)} .stg.s3 .sn{background:var(--orange)} .stg.s5 .sn{background:var(--green)}
+.stg .st{font-size:16px;font-weight:800}
+.stg .sd{font-size:13px;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.chip{background:#f4f7fd;border:1px solid #c9dbf7;border-radius:8px;padding:3px 12px;font-size:13px;color:var(--blue-d)}
+.chip b{color:var(--blue)}
+.stg .rows{margin-top:10px;border-top:1px dashed var(--line);padding-top:10px;display:grid;gap:6px}
+.stg .row{display:grid;grid-template-columns:96px 1fr;gap:10px;font-size:13.5px}
+.stg .row .k{font-weight:700;color:var(--muted);font-size:12.5px}
+.stg .row.hu .k{color:var(--orange)}
+.arr{text-align:center;color:var(--blue);font-weight:800;padding:4px 0;font-size:15px}
+.arr .lbl{font-family:Consolas,monospace;font-size:11.5px;color:var(--muted);letter-spacing:1px;margin-left:8px;font-weight:600}
+
+/* 溯源链接 */
+a.src{color:var(--blue);text-decoration:none;border-bottom:1px dashed #9fb9e8;font-size:.92em}
+a.src:hover{border-bottom-style:solid}
+.srcs{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 20px;margin:18px 0}
+.srcs .ph{font-weight:700;font-size:13px;color:var(--muted);margin:0 0 8px;letter-spacing:.5px}
+.srcs ul{margin:0;padding-left:18px;columns:2;column-gap:28px}
+.srcs li{font-size:12.5px;color:var(--muted);margin:4px 0;break-inside:avoid}
+
+/* 交互流程图（跟一条走） */
+.tracebar{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:18px 0 10px}
+.tracebar .tl{font-size:13px;font-weight:700;color:var(--muted);margin:0 0 8px}
+.tchip{display:inline-block;border:1.5px solid #c9dbf7;background:#f4f7fd;color:var(--blue-d);border-radius:999px;padding:5px 14px;margin:3px 6px 3px 0;font-size:13.5px;cursor:pointer;font-weight:600;font-family:inherit;transition:all .15s}
+.tchip:hover{border-color:var(--blue);background:#eaf1ff}
+.tchip.act{background:var(--blue);border-color:var(--blue);color:#fff}
+.tdetail{background:linear-gradient(180deg,#f6f9ff,#fff);border:2px solid var(--blue);border-radius:12px;padding:14px 18px;margin:0 0 18px;font-size:14px;display:none}
+.tdetail.show{display:block}
+.tdetail .tt{font-weight:800;font-size:15px;margin:0 0 8px}
+.tdetail ol{margin:0;padding-left:20px}
+.tdetail li{margin:6px 0;line-height:1.7}
+.tdetail .fs{display:inline-block;background:#eaf1ff;border-radius:6px;padding:0 8px;font-size:12px;color:var(--blue-d);margin:0 2px;white-space:nowrap;font-weight:600}
+.tdetail .tk{margin:10px 0 0;padding-top:8px;border-top:1px dashed var(--line);font-size:13px;color:#9a5409}
+.stgflow{position:relative}
+.stgflow svg.links{position:absolute;left:0;top:0;pointer-events:none;z-index:3}
+.nodes{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 2px}
+.node{background:#fff;border:1px solid #dbe4f3;border-radius:10px;padding:7px 12px;font-size:13px;min-width:118px;position:relative;transition:opacity .2s,box-shadow .2s;border-top:3px solid var(--blue)}
+.node .nname{font-weight:700;display:block}
+.node .nsub{font-size:11.5px;color:var(--muted);display:block;line-height:1.5;max-width:200px}
+.k-src{border-top-color:#0F172A}.k-prm{border-top-color:var(--blue)}.k-tier{border-top-color:var(--orange)}
+.k-dom{border-top-color:#0891b2}.k-out{border-top-color:var(--green)}.k-risk{border-top-color:#7c3aed}.k-drop{border-top-color:var(--red)}
+.stgflow.tracing .node{opacity:.26;filter:grayscale(.4)}
+.stgflow.tracing .node.on{opacity:1;filter:none;box-shadow:0 0 0 2px rgba(57,102,202,.35),0 8px 20px -8px rgba(57,102,202,.45)}
+.hopn{position:absolute;top:-9px;left:-9px;width:20px;height:20px;border-radius:50%;background:var(--blue);color:#fff;font-size:11px;font-weight:800;text-align:center;line-height:20px;z-index:4}
+/* 三件套填空示范 */
+.demo{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin:14px 0}
+.demo .dh{font-size:14.5px;font-weight:800;color:var(--blue);margin:0 0 10px}
+.demo .pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0}
+.demo .cell{border:1px solid #e8eef8;border-radius:8px;padding:10px 12px;font-size:13px;line-height:1.75}
+.demo .cell .lb{font-size:11px;font-weight:700;letter-spacing:.5px;display:block;margin-bottom:5px}
+.demo .cell.tpl .lb{color:var(--muted)} .demo .cell.fil .lb{color:var(--green)}
+.demo .cell.tpl{background:#f8fafd;color:#5b6778}
+.demo .cell.fil{background:#f5fdf7}
+.demo code{background:#eef3fb;border-radius:4px;padding:0 5px;font-size:12.5px}
+@media(max-width:760px){.demo .pair{grid-template-columns:1fr}}
+
+/* 整章折叠块 */
+.fold{background:#fff;border:1px solid var(--line);border-radius:12px;margin:20px 0;overflow:hidden}
+.fold>summary{cursor:pointer;list-style:none;padding:16px 22px;font-size:15.5px;font-weight:800;color:var(--blue);
+  background:linear-gradient(180deg,#f6f9ff,#fff);display:flex;align-items:center;gap:10px}
+.fold>summary::-webkit-details-marker{display:none}
+.fold>summary::before{content:"▸";font-size:14px;transition:transform .15s;display:inline-block}
+.fold[open]>summary::before{transform:rotate(90deg)}
+.fold>summary:hover{background:#eef4ff}
+.fold>summary .cnt{font-size:12.5px;font-weight:600;color:var(--muted);margin-left:auto}
+.fold .fbody{padding:4px 22px 20px;border-top:1px solid var(--line)}
+.fold .fbody h3:first-of-type{margin-top:22px}
+.ainote{background:#f6f4ff;border-left:4px solid #7c3aed;border-radius:8px;padding:13px 18px;margin:16px 0;font-size:13.5px;color:#4c2d8f;line-height:1.75}
+.ainote b{color:#5b21b6}
+
+footer{margin-top:50px;border-top:1px solid var(--line);padding-top:18px;font-size:12px;color:var(--muted)}
+
+/* 质感增强层 */
+html{scroll-behavior:smooth}
+body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+section{margin:58px 0}
+h2{font-size:26px;font-weight:800} h3{margin-top:40px}
+.lead{margin-bottom:24px;line-height:1.75} p{line-height:1.78}
+.hero{padding:54px 48px;box-shadow:0 20px 50px -16px rgba(57,102,202,.5)}
+.hero::after{content:"";position:absolute;right:-90px;top:-90px;width:340px;height:340px;
+  background:radial-gradient(circle,rgba(0,212,241,.20),transparent 70%);border-radius:50%;pointer-events:none}
+.kpi,.mod,.pend,.shift .col,.ex,.stg,.tblwrap,.srcs{border-color:#e8eef8;
+  box-shadow:0 1px 2px rgba(15,23,42,.04),0 12px 30px -16px rgba(15,23,42,.20)}
+.kpi,.mod{transition:transform .18s ease,box-shadow .18s ease}
+.kpi:hover,.mod:hover{transform:translateY(-3px);
+  box-shadow:0 6px 14px rgba(15,23,42,.06),0 20px 42px -16px rgba(15,23,42,.28)}
+
+@media(max-width:760px){.shift,.mods,.kpis,.flow{grid-template-columns:1fr}.hero h1{font-size:26px}.hero{padding:32px 24px}.srcs ul{columns:1}}
+</style>
+<meta name="copyright" content="Copyright (c) 2026 Alex Zheng (郑晓琪). All rights reserved.">
+<meta name="author" content="Alex Zheng">
+<style id="cg">
+/* content guard */
+html{-webkit-touch-callout:none}
+body{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+/* whitelist: everything a recruiter legitimately needs to copy stays selectable */
+footer .links,footer .links a,a[href^="mailto:"],input,textarea,select,[contenteditable]{
+-webkit-user-select:text;-moz-user-select:text;-ms-user-select:text;user-select:text}
+img,picture,svg,canvas{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
+</style>
+<style id="gwm">
+/* guide watermark */
+#gwm-tile{position:fixed;inset:-50%;z-index:2147483646;pointer-events:none;
+background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='220'><text x='10' y='120' transform='rotate(-24 210 110)' font-family='Arial,sans-serif' font-size='18' fill='%23000' fill-opacity='0.055'>&#169; 2026 Alex Zheng &#183; alexzheng-unzen.github.io</text></svg>");
+background-repeat:repeat}
+#gwm-line{position:fixed;right:12px;bottom:10px;z-index:2147483647;pointer-events:none;
+font:12px/1.4 Arial,"Microsoft YaHei",sans-serif;color:#444;background:rgba(255,255,255,.82);
+padding:3px 8px;border-radius:4px;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
+@media print{#gwm-tile,#gwm-line{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav>
+  <a href="#c1">① 能做什么、做不到什么</a>
+  <a href="#c2">② 一条内容怎么走完全程</a>
+  <a href="#c3">③ 要准备什么、怎么改、怎么分工</a>
+  <a href="#c4">④ 实时预警往哪走</a>
+  <a href="#c5">⑤ 收尾</a>
+</nav>
+
+<div class="hero">
+  <div class="ey">SOCIAL LISTENING SYSTEM · 复刻说明 · 给集团医院板块 · 2026-08-03</div>
+  <h1>Social Listening System<br>社媒舆情监控系统 · 复刻说明书</h1>
+  <p class="sub"><b>多平台 · 定向采集 · AI 筛选分流 · 部门看板</b><br>把散落的外部信息，变成各部门能直接用的判断</p>
+  <div class="meet">这份说明回答四个问题：<b>① 这套系统能做什么、做不到什么</b> → <b>② 一条内容在里面是怎么走的</b> → <b>③ 要复刻得准备些什么、人怎么分工</b> → <b>④ 以后想做实时预警，该往哪个方向走</b>。代码和环境那部分已经打包交付了，这里讲的是项目层面的事——不需要技术背景，需要的是业务判断和人手安排。</div>
+</div>
+
+<!-- ==================== ① ==================== -->
+<section id="c1">
+  <h2><span class="n">①</span>这套系统能做什么、做不到什么</h2>
+  <p class="lead">这套系统在我们公司连续跑了 4 个月。它要解决的不是"信息不够"，而是三件一直没解决好的事：<b>信息又多又漏</b>——公众号一天几百条，真正相关的只有两三条，而该知道的那条偏偏没人刷到；<b>东西留不下来</b>——有价值的信息躺在各人的收藏夹和群聊里，人一走就带走了；<b>看起来太费劲</b>——发到群里没人有时间读，大家真正想知道的是"这条跟我有什么关系、我要不要做点什么"。</p>
+
+  <div class="shift">
+    <div class="col old">
+      <h4>Before · 人去找信息</h4>
+      <ul>
+        <li>每个部门自己上网搜，费时费力还容易漏</li>
+        <li>剩下的靠人脉打听、靠平台推荐——刷到什么算什么</li>
+        <li>同行动作、政策变化、客户投诉：等自己听说的时候，往往已经晚了</li>
+        <li>各自存在各自手里，散在群聊里，攒不下来也没法复用</li>
+      </ul>
+    </div>
+    <div class="col new">
+      <h4>Now · 信息来找人</h4>
+      <ul>
+        <li>按监控词去多个平台<b>定向采、批量采</b></li>
+        <li>AI 拿事先写好的标准逐条读、<b>打标签、分等级</b>，跟我们无关的直接滤掉（大约占一半）</li>
+        <li>整理完<b>直接送到各部门的看板</b>，高危的置顶提醒</li>
+        <li>全部存进库里，每条都能翻回原文；标准越校越准</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>能监听什么：五路信源现状</h3>
+  <div class="tblwrap"><table>
+    <tr><th>信源</th><th>主要用来看什么</th><th>怎么采</th><th>目前状态与前置条件</th></tr>
+    <tr><td><b>竞品官网</b></td><td>同行的新动作：新产品、新的服务承诺、新合作</td><td>用搜索接口 <a class="src" href="https://tavily.com" target="_blank">Tavily↗</a> 定期抓页面</td><td><span class="ok">最稳的一路</span>，不用装 Docker，第一天就能跑起来</td></tr>
+    <tr><td><b>微信公众号</b></td><td>行业权威文章、政策解读、同行深度报道</td><td>用搜索接口 <a class="src" href="https://exa.ai" target="_blank">Exa↗</a> 按监控词搜文章</td><td><span class="ok">稳定</span>；但它是"搜"来的不是"订"来的（下面边界 3 讲）</td></tr>
+    <tr><td><b>小红书</b></td><td>用户的真实声音：吐槽、顾虑、对品牌的评价</td><td>用一个装在 Docker 里的浏览器 <a class="src" href="https://github.com/energypantry/agent-browser-runtime" target="_blank">agent-browser-runtime↗</a> 像真人一样浏览；自家品牌另设一组词每轮必查</td><td><span class="mid">前置条件最多</span>：要拿到第三方工具的授权、装 Docker、还要人扫码登录</td></tr>
+    <tr><td><b>X（Twitter）</b></td><td>海外的讨论声量</td><td>和小红书用同一套浏览器</td><td><span class="mid">刚起步，还在试</span></td></tr>
+    <tr><td><b>监管及官方网站</b></td><td>政策原文、政府公开的数据库</td><td>需要的时候整批采一次，平时不定时去转</td><td><span class="ok">按需使用</span>，已经有成功交付的例子（见下面场景 C）</td></tr>
+  </table></div>
+
+  <h3>已落地的三个业务场景</h3>
+  <div class="flow">
+    <div class="mod">
+      <div class="h"><span class="id">A</span>Crisis Alert · 危机舆情发现</div>
+      <p class="role">同行的负面帖子被自动抓到并判好等级，<b>相关同事当天就能看到</b>；自家品牌另设一组词每轮必查。</p>
+      <p class="serve">换到医院板块：患者投诉帖、医疗纠纷帖、点名到医院或某位医生的负面内容。</p>
+      <details><summary>Evidence · 库内原帖</summary><ul>
+        <li>「众安保险请给我孩子一个说法！」——<b>Tier 1</b> · 发帖 2026-06-01</li>
+        <li>「众安保险—你的良心不会痛吗？」——<b>Tier 1</b> · 发帖 2025-12-19</li>
+        <li>「避雷 众安保险 简直坑大了！」——Tier 2 · 发帖 2026-06-11</li>
+        <li>三条的正文都在采集当时存下来了，随时能翻回去看；小红书的原文链接过几天会失效，<b>自己存一份就是为了防这个</b></li>
+      </ul></details>
+    </div>
+    <div class="mod">
+      <div class="h"><span class="id">B</span>User Research · 新品调研</div>
+      <p class="role">做调研时，客群画像和用户顾虑<b>直接从系统采回来的社媒原文里取</b>，不用从头再搜一遍。</p>
+      <p class="serve">换到医院板块：产科、儿科、体检这些服务线，用户在决定去哪家之前都在纠结什么。</p>
+      <details><summary>Evidence · 一手数据与关键发现</summary><ul>
+        <li>少儿高端医疗险调研：自己抓了 <b>45 篇笔记正文 + 720 条真实评论</b>，全程参考约 805 篇笔记</li>
+        <li>发现：用户嘴里出现最多的痛点是「拒赔、理赔难」——产品因此把「理赔确定性」定为主打卖点</li>
+        <li>产出：客群画像 + 高频痛点清单 + 同行没做到的空白点，直接进了产品调研包</li>
+      </ul></details>
+    </div>
+    <div class="mod">
+      <div class="h"><span class="id">C</span>Policy Tracking · 政策信息采集</div>
+      <p class="role">政府公开的信息<b>整批采下来、整理成表直接交给业务同事</b>，不用再靠人一页页翻网站。</p>
+      <p class="serve">换到医院板块：卫健委、医保局、药监局公开的目录和政策文件。</p>
+      <details><summary>Evidence · 交付物与校验</summary><ul>
+        <li>国家医保局「全国医疗服务项目编码」全量 <b>7,881 条 × 8 列</b>（2026-06-17 采集）</li>
+        <li>和官网自己给出的条数 <b>7,881 完全对得上</b>，又抽样逐字段核对过，没有遗漏</li>
+        <li>采集脚本留着，随手册一起交付，以后业务同事可以自己更新</li>
+      </ul></details>
+    </div>
+  </div>
+
+  <h3>能力边界：它做不到什么（复刻前先知道）</h3>
+  <p class="lead">下面六条不是列缺点，是把设计上做过的取舍讲清楚。有人问"这系统是不是全自动、是不是实时的"，答案都在这里。</p>
+  <div class="mods">
+    <div class="mod">
+      <div class="h"><span class="id">1</span>它不是实时的</div>
+      <p class="role">采集是<b>定时成批跑</b>的，而且要有人点一下才开始，不会自己在后台一直转。一条帖子从发出来到进看板，通常是几小时到一两天。</p>
+      <p class="serve">想把这个时间缩短到分钟级，路径和投入我整理在 <a class="src" href="#c4">第 ④ 章「实时预警」↓</a>。先说结论：对小红书做"秒级"不现实，市面上的商用工具也做不到。</p>
+    </div>
+    <div class="mod">
+      <div class="h"><span class="id">2</span>小红书这一路有平台限制</div>
+      <p class="role">登录状态过几天就失效，要人重新扫码；帖子的原文链接也是过几天就打不开。<b>所以系统在采集当时就把正文原样存下来了</b>——哪怕以后原帖链接失效，内容照样能在系统里看到，不用担心"点进去是空的"。</p>
+      <p class="serve">这是平台自己的规则，不是系统做得不好。反过来说，任何号称"能永久稳定全自动采小红书"的方案，都值得多问几句。</p>
+    </div>
+    <div class="mod">
+      <div class="h"><span class="id">3</span>公众号这一路是"搜"来的，不是"订"来的</div>
+      <p class="role">系统不是像订阅号那样自动收全某个号的新文章，而是拿监控词去搜——<b>搜到哪些算哪些，总会有漏掉的</b>，而且搜回来的以旧文章居多。</p>
+      <p class="serve">所以监控词表写得好不好，直接决定这一路能拿回多少东西——这也是词表被列进"三件套"的原因（见 ③）。想更全，可以看这个开源工具 <a class="src" href="https://github.com/wechat-article/wechat-article-exporter" target="_blank">wechat-article-exporter↗</a>：用自家公众号后台的身份把订阅的号整个导出来。我试过 48 个号、496 篇文章一次成功，结论是可行，但要配一套扫码和限速的规矩。</p>
+    </div>
+    <div class="mod">
+      <div class="h"><span class="id">4</span>高危舆情绝不自动往外发</div>
+      <p class="role">判定为高危的帖子，系统<b>只把研判卡放进门户的预警区，停在那里等人看</b>，不会自动推给任何群、任何人。这是故意这么设计的。</p>
+      <p class="serve">三个原因：AI 会判错；品牌声誉的事必须有人签字负责；自动发错一次的代价，远大于晚十分钟发出来。这一条建议原样保留。</p>
+    </div>
+    <div class="mod">
+      <div class="h"><span class="id">5</span>门户只能在公司内网用</div>
+      <p class="role">后台接口<b>没有做登录校验</b>，所以绝对不能映射到公网上；页面上那个邀请码只是一道门帘，防的是误入，防不住懂技术的人绕过去。</p>
+      <p class="serve">三条部署红线：只在公司可信内网里跑；不要把敏感个人信息放进去；如果确实需要真正的登录校验，得请 IT 在服务端加一层。</p>
+    </div>
+    <div class="mod">
+      <div class="h"><span class="id">6</span>AI 的判断有已知的盲点</div>
+      <p class="role">比如商家的官方账号、销售人员发的广告贴，系统目前<b>还分不出发帖的是不是卖方</b>，会把它们当成普通用户的真实声音收进来。这块正在改。</p>
+      <p class="serve">判定标准需要人一直校准下去——<b>这套系统的上限不在技术，在判定标准写得准不准</b>。有人手能持续做这件事，价值很大。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== ② ==================== -->
+<section id="c2">
+  <h2><span class="n">②</span>信息流路线图：一条内容怎么流过整个系统</h2>
+  <p class="lead">下面这张图<b>可以点</b>。五条样例覆盖了五种常见情况——点任意一条，图上就会沿路亮起来：<b>抓回来 → 读完打标签 → 判等级 → 分给部门 → 上看板</b>，每一步做了什么写在下面的框里。第五条专门演示"被过滤掉的无关内容"，那部分占了系统一半的工作量。</p>
+
+  <div class="stg s0" style="margin-bottom:10px">
+    <div class="sh"><span class="sn">0</span><div><div class="st">开始之前 · 公司画像（告诉 AI 我们是谁）</div><div class="sd">这是所有判断的地基——下面每一份 Prompt 开头都会先带上它</div></div></div>
+    <div class="rows">
+      <div class="row"><span class="k">干什么</span><span>把「我们是谁、做什么业务、同行有哪几家、<b>什么不归我们管</b>」写成一份公司画像。通用 AI 工具什么都觉得重要；这套系统只认你的业务。</span></div>
+      <div class="row hu"><span class="k">人要做什么</span><span>复刻要做的第一件事就是填这份画像（中英两份，怎么填见 ③）——"什么不归我们管"那句，是滤掉无关内容的关键</span></div>
+    </div>
+  </div>
+
+  <div class="tracebar" id="tracebar"><p class="tl">🖱 挑一条内容，跟着它走一遍（点一下切换，图上会沿路亮起来）：</p></div>
+  <div class="tdetail" id="tdetail"></div>
+
+  <div class="stgflow" id="flow">
+    <div class="stg">
+      <div class="sh"><span class="sn">1</span><div><div class="st">第一步 · 从各个平台把内容抓回来</div><div class="sd">按监控词分头去采；抓到的正文、发帖时间、点赞评论数，当场存进库里</div></div></div>
+      <div class="nodes">
+        <div class="node k-src" id="nd-xhs"><span class="nname">📱 小红书 / X</span><span class="nsub">用户原声 · 痛点 · 口碑</span></div>
+        <div class="node k-src" id="nd-wechat"><span class="nname">📰 微信公众号</span><span class="nsub">行业权威 · 政策解读</span></div>
+        <div class="node k-src" id="nd-comp"><span class="nname">🏢 竞品官网</span><span class="nsub">竞品动作 · 服务承诺</span></div>
+        <div class="node k-src" id="nd-gov"><span class="nname">🏛️ 监管官网</span><span class="nsub">政策一手源 · 按需批量</span></div>
+        <div class="node k-risk" id="nd-risk"><span class="nname">🛡️ 品牌哨兵</span><span class="nsub">点名自家的帖子单独盯防 · 每轮必查</span></div>
+      </div>
+      <div class="rows">
+        <div class="row hu"><span class="k">人要做什么</span><span>值班的人每轮点一下启动（10–20 分钟）；小红书登录失效时扫一次码</span></div>
+      </div>
+    </div>
+    <div class="arr">↓ <span class="lbl">存进库时统一整理：发帖时间换成统一格式 · 重复的自动合并 · 抓不到的字段就空着，不瞎编</span></div>
+
+    <div class="stg">
+      <div class="sh"><span class="sn">2</span><div><div class="st">第二步 · AI 逐条读完，打上标签</div><div class="sd">四份 Prompt 各管一路来源，判定标准全写在里面——<b>系统聪不聪明，就看这一层写得好不好</b></div></div></div>
+      <div class="nodes">
+        <div class="node k-prm" id="nd-psocial"><span class="nname">💬 社媒原声 Prompt</span><span class="nsub">痛点 · 客群 · 情报用途</span></div>
+        <div class="node k-prm" id="nd-pind"><span class="nname">📊 行业文 Prompt</span><span class="nsub">影响面 = 深度 × 扩散</span></div>
+        <div class="node k-prm" id="nd-pcomp"><span class="nname">⚔️ 竞品页 Prompt</span><span class="nsub">战略信号 5 类打分</span></div>
+        <div class="node k-risk" id="nd-prisk"><span class="nname">🚨 风险研判 Prompt</span><span class="nsub">事实 / 话术分离 · 评论区风向</span></div>
+      </div>
+      <div class="rows">
+        <div class="row hu"><span class="k">人要做什么</span><span>判定标准是人写的，靠问卷校准。我踩过的坑：<b>写进去不等于生效</b>，改完得拿真实帖子试一遍，看 AI 是不是真照做了</span></div>
+      </div>
+    </div>
+    <div class="arr">↓ <span class="lbl">判等级</span></div>
+
+    <div class="stg s3">
+      <div class="sh"><span class="sn">3</span><div><div class="st">第三步 · 判等级，决定要不要送到人面前</div><div class="sd">量大的批量判读用便宜快的模型，高危的研判用更强的模型，两个互为备份</div></div></div>
+      <div class="nodes">
+        <div class="node k-tier" id="nd-t1"><span class="nname">Tier 1</span><span class="nsub">高价值，必读</span></div>
+        <div class="node k-tier" id="nd-t2"><span class="nname">Tier 2</span><span class="nsub">部门参考</span></div>
+        <div class="node k-tier" id="nd-t3"><span class="nname">Tier 3</span><span class="nsub">行业背景，了解一下</span></div>
+        <div class="node k-drop" id="nd-omit"><span class="nname">Omit</span><span class="nsub">判定跟我们无关，直接滤掉（约占一半）</span></div>
+        <div class="node k-risk" id="nd-warn"><span class="nname">⚠️ 预警级别</span><span class="nsub">高 / 中 / 低（只给负面帖打）</span></div>
+      </div>
+      <div class="rows">
+        <div class="row hu"><span class="k">人要做什么</span><span>对送上来的内容点赞/点踩，反馈会进下一轮校准；看到不该出现的内容随手记一笔</span></div>
+      </div>
+    </div>
+    <div class="arr">↓ <span class="lbl">分给部门：一条内容只送一个部门，不群发</span></div>
+
+    <div class="stg">
+      <div class="sh"><span class="sn">4</span><div><div class="st">第四步 · 这条主要该给谁看</div><div class="sd">我们分了下面 6 个格子；医院板块可以按院区或者按职能，自己定几个格子</div></div></div>
+      <div class="nodes">
+        <div class="node k-dom" id="nd-dstrategy"><span class="nname">🗂️ 管理战略</span></div>
+        <div class="node k-dom" id="nd-dproduct"><span class="nname">🗂️ 产品精算</span></div>
+        <div class="node k-dom" id="nd-dclaims"><span class="nname">🗂️ 理赔运营</span></div>
+        <div class="node k-dom" id="nd-dnetwork"><span class="nname">🗂️ 医疗网络</span></div>
+        <div class="node k-dom" id="nd-dmarket"><span class="nname">🗂️ 市场渠道</span></div>
+        <div class="node k-dom" id="nd-dpace"><span class="nname">🗂️ 健管服务</span></div>
+      </div>
+      <div class="rows">
+        <div class="row hu"><span class="k">人要做什么</span><span>各部门负责人用问卷，把判定标准从"别人猜的"换成"自己亲口说的"——这是我试下来收益最大的一步（完整两阶段示范见 ③）</span></div>
+      </div>
+    </div>
+    <div class="arr">↓ <span class="lbl">送到人面前</span></div>
+
+    <div class="stg s5">
+      <div class="sh"><span class="sn">5</span><div><div class="st">第五步 · 上门户：看板、档案库、研判卡</div><div class="sd">各部门各看各的，高危的置顶；不管上不上看板，全都留底</div></div></div>
+      <div class="nodes">
+        <div class="node k-out" id="nd-odept"><span class="nname">🗂️ 部门看板</span><span class="nsub">各部门只看自己那块</span></div>
+        <div class="node k-out" id="nd-oticker"><span class="nname">📡 首页滚动条</span><span class="nsub">最新的动静</span></div>
+        <div class="node k-out" id="nd-ovoc"><span class="nname">💬 用户原声墙</span><span class="nsub">用户自己说的话</span></div>
+        <div class="node k-risk" id="nd-orisk"><span class="nname">🚨 舆情预警区 · 研判卡</span><span class="nsub">停在这里等人看</span></div>
+        <div class="node k-out" id="nd-oarch"><span class="nname">📦 离线档案库</span><span class="nsub">全部留底 · 断网也能查</span></div>
+        <div class="node k-drop" id="nd-odrop"><span class="nname">🗑 不上看板</span><span class="nsub">只留个底，不打扰任何人</span></div>
+      </div>
+      <div class="rows">
+        <div class="row hu"><span class="k">人要做什么</span><span>各部门每天花 5 分钟看自己那块；<b>高危的研判卡必须有人复核过才能动作</b>——出卡的人和复核的人不能是同一个</span></div>
+      </div>
+    </div>
+  </div>
+  <p class="small">注：点击互动要在浏览器里打开才有；打印成 PDF 只会显示静态结构。样例 ①②③⑤ 取自我们真实的库内案例，样例 ④ 做了脱敏处理。</p>
+
+  <h3>哪些机器干、哪些人干</h3>
+  <div class="tblwrap"><table>
+    <tr><th>环节</th><th>机器干的</th><th>人干的</th></tr>
+    <tr><td>采集</td><td>按词表去抓、存库、去掉重复的、留底</td><td>每轮点一下启动；小红书登录失效时扫码（几天一次）</td></tr>
+    <tr><td>判读分级</td><td>逐条读原文、打标签、判等级、分给部门</td><td>写判定标准；改完拿真实帖子试一遍</td></tr>
+    <tr><td>日常查看</td><td>分区呈现、高危置顶</td><td>每天 5 分钟看自己那块，点赞/点踩</td></tr>
+    <tr><td>风险研判</td><td>生成研判卡（把事实和带节奏的话分开列、判评论区风向）</td><td><b>高危的必须人工复核</b>，怎么处理由人拍板</td></tr>
+    <tr><td>校准</td><td>把大家的反馈汇总起来</td><td>收问卷，把答复一份份写回判定标准</td></tr>
+    <tr><td>日报</td><td>可以出初稿素材</td><td>有人汇总、终审后再发群</td></tr>
+  </table></div>
+</section>
+
+<!-- ==================== ③ ==================== -->
+<section id="c3">
+  <h2><span class="n">③</span>要准备什么、怎么改、人怎么分工</h2>
+  <p class="lead">先说结论：<b>别从零写，拿复用包改</b>。复用包是一套能直接跑的完整系统——代码、门户、自检、六份手册都齐了，解压装好依赖，10 分钟就能看到一个空门户。里面凡是我们公司特有的内容，都被挖成了填空题，你们要做的就是把这些空填成医院板块的。</p>
+
+  <h3>要准备的东西（清单）</h3>
+  <div class="tblwrap"><table>
+    <tr><th>类别</th><th>要准备什么</th><th>说明</th></tr>
+    <tr><td><b>判断力三件套</b><br><span class="small">系统的灵魂，只能你们自己写</span></td><td>① 公司画像（中、英各一份：中文版给人看和维护，英文版是 AI 实际读的，先写中文再对照翻）<br>② 监控词表（四类：品牌与同行 / 产品与服务 / 政策与行业 / 用户吐槽）<br>③ 部门判定标准（一个部门一份：他们平时拍什么板、什么消息一出现就会动起来、什么该收、什么不该收）</td><td>画像里"什么不归我们管"那句最关键；<b>三样都有填空示范，见下面「三件套长什么样」</b></td></tr>
+    <tr><td><b>几个 API 账号</b><br><span class="small">都是自己上网注册，不用采购流程</span></td><td>① 大模型：<a class="src" href="https://platform.deepseek.com" target="_blank">DeepSeek 开放平台↗</a>（跑量的主力）和/或 <a class="src" href="https://platform.moonshot.cn" target="_blank">Moonshot 开放平台↗</a>（判高危的时候用），至少要有一个<br>② <a class="src" href="https://app.tavily.com" target="_blank">Tavily↗</a>（采竞品官网用）<br>③ <a class="src" href="https://dashboard.exa.ai" target="_blank">Exa↗</a>（采公众号用，一定要自己单独申请一个）</td><td>花销和平时用 AI 工具差不多，不用额外采购。Exa 如果不单独申请，就是和别人共用额度，很容易被限速——更麻烦的是被限速时它不报错，看起来就像"这次没搜到文章"。我就是栽在这上面，公众号断了 37 天才发现</td></tr>
+    <tr><td><b>运行环境</b></td><td>① 一台常年开着的 Windows 电脑（在公司内网里）<br>② <a class="src" href="https://nodejs.org" target="_blank">Node.js↗</a> 20 以上<br>③ <a class="src" href="https://www.docker.com/products/docker-desktop/" target="_blank">Docker Desktop↗</a>（<b>只有采小红书才用得上</b>）</td><td>不用买服务器。跑起来之后，同事在浏览器里输内网地址就能看</td></tr>
+    <tr><td><b>账号和通知渠道</b></td><td>① 一个小红书账号（建议专门开一个，手机扫码登录）<br>② 一个飞书或企业微信群（以后接预警推送用，见 ④）</td><td>小红书账号有被限速的可能，别用重要的个人号</td></tr>
+    <tr><td><b>人</b></td><td>① 一位系统负责人（管问卷、管校准、排班）<br>② 每个部门找一位同事来答问卷<br>③ 几位轮流值班的同事（见下面的分工建议）</td><td>我们这套目前是我一个人在维护；人手够的团队把这些环节分开，会顺畅很多</td></tr>
+  </table></div>
+
+  <h3>三件套长什么样：填空示范</h3>
+  <p class="lead">复用包里这三样都是 <code>{{占位符}}</code> 模板。下面各给一个"模板原样 vs 填好的样子"对照——<b>医院板块那一栏是我随手写的示意，实际以你们自己的说法为准</b>；我们那一栏是真实在跑的内容。</p>
+
+  <div class="demo">
+    <p class="dh">示范 1 · 公司画像（中、英各一份，内容必须一致）</p>
+    <div class="pair">
+      <div class="cell tpl"><span class="lb">📄 模板原样（包内 IDENTITY.md 节选）</span>
+        <code>{{一句话定位：我们是谁、做什么、服务谁}}</code><br>
+        业务线：<code>{{业务线 1}}</code> / <code>{{业务线 2}}</code> / …<br>
+        竞品：<code>{{竞品 1}}</code> / <code>{{竞品 2}}</code> / <code>{{竞品 3}}</code><br>
+        <code>{{一句话写清什么不归你们管——这条是滤掉不相干内容的关键}}</code></div>
+      <div class="cell fil"><span class="lb">✅ 填好的样子（医院板块版 · 示意）</span>
+        「这家医院是高端私立综合医疗集团，为家庭客户提供妇产、儿科、全科到专科的全周期服务。」<br>
+        业务线：妇产 / 儿科 / 全科与专科 / 体检 / 保险直付服务<br>
+        竞品：你们真实对标的 2–3 家高端私立机构（写具体名字）<br>
+        <b>不做什么</b>：「不评价公立体系诊疗水平；不收医美纠纷类内容；不收与本院无关的医患矛盾时政讨论。」</div>
+    </div>
+    <p class="small">中文版是给人看、以后也靠它维护；英文版（company-context.md）才是 AI 跑起来时真正读的那份——内容一样，逐条翻过去就行（可以让 AI 帮你翻，人再核一遍）。例：<code>We do NOT: comment on public-hospital care quality; …</code>。两份的空格数不一样（中文大约 49 处、英文大约 35 处）不用在意——装的是同一套信息，只是详略和格式不同，<b>以中文版为准先填完，再对照翻译</b>，验收都是同一条：全局搜 <code>{{</code> 一个不剩。⚠️ 两份内容对不上，AI 就会按旧的那份判——这是最不容易被发现的一种失准。</p>
+  </div>
+
+  <div class="demo">
+    <p class="dh">示范 2 · 监控词表（四维度，包内 search-terms.yaml）</p>
+    <div class="tblwrap" style="margin:8px 0;box-shadow:none"><table>
+      <tr><th>维度</th><th>我们的真实词（在跑）</th><th>医院板块版（示意）</th></tr>
+      <tr><td><b>品牌与竞品舆情</b><br><span class="small">哨兵词所在维度</span></td><td>「我们的品牌名 避雷」等品牌×负面组合；竞品名×口碑</td><td>「医院品牌名 投诉」「医院品牌名 产科 后悔」「××竞品医院 口碑」</td></tr>
+      <tr><td><b>产品与服务动态</b></td><td>「预授权 时效」「直付 医院」</td><td>「无痛分娩 价格」「国际部 儿科 预约」</td></tr>
+      <tr><td><b>政策与行业趋势</b></td><td>「互联网医院 资质」「医保支付」</td><td>「外资医院 政策」「商保直付 私立医院」</td></tr>
+      <tr><td><b>用户怨言与争议</b></td><td>「保险 拒赔」「理赔难」</td><td>「私立医院 被坑」「产检 排队 吐槽」</td></tr>
+    </table></div>
+    <p class="small">三条经验：① 词表不必一次写全——我们从 98 词到 117 词是三个月按盲区逐步补的；② <b>品牌×负面组合是哨兵词</b>，与大词表分开、每轮必查；③ 中文平台别放英文品牌词（我们实测零声量全是噪音）。</p>
+  </div>
+
+  <div class="demo">
+    <p class="dh">示范 3 · 部门判定标准——先猜、后校准，两个阶段</p>
+    <p class="small" style="margin-top:0">判定标准有专门一份文档记录（复用包内 <code>templates/dept-routing-criteria-template.md</code>；我们在跑的对应文件是《部门判定标准·定稿池》，问卷每收一份就固化一节）。AI 每次判读，都是把这份文档拼进 Prompt 执行——所以"改标准"就是改这份文档。</p>
+
+    <p style="font-weight:800;margin:16px 0 6px;color:var(--blue)">第一阶段 · 起步版：我和 AI 一起猜</p>
+    <p class="small" style="margin-top:0">还没有任何问卷时，我和大模型逐个部门脑暴"他们应该关心什么"，写进文档先跑起来。当时实际喂给 AI 的判定段落长这样（节选示意，真实文件长得多）：</p>
+    <div class="cell tpl" style="display:block;margin:8px 0">
+      <span class="lb">📄 分流 Prompt 节选 · 第一阶段（猜的版本）</span>
+      【分给哪个部门】读完这条内容，判断它主要该给哪个部门（只能选一个）：<br>
+      · HR —— 用工政策、社保新规、员工福利变化 <b style="color:var(--orange)">← 我猜的</b><br>
+      · 医疗网络 —— 凡提到「预授权」的内容都归这里 <b style="color:var(--orange)">← 我猜的</b><br>
+      · 市场渠道 —— 品牌口碑、同业营销活动、渠道动作<br>
+      · ……（每个部门下面列正例 ✓ / 反例 ✗，AI 按例子类推）
+    </div>
+    <p class="small">诚实交代：截至 7 月底问卷只回收了 4/15 份——<b>没答卷的部门，今天仍在用这种猜的版本跑</b>。第一版不怕猜错，怕不上线：不上线，就永远没有可以让同事批改的实物。</p>
+
+    <p style="font-weight:800;margin:18px 0 6px;color:var(--blue)">第二阶段 · 校准版：发问卷收真话，回来改 Prompt</p>
+    <p class="small" style="margin-top:0">问卷怎么问有讲究，三条原则：<b>回溯</b>（问"上次因为外面的消息改变做法是什么时候"，不问"你希望看到什么"——人对已发生的事记得准，对未来的想象不准）；<b>批改</b>（把我猜的标准预填好，让同事打勾或划掉，比空白填空回收率高得多）；<b>举例</b>（每人 2 条想要 + 1 条不想要的真实例子，"不想要"比"想要"值钱）。</p>
+    <p class="small">一份答卷从收回到生效是这样走的——HR 域真实过程：</p>
+    <ol class="steps" style="margin:10px 0 4px">
+      <li><b>猜的版本在出什么错</b>：按第一阶段的标准，「社保缴费基数调整解读」这类宏观政策文源源不断进 HR 看板——打开一看，全是读了也没法行动的新闻</li>
+      <li><b>问卷收回真话</b>：HR 同事把"用工政策 / 社保新规"整行划掉，写下原话：「我要的是<b>具体到某家同业公司</b>的人事动静——裁员、搬迁、组织调整，那是我去挖人的时机」</li>
+      <li><b>回来改那一行 Prompt</b>：改成「只收点名具体同业公司的人事信号；宏观政策类直接过滤」。改完后，同类内容的走向立刻不同——「社保新政解读」→ 过滤，不再打扰；「某同业公司华南区裁员」→ 进 HR 看板、标高价值</li>
+    </ol>
+    <p class="small">同款校准另一例：「预授权」类内容原先全给医疗网络（猜的），预授权、运营两个部门的答卷交叉印证后拆成两半——审核/时效口径 → 医疗网络；被卡/结算卡壳 → 理赔运营。校准不是推倒重来，是<b>一行一行换血</b>：每收一份问卷，就把那个域从"猜的"换成"同事亲口说的"。</p>
+  </div>
+
+  <h3>两条路：从零编 vs 拿复用包改</h3>
+  <div class="shift">
+    <div class="col old">
+      <h4>从零自研（不建议）</h4>
+      <ul>
+        <li>我们从立项到今天走了 <b>4 个月、25 次版本迭代</b></li>
+        <li>我一路踩过 38 个记录在案的坑：反爬、采集管道断供、时间格式污染、模型下架……</li>
+        <li>每个坑的修复都已沉淀在复用包里，重走一遍没有价值</li>
+      </ul>
+    </div>
+    <div class="col new">
+      <h4>拿复用包改（推荐）</h4>
+      <ul>
+        <li>109 个文件的完整系统 + <b>6 份手册</b>（搭建史 / 部署 / 运维 / 定制 / 采集后端 / 方法论）+ 我们的参考实现</li>
+        <li>空库启动自动建表；自带 <b>65 项自动化自检</b>（相当于出厂检测，含义见下方改造第 6 步），交付时全绿</li>
+        <li>照包内 FILLING-GUIDE 填空即可，验收标准明确：<b>全局搜 <code>{{</code> 清零</b></li>
+        <li>包内另附给 AI 助手的接手说明——你们用 AI 工具改造时，AI 能直接读懂这套系统的红线</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>改造六步（从解压到能用）</h3>
+  <ol class="steps">
+    <li><b>先把空门户跑起来（第一天，约 10 分钟）</b>：解压 → 装依赖 → 启动 → 浏览器打开。能看到空门户，说明环境没问题。这一步什么都不用填</li>
+    <li><b>填公司画像</b>：先写中文版（给人看、以后也靠它维护），再对照翻成英文版（AI 实际读的），两份内容要一致。这是最重要的一步——写清楚医院板块是谁、有哪些业务线、同行有哪几家、<b>什么不归我们管</b></li>
+    <li><b>换掉监控词表和同行名单</b>：四类词逐条换成你们自己的（院区名 + 纠纷/投诉/曝光这类组合、科室和服务线、同行医院、卫健和医保的政策词）。⚠️ 中文平台上别放英文品牌词——我试过，一条声量都没有，搜回来全是不相干的</li>
+    <li><b>把 API 账号填进去</b>：申请到的 key 填进配置文件（包里有逐项说明的模板）；再给门户设一个你们自己的邀请码</li>
+    <li><b>一路一路开跑</b>：先跑竞品官网（最稳，当天就能看到内容）→ 再跑公众号 → 最后弄小红书（前提是先拿到那个浏览器工具的商用授权，见下面红线）</li>
+    <li><b>验收</b>：跑一条自检命令（npm test）——包里自带 <b>65 个自动检查点</b>，专门盯时间格式转换、AI 返回结果的解析、模型出故障时能不能自动换一家这些以前真出过事的地方，相当于出厂检测，全绿就说明没改坏。再加两条：全局搜 <code>{{</code> 一个不剩、门户从"空的"变成"有内容"。到这一步，系统就是医院板块自己的了</li>
+  </ol>
+
+  <div class="warn">🚫 <b>两条红线，动手之前先记住：</b><br>
+  ① Prompt 文件里的 <code>{{COMPANY_CONTEXT}}</code> 和 <code>{{TAG_CANDIDATES}}</code> <b>不是要填的空</b>——这两个是程序运行时自动替换的变量，手动填掉系统直接坏。填空只照 FILLING-GUIDE 上的清单来，别看见 <code>{{</code> 就填。<br>
+  ② 小红书那一路要用的浏览器工具 <a class="src" href="https://github.com/energypantry/agent-browser-runtime" target="_blank">agent-browser-runtime↗</a> <b>不在包里</b>：它是别人的开源项目，用的是 PolyForm Noncommercial 许可，<b>公司要商用，得先联系作者拿授权</b>。这件事排在最前面去办——授权没下来之前，其他几路照跑，不受影响。</div>
+
+  <h3>大概要花多久（按我自己的经验折算）</h3>
+  <div class="tblwrap"><table>
+    <tr><th>阶段</th><th>时长</th><th>做到哪一步算过关</th></tr>
+    <tr><td>环境跑起来</td><td>第 1 天</td><td>空门户能打开，自检全绿</td></tr>
+    <tr><td>两路先出内容</td><td>第 1 周</td><td>竞品官网 + 公众号两路有真内容进看板；画像和词表第一版填完</td></tr>
+    <tr><td>小红书那一路</td><td>第 2–3 周</td><td>拿授权 → 装 Docker → 扫码 → 品牌词跑通（时间主要花在等授权上）</td></tr>
+    <tr><td>开始收问卷校准</td><td>第 3–4 周</td><td>问卷发出去、一份份收回来，判定标准开始一条条改成同事自己的说法</td></tr>
+    <tr><td>进入"每天能用"</td><td>大约第 4 周起</td><td>值班排起来了，日报开始出</td></tr>
+    <tr><td>接着一直校准</td><td>长期</td><td>我们跑了 4 个月，判定标准还在磨——<b>这不是没做完，系统就是这么越用越准的</b></td></tr>
+  </table></div>
+
+  <h3>多人怎么分工</h3>
+  <div class="pains">📌 先说一条技术上的限制：<b>同一时间只能有一个人跑采集</b>（数据库同时只允许一个人写，两个人一起采会把彼此的数据覆盖掉）。所以分工的重点不是"大家一起采"，而是把复核、研判、校准、日报这些人做的环节分给不同的人。我们这套目前是我一个人在维护，这些活全压在同一个人身上，采集频率和校准速度都上不去——分工是我自己没条件做、但确实值得做的部分，供你们参考。</div>
+  <div class="tblwrap"><table>
+    <tr><th>岗位</th><th>人数</th><th>每天花多久</th><th>做什么</th></tr>
+    <tr><td><b>值班采集</b></td><td>每天 1 人，轮流</td><td>10–20 分钟</td><td>启动当天的采集；小红书登录失效时扫码；看一眼开工自检的结果——哪一路超过 7 天没抓到新东西会标黄，看到就要查</td></tr>
+    <tr><td><b>版块复核</b></td><td>每人认领 1–2 个平台或部门版块</td><td>5–10 分钟</td><td>看一遍自己那块、点赞或点踩、发现判错了随手记一笔——这些记录就是下一轮校准的原料</td></tr>
+    <tr><td><b>研判值守</b></td><td>当天 2 人</td><td>有事才做</td><td>复核高危研判卡（出卡的人和复核的人不能是同一个）、定级别、按预案上报</td></tr>
+    <tr><td><b>日报汇总</b></td><td>每天 1 人，轮流</td><td>15 分钟</td><td>把当天要点整理成早报发群：摘要 / 重要事件 / 风险提醒 / 建议动作</td></tr>
+    <tr><td><b>系统负责人</b></td><td>固定 1 人</td><td>每周半天</td><td>收问卷、把答复写回判定标准、增删监控词、排班</td></tr>
+  </table></div>
+  <p class="small">这套分工不是我自己编的：舆情行业常见的是「报道组 + 分析组」两组制，或者「监测岗 / 研判岗 / 联络岗」三岗值班制，政府的预案里常见每天 9:00、12:00、19:00 各巡查一次——医院板块还可以再按院区分一层（研判岗一人认领一个院区）。出处见第 ④ 章末尾的来源表。</p>
+  <p class="small">如果想多采一些：小红书可以<b>多个账号轮流用</b>，每个账号每天有各自的安全额度，人多就能多采。但采集的原则不变：量小、模仿真人的节奏、一有异常就退（连着两个词都抓不到内容，系统会自动停下来等人处理），不跟平台硬碰。</p>
+
+  <h3>我踩过的坑（每一条都交过学费）</h3>
+  <div class="mods">
+    <div class="mod"><div class="h"><span class="id">1</span>故障会装成正常的样子</div><p class="role">公众号那一路断了 <b>37 天</b>我都没发现——搜索接口被限速之后，日志上天天写着"搜索完成，0 篇"，看起来就像最近没有新文章。</p><p class="serve">学到的：监控系统自己也需要被监控。现在开工自检里加了一条"哪一路超过 7 天没进新内容就标黄"，就是这次的学费换来的。</p></div>
+    <div class="mod"><div class="h"><span class="id">2</span>宁可空着，也不瞎编</div><p class="role">抓不到发布时间就留空、标成"采集日期"，绝不拿抓取时间冒充发帖时间。</p><p class="serve">这类系统靠的就是可信：有一次被同事发现"2018 年的老文章显示成 3 小时前"，信任一下就没了。</p></div>
+    <div class="mod"><div class="h"><span class="id">3</span>品牌词每轮都要搜</div><p class="role">有一条骂自家品牌的帖子，因为词表在轮着搜，<b>53 天都没被搜到</b>。后来把品牌词单独拎出来，不跟着大词表排队，每轮都查。</p><p class="serve">对医院尤其要紧——「医院品牌名 避雷 / 投诉 / 纠纷」这类组合就属于必查词，一轮都不能落。</p></div>
+    <div class="mod"><div class="h"><span class="id">4</span>时间格式一次弄对</div><p class="role">"5小时前""昨天22:17"这种页面上显示的文字直接存进库，结果排序、显示、筛选三个地方全乱，回头修了 834 条数据。</p><p class="serve">复用包里已经修好了。提这一条是想说：<b>数据存进库时的规矩，比多做一个功能重要</b>。</p></div>
+    <div class="mod"><div class="h"><span class="id">5</span>当天的事当天判完</div><p class="role">小红书的帖子链接过几天就失效——高危帖必须<b>当天就把研判做完</b>，隔夜链接一死，只能重新采一遍。</p><p class="serve">所以值班安排上，"研判要和采集在同一时段做完"是硬规矩，不是建议。</p></div>
+    <div class="mod"><div class="h"><span class="id">6</span>写进去不等于生效</div><p class="role">判定规则在 Prompt 里改完了，模型不一定真照着做——我拿 6 条真实帖子、正反两个方向都试过，才敢上线。</p><p class="serve">每次改完判定标准，找几条已知答案的帖子喂给系统对一下答案，是成本最低的质检办法。</p></div>
+  </div>
+</section>
+
+<!-- ==================== ④ ==================== -->
+<section id="c4">
+  <h2><span class="n">④</span>实时预警：往哪个方向走</h2>
+  <p class="lead">实时预警也是我们下一步想做的方向。这一章是<b>另外补做的调研</b>，不是我们已经跑起来的东西——先给一个能直接上手的做法，其余材料收在下面的折叠里，需要时再展开。</p>
+
+  <div class="ainote">🤖 <b>本章说明</b>：这一章的内容由 <b>Claude Code 联网调研补充</b>，包括商用工具的速度水位、预警分级阈值、推送方式、合规条款和三条演进路线。所有关键论断都附了来源链接，可以自己点开核对。<b>这些不是我们的实操经验</b>——我们在实时预警上还没落地，只有下面"把词分成三档"这一条，是我们现在跑的品牌哨兵机制的延伸。</div>
+
+  <h3>自己做"接近实时"：把词分成三档</h3>
+  <p>思路不是把所有词都跑得更快，而是<b>把最要紧的那批词跑得更勤</b>。这跟我们现在跑的"品牌哨兵"是一个路子，行业里公开的做法也一样（核心词高频跑 + 其余词定时轮着跑 <a class="src" href="https://www.sohu.com/a/1040969740_121117363" target="_blank">来源↗</a>）：</p>
+  <div class="flow">
+    <div class="mod core"><div class="h"><span class="id">🛡️</span>第一档 · 每 15–30 分钟一轮</div><p class="role">品牌词配上负面词，大约 20–50 个组合：「医院品牌名 医闹 / 纠纷 / 投诉 / 曝光 / 维权」，各院区名也配一套同样的。</p><p class="serve">每轮只取最新的 20–30 条，一天的请求量压在平台的安全范围内。</p></div>
+    <div class="mod"><div class="h"><span class="id">📋</span>第二档 · 每 2–4 小时一轮</div><p class="role">服务线、科室、医生名字、产品名——重要，但不是火烧眉毛的那类。</p><p class="serve">大概几小时能发现，跟得上日常运营的节奏。</p></div>
+    <div class="mod"><div class="h"><span class="id">🌐</span>第三档 · 每天轮一遍</div><p class="role">同行医院、行业和政策类的词——属于背景信息，慢一点没关系。</p><p class="serve">我们现在那张 117 个词的大词表，就属于这一档。</p></div>
+  </div>
+
+  <details class="fold">
+    <summary>展开：行业能做到多快 · 预警怎么分级 · 怎么推送 · 合规红线 · 三条演进路线 <span class="cnt">Claude Code 调研补充 · 18 条来源</span></summary>
+    <div class="fbody">
+
+  <h3>行业实际能做到多快</h3>
+  <div class="tblwrap"><table>
+    <tr><th>工具</th><th>对外宣称的速度</th><th>这个数字该怎么理解</th></tr>
+    <tr><td>识微商情</td><td>"分钟级预警"</td><td>它说的社交数据"秒级更新"，指的是数据进库之后那一段，不包括前面排队采集的时间 <a class="src" href="https://nav.eyosc.com/sites/4577.html" target="_blank">来源↗</a></td></tr>
+    <tr><td>五节数据</td><td>30 分钟</td><td>"30 分钟内完成从拿到内容到发出预警"——中等规模厂商给的比较实在的数字 <a class="src" href="https://www.wujiedata.com/" target="_blank">来源↗</a></td></tr>
+    <tr><td>Meltwater</td><td>2–5 分钟</td><td>官方说法，覆盖新闻和社媒的告警 <a class="src" href="https://www.meltwater.com/en/products/real-time-alerting" target="_blank">来源↗</a></td></tr>
+    <tr><td>Brandwatch</td><td>主打"异常波动检测"</td><td>第三方评测提到它的实时更新其实有延迟 <a class="src" href="https://research.com/software/reviews/brandwatch-social-media-management" target="_blank">来源↗</a></td></tr>
+  </table></div>
+  <div class="pains">💡 换到你们最关心的平台上看：上面这些"分钟级"主要对新闻、微博这类来源才成立。<b>小红书不对外开放内容接口，公众号只能靠搜索、本来就搜不全</b>——这两个平台，行业实际能做到的是 <b>15 分钟到几个小时</b>。凡是对小红书宣称"秒级"的，秒的是"进库之后到发出告警"那一小段，不是从别人发帖算起。<a class="src" href="https://www.fanruan.com/blog/article/1797909/" target="_blank">小红书接口现状↗</a> <a class="src" href="https://blog.csdn.net/qq_43155641/article/details/143714279" target="_blank">公众号采集约束↗</a></div>
+
+  <h3>什么情况该报警、报到哪一级</h3>
+  <p>国内通行的是红/橙/黄/蓝四级；下面这些数字有公开模板，照着改成你们的量级就行 <a class="src" href="https://www.sohu.com/a/1040969740_121117363" target="_blank">阈值来源↗</a> <a class="src" href="https://www.pudong.gov.cn/zwgk/14528.gkml_ywl_yjgl/2023/111/309392.html" target="_blank">分级来源↗</a>：</p>
+  <div class="tblwrap"><table>
+    <tr><th>级别</th><th>什么情况触发（数字是示例，按你们的量改）</th><th>触发之后怎么办</th></tr>
+    <tr><td><span class="no">红 · I 级</span></td><td>负面内容占比超过 60%；或 1 小时内负面超过 50 条；或某一条帖子 1 小时阅读破 10 万、转发破 1000</td><td><b>不自动发大群</b>——先发给 2 人的值班小群，人确认过再转，15 分钟内定级上报</td></tr>
+    <tr><td><span class="mid">橙 · II 级</span></td><td>数量比上一时段涨了 200% 以上（就算总数不多也要报——这是要爆发的前兆）</td><td>机器人直接发群 + @值班的人，30 分钟内在群里回一句"已看 / 是误报 / 要升级"</td></tr>
+    <tr><td><span class="mid" style="color:#b8860b">黄 · III 级</span></td><td>负面内容占比超过 30%；或 1 小时内负面超过 10 条</td><td>机器人发群但不 @人，24 小时内处理完并回复</td></tr>
+    <tr><td><span class="ok" style="color:#2b6cb0">蓝 · IV 级</span></td><td>零星出现的一般负面</td><td>放进观察清单，周报里一起汇总</td></tr>
+  </table></div>
+  <div class="warn">⚕️ <b>医院还要在通用标准之外加两条"直接升一级"的规则：</b>① 帖子里<b>能指到具体院区、科室或某位医生</b>；② 帖子里<b>带病历、缴费单、检查单这类就诊凭证的照片</b>——这两种帖子传得更快，法律风险也更高。<br>医疗舆情有四个特点要特别当心：传得快；情绪化的表达会压过专业解释；存在有组织的放大（职业医闹、黑公关）；线上的情绪很容易变成线下聚集。<a class="src" href="https://m.civiw.com/opinion/20260625135711777" target="_blank">医疗舆情处置全流程↗</a></div>
+
+  <h3>怎么推给人，以及为什么要卡一道人工</h3>
+  <p><b>推送本身很简单</b>：飞书的自定义机器人，拉进群就能用，不需要管理员审批（每分钟最多 100 条，建议打开签名校验）<a class="src" href="https://open.feishu.cn/document/client-docs/bot-v3/add-custom-bot?lang=zh-CN" target="_blank">飞书官方文档↗</a>；企业微信的群机器人也一样（每分钟 20 条）<a class="src" href="https://developer.work.weixin.qq.com/document/path/91770" target="_blank">企微官方文档↗</a>。真正要想清楚的不是怎么推，而是<b>什么该拦一道</b>：</p>
+  <div class="pains">🚧 <b>红级必须过人工这一关（这条建议原样照搬）</b>：红级预警不自动发大群——先发到 2 人的值班小群，人确认了再一键转给决策群。原因很实在：行业公开的情绪判断准确率大概在 75–80%，红色告警要是不复核，等于让 15–25% 的误报直接冲到管理层面前，喊几次"狼来了"，这系统就没人信了。<a class="src" href="https://www.wujiedata.com/" target="_blank">准确率来源↗</a> 响应节奏可以参考"黄金 4 小时"（人民网舆情监测室提的，现在已经在往"黄金 1 小时"走：先说事实，别急着下结论）。<a class="src" href="https://wiki.mbalib.com/wiki/%E9%BB%84%E9%87%914%E5%B0%8F%E6%97%B6" target="_blank">黄金4小时↗</a></div>
+
+  <h3>合规红线（医院做这件事一定要看）</h3>
+  <div class="ex">
+    <span class="tag">依据《个人信息保护法》和配套的审计办法</span>
+    <p class="data">① <b>只采公开内容是有法律依据的，但有边界</b>：第 27 条允许"在合理的范围内"处理个人自己公开的信息，但本人明确拒绝的除外 <a class="src" href="https://www.cac.gov.cn/2021-08/20/c_1631050028355286.htm" target="_blank">法条全文↗</a></p>
+    <p class="data">② <b>医疗健康信息属于敏感个人信息</b>（第 28 条），处理它需要本人"单独同意"（第 29 条）。所以系统设计上有一条红线：库里只存<b>链接、正文摘要、平台上公开的昵称</b>，绝不把"能认出是谁"和"病情、就诊记录"这两样关联着存进去——一旦关联，性质就从"处理已公开的信息"变成"处理敏感个人信息"，合规要求完全不是一个量级</p>
+    <p class="data">③ 合规审计办法里已经点名，"<b>超出合理范围去收集、留存、加工已经公开的个人信息</b>"是重点关注项 <a class="src" href="https://www.cac.gov.cn/2025-02/14/c_1741233507681519.htm" target="_blank">审计办法↗</a>。截图这类证据要单独存放、限制能看的人、设一个保留期限</p>
+  </div>
+
+  <h3>三条路线，投入从低到高，可以分步走</h3>
+  <div class="flow">
+    <div class="mod"><div class="h"><span class="id">一</span>花钱最少 · 1–2 周</div><p class="role"><b>把词分档跑 + 群机器人直接推</b>：最要紧那档词 30 分钟跑一轮，黄级和蓝级由飞书机器人推群。</p><p class="serve">这样大概 30–45 分钟能发现——已经赶得上"黄金 4 小时"，甚至民营医疗同行说的"最好 2 小时内响应"也来得及。要注意控制风险：小红书那边一天的请求量压在几百次，间隔要随机。<a class="src" href="https://www.cn-healthcare.com/articlewm/20230204/content-1505966.html" target="_blank">民营医疗响应窗口↗</a></p></div>
+    <div class="mod core"><div class="h"><span class="id">二</span>中等投入 · 1–2 个月</div><p class="role"><b>把分级规则写进系统 + 排三岗值班 + 红级卡人工</b>：四色标准落到代码里，值班表落到具体的人。</p><p class="serve">这一档主要难在人力组织——一个人维护是做不了 7×24 值守的，人手够的团队更有条件把值班制立起来。合规的存储方案（只存链接和摘要）同步做掉。</p></div>
+    <div class="mod"><div class="h"><span class="id">三</span>投入较大 · 按季度算</div><p class="role"><b>自建的部分 + 买一套商用工具补盲区</b>：自建负责细到院区、科室的归因（这个商用工具做不了），商用工具负责覆盖面和突发发现。</p><p class="serve">配套出一份院级的《舆情管理制度》：分级、上报时限、谁负责、怎么处置。医疗版的时限一般是：紧急事件 15 分钟上报、1 小时启动处置、24 小时内首次对外发声。<a class="src" href="https://m.civiw.com/opinion/20260625135711777" target="_blank">时限来源↗</a></p></div>
+  </div>
+  <div class="warn">⚠️ <b>有一件事不建议追</b>：对小红书做"秒级、分钟级"的全流程预警。商用厂商自己在小红书上也做不到，投入产出比很差。把力气花在"<b>发现之后 15 分钟内完成人工定级、启动响应</b>"上，比把发现时间从 30 分钟压到 5 分钟划算得多。</div>
+
+  <div class="srcs">
+    <p class="ph">本章溯源总表（按引用顺序）</p>
+    <ul>
+      <li><a class="src" href="https://nav.eyosc.com/sites/4577.html" target="_blank">识微商情：分钟级预警口径</a></li>
+      <li><a class="src" href="https://www.wujiedata.com/" target="_blank">五节数据：30 分钟预警 / 情感准确率 75%+</a></li>
+      <li><a class="src" href="https://www.meltwater.com/en/products/real-time-alerting" target="_blank">Meltwater：官方 2–5 分钟告警</a></li>
+      <li><a class="src" href="https://research.com/software/reviews/brandwatch-social-media-management" target="_blank">Research.com：Brandwatch 实时性评测</a></li>
+      <li><a class="src" href="https://www.fanruan.com/blog/article/1797909/" target="_blank">帆软：小红书数据接口现状</a></li>
+      <li><a class="src" href="https://blog.csdn.net/qq_43155641/article/details/143714279" target="_blank">CSDN：搜狗微信采集约束</a></li>
+      <li><a class="src" href="https://www.66daili.com/doc/technology/hongshu_crawler" target="_blank">小红书反爬机制与频率约束</a></li>
+      <li><a class="src" href="https://www.sohu.com/a/1040969740_121117363" target="_blank">舆情预警配置策略：三层词库与阈值模板</a></li>
+      <li><a class="src" href="https://www.pudong.gov.cn/zwgk/14528.gkml_ywl_yjgl/2023/111/309392.html" target="_blank">浦东惠南镇：四色分级应急预案</a></li>
+      <li><a class="src" href="https://wiki.mbalib.com/wiki/%E9%BB%84%E9%87%914%E5%B0%8F%E6%97%B6" target="_blank">MBA智库：黄金 4 小时</a></li>
+      <li><a class="src" href="https://open.feishu.cn/document/client-docs/bot-v3/add-custom-bot?lang=zh-CN" target="_blank">飞书：自定义机器人官方文档</a></li>
+      <li><a class="src" href="https://developer.work.weixin.qq.com/document/path/91770" target="_blank">企业微信：群机器人官方文档</a></li>
+      <li><a class="src" href="https://m.civiw.com/opinion/20260625135711777" target="_blank">识微：医疗舆情突发事件处置全流程</a></li>
+      <li><a class="src" href="https://www.cn-healthcare.com/articlewm/20230204/content-1505966.html" target="_blank">健康界：民营医疗舆情管理</a></li>
+      <li><a class="src" href="https://m.civiw.com/report/20221208094931363" target="_blank">识微：舆情监测团队搭建与分工</a></li>
+      <li><a class="src" href="https://m.civiw.com/nav/20260513162233291" target="_blank">识微：三岗值班制方案</a></li>
+      <li><a class="src" href="https://www.cac.gov.cn/2021-08/20/c_1631050028355286.htm" target="_blank">网信办：个人信息保护法全文</a></li>
+      <li><a class="src" href="https://www.cac.gov.cn/2025-02/14/c_1741233507681519.htm" target="_blank">网信办：个人信息保护合规审计管理办法</a></li>
+    </ul>
+  </div>
+
+    </div>
+  </details>
+</section>
+
+<!-- ==================== ⑤ ==================== -->
+<section id="c5">
+  <h2><span class="n">⑤</span>收尾</h2>
+  <p class="lead">要备的料、改造步骤、判定标准怎么从"猜的"走到"准的"，③ 里已经写全，这里不重复。复用包（全部代码 + 六份手册 + 我们的参考实现）已完成交付——照 ③ 的清单和六步起步即可。启动时遇到任何问题，会后找 Alex，随时聊。</p>
+</section>
+
+<footer>市场部 · 2026-08-03 · 供集团医院板块复刻参考 · 库内数字经 2026-08-03 查库实测（数据采集至 2026-07-29）；场景实据取自对应交付物原件；第 ④ 章外部论断均附来源链接，点击可查证</footer>
+
+</div>
+<script>
+const links=document.querySelectorAll('nav a');
+const secs=[...links].map(a=>document.querySelector(a.getAttribute('href')));
+addEventListener('scroll',()=>{let i=secs.findIndex(s=>s&&s.getBoundingClientRect().top>90)-1;
+if(i<-1)i=secs.length-1;if(i<0)i=0;links.forEach((a,j)=>a.classList.toggle('on',j===i));},{passive:true});
+
+/* ② 跟一条内容走一遍 */
+(function(){
+try{
+  var flow=document.getElementById('flow'),bar=document.getElementById('tracebar'),det=document.getElementById('tdetail');
+  if(!flow||!bar||!det)return;
+  var svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('class','links');flow.appendChild(svg);
+  var TRACES=[
+    {label:'① 用户吐槽帖',hops:['nd-xhs','nd-psocial','nd-t1','nd-dclaims','nd-odept'],
+     tt:'样例 ①：小红书上一条用户投诉帖「请给我孩子一个说法」（我们库里的真实案例，说的是众安的产品）',
+     steps:['<b>抓回来</b>：监控词「保险 拒赔」搜到了它，正文、发帖时间、点赞评论数当场存进库里',
+       '<b>打标签</b>（用社媒那份 Prompt）：<span class="fs">是用户自己发的</span><span class="fs">痛点 = 拒赔纠纷</span><span class="fs">人群 = 有孩子的家庭</span>',
+       '<b>判等级</b>：<span class="fs">Tier 1 高价值</span>——负面情绪强、说的事能核实、又跟我们业务直接相关',
+       '<b>分给谁</b>：主要给 <span class="fs">理赔运营</span>——因为讲的是"事情办到一半被卡住"，属于执行环节（这条规则是两个部门的问卷交叉印证出来的）',
+       '<b>上看板</b>：理赔那块置顶，同时进首页滚动条和用户原声墙，档案库里永久留底。理赔同事看到点了 👍，这个反馈会进下一轮校准'],
+     tk:'💡 换到医院板块：监控词改成「××医院 投诉 / 纠纷」，整条流水线一模一样。'},
+    {label:'② 政策解读文',hops:['nd-wechat','nd-pind','nd-t1','nd-dproduct','nd-odept'],
+     tt:'样例 ②：一篇公众号深度文（讲医保支付政策会怎么影响商业保险）',
+     steps:['<b>抓回来</b>：用「医保支付」这类监控词搜到这篇公众号文章，全文存进库',
+       '<b>打标签</b>（用行业文那份 Prompt）：<span class="fs">影响范围 = 整个行业</span><span class="fs">讲的是 医保新政对商保的影响</span>',
+       '<b>判等级</b>：<span class="fs">Tier 1</span>——这类政策一落地，业务成本结构就会变',
+       '<b>分给谁</b>：主要给 <span class="fs">产品精算</span>——做保险研发的同事在问卷里确认过，创新药和医保新政的影响都要收',
+       '<b>上看板</b>：产品那块，同时进每天的情报摘要'],
+     tk:'💡 换到医院板块：换成卫健委、医保局的政策对高端私立机构的影响，送到运营和管理层的看板。'},
+    {label:'③ 竞品官网动作',hops:['nd-comp','nd-pcomp','nd-t1','nd-dmarket','nd-odept'],
+     tt:'样例 ③：同行官网上线了一个新的服务承诺页面',
+     steps:['<b>抓回来</b>：定期去抓同行官网，把这次的页面和上次比一比，发现有变化',
+       '<b>打标签</b>（用竞品那份 Prompt）：<span class="fs">属于 新的服务承诺</span><span class="fs">涉及 具体哪一家</span>',
+       '<b>判等级</b>：<span class="fs">Tier 1 同行动作</span>',
+       '<b>分给谁</b>：主要给 <span class="fs">市场渠道</span>——他们的原话是"同行上了新东西，就会有人问我们跟不跟"，这就是要动起来的信号',
+       '<b>上看板</b>：市场那块，负责的同事当天就能看到'],
+     tk:'💡 换到医院板块：同行医院官网上新科室、新套餐、改价格，同样的玩法。'},
+    {label:'④ 点名自家的负面帖',hops:['nd-risk','nd-prisk','nd-warn','nd-orisk'],color:'#7c3aed',
+     tt:'样例 ④：社媒上出现一条点名自家品牌的负面帖（做了脱敏——这也是当初做这套系统最原始的动机）',
+     steps:['<b>被哨兵词抓到</b>：品牌词每轮都查，点名自家的负面帖不走普通流程，单独送去做研判',
+       '<b>往下挖</b>：连评论区一起抓——<b>评论区往往比帖子本身更有价值</b>：能看出是有人带节奏，还是真实的用户不满',
+       '<b>出一张研判卡</b>（用研判那份 Prompt）：指向谁 / 核心指控是什么 / <b>能核实的事实和带节奏的话分开列</b> / 评论区什么风向 / 建议怎么处理 → <span class="fs">预警级别 = 中</span>',
+       '<b>停在预警区等人</b>：人来复核 → 定级别 → 决定怎么处理 → 处理完撤下。<b>整个过程系统不会自动对外做任何动作</b>'],
+     tk:'⚠️ 换到医院，这条线就是「患者投诉帖尽快进预警区，但怎么处理永远由人拍板」——第 ④ 章讲的实时预警，提速的就是这一段。'},
+    {label:'⑤ 无关内容（被滤掉）',hops:['nd-xhs','nd-psocial','nd-omit','nd-odrop'],color:'#E6252F',dash:1,
+     tt:'样例 ⑤：监控词「预授权」搜到一条讲支付宝预授权怎么用的教程帖（我们库里的真实案例）',
+     steps:['<b>抓回来</b>：确实搜到了——「预授权」三个字真的在正文里',
+       '<b>打标签</b>：AI 拿公司画像一对照——这是讲支付工具的，跟健康险业务没关系',
+       '<b>判等级</b>：<span class="fs">Omit（判定无关）</span>',
+       '<b>去向</b>：不上看板、不打扰任何人，只在库里留个底。我们库里 2,418 条内容，有 1,241 条走的是这条路，差不多占一半'],
+     tk:'💡 词表管的是"能不能搜得全"，画像和 Prompt 管的是"能不能滤得准"——画像里「什么不归我们管」那句话，价值就在这里。'}];
+  var active=null;
+  function clearAll(){flow.classList.remove('tracing');while(svg.firstChild)svg.removeChild(svg.firstChild);
+    flow.querySelectorAll('.node.on').forEach(function(n){n.classList.remove('on')});
+    flow.querySelectorAll('.hopn').forEach(function(h){h.remove()});
+    bar.querySelectorAll('.tchip.act').forEach(function(c){c.classList.remove('act')});}
+  function run(t){clearAll();active=t;flow.classList.add('tracing');t._btn.classList.add('act');
+    var box=flow.getBoundingClientRect();
+    svg.setAttribute('width',flow.scrollWidth);svg.setAttribute('height',flow.scrollHeight);
+    var els=t.hops.map(function(id){return document.getElementById(id)}).filter(Boolean);
+    els.forEach(function(el,i){el.classList.add('on');var b=document.createElement('span');b.className='hopn';b.textContent=i+1;el.appendChild(b);});
+    for(var i=0;i<els.length-1;i++){
+      var ra=els[i].getBoundingClientRect(),rb=els[i+1].getBoundingClientRect();
+      var x1=ra.left-box.left+ra.width/2,y1=ra.bottom-box.top,x2=rb.left-box.left+rb.width/2,y2=rb.top-box.top,my=(y1+y2)/2;
+      var p=document.createElementNS('http://www.w3.org/2000/svg','path');
+      p.setAttribute('d','M '+x1+' '+y1+' C '+x1+' '+my+', '+x2+' '+my+', '+x2+' '+y2);
+      p.setAttribute('fill','none');p.setAttribute('stroke',t.color||'#3966CA');p.setAttribute('stroke-width','2.5');p.setAttribute('opacity','.9');
+      if(t.dash)p.setAttribute('stroke-dasharray','6 5');
+      svg.appendChild(p);}
+    det.className='tdetail show';
+    det.innerHTML='<p class="tt">'+t.tt+'</p><ol>'+t.steps.map(function(s){return '<li>'+s+'</li>'}).join('')+'</ol>'+(t.tk?'<p class="tk">'+t.tk+'</p>':'');}
+  TRACES.forEach(function(t){var b=document.createElement('button');b.className='tchip';b.textContent=t.label;b.onclick=function(){run(t)};t._btn=b;bar.appendChild(b);});
+  addEventListener('resize',function(){if(active)run(active)});
+  run(TRACES[0]);
+}catch(e){var tb=document.getElementById('tracebar');if(tb)tb.style.display='none';var td=document.getElementById('tdetail');if(td)td.style.display='none';}
+})();
+</script>
+<div id="gwm-tile" aria-hidden="true"></div><div id="gwm-line" aria-hidden="true">&#169; 2026 Alex Zheng &#183; alexzheng-unzen.github.io &#183; redacted copy, not for redistribution</div>
+<script id="cg-js">
+(function(){
+  var OPEN = 'a[href^="mailto:"], footer .links, input, textarea, select, [contenteditable]';
+  var CREDIT = "Copyright (c) 2026 Alex Zheng (\u90d1\u6653\u742a). All rights reserved. https://alexzheng-unzen.github.io/";
+  function allowed(n){
+    while (n && n.nodeType !== 1) n = n.parentNode;
+    return !!(n && n.closest && n.closest(OPEN));
+  }
+  document.addEventListener('contextmenu', function(e){
+    if (!allowed(e.target)) e.preventDefault();
+  }, true);
+  document.addEventListener('dragstart', function(e){
+    var n = e.target;
+    if (n && n.nodeType === 1 && /^(IMG|PICTURE|SVG|CANVAS)$/i.test(n.tagName)) e.preventDefault();
+  }, true);
+  /* anything that does get copied carries the source with it */
+  document.addEventListener('copy', function(e){
+    try {
+      var sel = String(window.getSelection());
+      if (!sel || sel.length < 24 || !e.clipboardData) return;
+      e.clipboardData.setData('text/plain', sel + '\n\n' + CREDIT);
+      e.preventDefault();
+    } catch (err) {}
+  });
+})();
+</script>
+</body>
+</html>

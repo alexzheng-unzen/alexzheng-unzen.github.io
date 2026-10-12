@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<!-- Copyright (c) 2026 Alex Zheng (郑晓琪). All rights reserved.  https://alexzheng-unzen.github.io/ -->
+<html lang="zh-CN">
+<head>
+<meta name="robots" content="noindex, noai, noimageai, noarchive">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>黑客松参赛培训 · AI Office Hour · 2026-08-06</title>
+<style>
+:root{
+  --blue:#3966CA; --blue-d:#27406e; --cyan:#00D4F1; --orange:#F08519;
+  --green:#2BB346; --red:#E6252F; --bg:#EBF0FA; --bg2:#E0F1FF;
+  --ink:#0F172A; --muted:#64748b; --line:#dde5f2; --card:#fff;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"OPPO Sans","Microsoft YaHei",-apple-system,Arial,sans-serif;font-size:16px;line-height:1.7}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px 72px}
+
+nav{position:sticky;top:0;z-index:10;background:rgba(235,240,250,.95);backdrop-filter:blur(6px);
+  display:flex;gap:6px;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid var(--line);margin-bottom:8px}
+nav a{font-size:13px;color:var(--muted);text-decoration:none;padding:5px 11px;border-radius:8px}
+nav a:hover,nav a.on{background:#fff;color:var(--blue)}
+
+.hero{background:linear-gradient(135deg,#3966CA 0%,#27406e 100%);color:#fff;border-radius:16px;
+  padding:44px 40px;margin:18px 0 36px;position:relative;overflow:hidden}
+.hero .ey{font-size:12px;letter-spacing:3px;color:#bcd2ff;font-weight:600}
+.hero h1{font-size:34px;line-height:1.25;margin:12px 0 14px;letter-spacing:.5px}
+.hero .sub{font-size:17px;color:#dde9ff;max-width:820px;margin:0 0 18px}
+.hero .sub b{color:#fff}
+.hero .meet{font-size:14.5px;background:#fff;padding:16px 20px;border-radius:10px;
+  color:var(--ink);max-width:820px;line-height:1.85;box-shadow:0 2px 12px rgba(15,23,42,.22)}
+.hero .meet b{color:var(--blue)}
+
+section{margin:44px 0}
+h2{font-size:24px;margin:0 0 4px;letter-spacing:.3px}
+h2 .n{color:var(--blue);font-weight:800;margin-right:8px}
+h3{font-size:17px;margin:30px 0 6px;color:var(--ink)}
+.lead{color:var(--muted);font-size:15px;margin:0 0 20px;max-width:820px}
+p{margin:0 0 14px;max-width:840px}
+.small{font-size:13px;color:var(--muted);max-width:840px}
+
+.shift{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0}
+.shift .col{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+.shift .col.old{opacity:.9}
+.shift .col.new{border:2px solid var(--blue);background:linear-gradient(180deg,#fff,#f6f9ff)}
+.shift h4{margin:0 0 12px;font-size:14px;letter-spacing:.5px}
+.shift .old h4{color:var(--muted)} .shift .new h4{color:var(--blue)}
+.shift ul{margin:0;padding-left:18px} .shift li{margin:8px 0;font-size:14.5px}
+
+.pains{background:var(--bg2);border-left:4px solid var(--blue);border-radius:8px;padding:14px 18px;margin:18px 0;font-size:14.5px;color:var(--blue-d)}
+.warn{background:#fff7ec;border-left:4px solid var(--orange);border-radius:8px;padding:14px 18px;margin:18px 0;font-size:14.5px;color:#9a5409}
+.danger{background:#fdeced;border-left:4px solid var(--red);border-radius:8px;padding:14px 18px;margin:18px 0;font-size:14.5px;color:#9b1c1c}
+
+.dec{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:14.5px;margin:16px 0}
+.dec th{background:#f4f7fd;text-align:left;padding:11px 14px;font-size:12.5px;color:var(--muted);border-bottom:1px solid var(--line);font-weight:600}
+.dec td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.dec tr:last-child td{border-bottom:none}
+.dec .flag td{background:#f6f9ff} .dec .flag td b{color:var(--blue)}
+.dec td b{color:var(--ink)}
+.pos{color:var(--green);font-weight:600} .neg{color:var(--red);font-weight:600}
+.star{color:var(--orange);font-weight:700}
+.scroll{overflow-x:auto}
+
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 22px;border-top:3px solid var(--blue)}
+.kpi .big{font-size:26px;font-weight:800;color:var(--blue);line-height:1.1;letter-spacing:.5px}
+.kpi .big .u{font-size:15px;font-weight:600;color:var(--muted)}
+.kpi p{font-size:13px;color:var(--muted);margin:8px 0 0;line-height:1.6}
+
+.mods{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:18px 0}
+.mod{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 22px;border-top:3px solid var(--blue)}
+.mod.core{border-top-color:var(--orange);background:linear-gradient(180deg,#fffdf8,#fff)}
+.mod .h{font-size:16px;font-weight:700;margin:0 0 6px}
+.mod .h .id{color:var(--blue);margin-right:6px} .mod.core .h .id{color:var(--orange)}
+.mod .role{font-size:14px;margin:6px 0;color:var(--ink)} .mod .role b{color:var(--blue)}
+.mod .serve{font-size:13px;color:var(--muted)}
+
+.steps{counter-reset:s;list-style:none;padding:0;margin:16px 0}
+.steps li{counter-increment:s;background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 18px 14px 58px;position:relative;margin-bottom:10px;font-size:14.5px}
+.steps li::before{content:counter(s);position:absolute;left:16px;top:12px;width:28px;height:28px;background:var(--blue);color:#fff;border-radius:50%;text-align:center;line-height:28px;font-weight:700;font-size:14px}
+.steps li b{color:var(--blue)}
+
+.tg{display:inline-block;font-size:11px;font-weight:600;padding:1px 8px;border-radius:5px;white-space:nowrap;vertical-align:1px}
+.tg-fact{background:#dcefe0;color:#1c7a30} .tg-infer{background:#fde8d3;color:#9a5409}
+.tg-todo{background:#eef1f6;color:var(--muted);border:1px solid var(--line)}
+
+.pend{background:#fff;border:2px dashed var(--blue);border-radius:12px;padding:18px 22px;margin:18px 0;font-size:14.5px}
+.pend .ph{font-weight:700;color:var(--blue);font-size:15px;margin:0 0 8px}
+.pend ul{margin:6px 0 0;padding-left:18px} .pend li{font-size:14px;margin:6px 0}
+
+details{background:#fff;border:1px solid var(--line);border-radius:10px;margin:12px 0;padding:0 18px}
+details summary{cursor:pointer;padding:14px 0;font-size:14px;color:var(--blue);font-weight:600;list-style:none}
+details summary::before{content:"▸ ";color:var(--blue)} details[open] summary::before{content:"▾ "}
+details .inner{padding:4px 0 18px;font-size:14px;color:var(--ink)}
+
+footer{margin-top:50px;border-top:1px solid var(--line);padding-top:18px;font-size:12px;color:var(--muted)}
+
+/* 质感增强层 */
+html{scroll-behavior:smooth}
+body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+section{margin:58px 0}
+h2{font-size:26px;font-weight:800} h3{margin-top:40px}
+.lead{margin-bottom:24px;line-height:1.75} p{line-height:1.78}
+.hero{padding:54px 48px;box-shadow:0 20px 50px -16px rgba(57,102,202,.5)}
+.hero::after{content:"";position:absolute;right:-90px;top:-90px;width:340px;height:340px;
+  background:radial-gradient(circle,rgba(0,212,241,.20),transparent 70%);border-radius:50%;pointer-events:none}
+.kpi,.mod,.pend,.shift .col,.dec{border-color:#e8eef8;
+  box-shadow:0 1px 2px rgba(15,23,42,.04),0 12px 30px -16px rgba(15,23,42,.20)}
+.kpi,.mod{transition:transform .18s ease,box-shadow .18s ease}
+.kpi:hover,.mod:hover{transform:translateY(-3px);
+  box-shadow:0 6px 14px rgba(15,23,42,.06),0 20px 42px -16px rgba(15,23,42,.28)}
+.dec th{padding:13px 16px;background:#f7faff;font-size:12px}
+.dec td{padding:13px 16px;line-height:1.66}
+.dec tbody tr{transition:background .14s} .dec tbody tr:hover td{background:#fafcff}
+details{border-color:#e8eef8;box-shadow:0 1px 2px rgba(15,23,42,.03),0 10px 26px -18px rgba(15,23,42,.16)}
+@media(max-width:760px){.shift,.mods,.kpis{grid-template-columns:1fr}.hero h1{font-size:26px}.hero{padding:32px 24px}}
+</style>
+<meta name="copyright" content="Copyright (c) 2026 Alex Zheng (郑晓琪). All rights reserved.">
+<meta name="author" content="Alex Zheng">
+<style id="cg">
+/* content guard */
+html{-webkit-touch-callout:none}
+body{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+/* whitelist: everything a recruiter legitimately needs to copy stays selectable */
+footer .links,footer .links a,a[href^="mailto:"],input,textarea,select,[contenteditable]{
+-webkit-user-select:text;-moz-user-select:text;-ms-user-select:text;user-select:text}
+img,picture,svg,canvas{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
+</style>
+<style id="gwm">
+/* guide watermark */
+#gwm-tile{position:fixed;inset:-50%;z-index:2147483646;pointer-events:none;
+background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='220'><text x='10' y='120' transform='rotate(-24 210 110)' font-family='Arial,sans-serif' font-size='18' fill='%23000' fill-opacity='0.055'>&#169; 2026 Alex Zheng &#183; alexzheng-unzen.github.io</text></svg>");
+background-repeat:repeat}
+#gwm-line{position:fixed;right:12px;bottom:10px;z-index:2147483647;pointer-events:none;
+font:12px/1.4 Arial,"Microsoft YaHei",sans-serif;color:#444;background:rgba(255,255,255,.82);
+padding:3px 8px;border-radius:4px;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
+@media print{#gwm-tile,#gwm-line{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav>
+  <a href="#c1">① 黑客松是什么</a>
+  <a href="#c2">② 我们这场的不同</a>
+  <a href="#c3">③ 考点</a>
+  <a href="#c4">④ 最新赛程</a>
+  <a href="#c5">⑤ 管用的打法</a>
+  <a href="#c6">⑥ 四个项目怎么切题</a>
+  <a href="#c7">⑦ 行动清单</a>
+</nav>
+
+<div class="hero">
+  <div class="ey">AI OFFICE HOUR · 黑客松参赛培训 · 2026-08-06</div>
+  <h1>这场黑客松不比代码，<br>那它到底比什么？</h1>
+  <p class="sub">DIG × 飞书「效率先锋」AI Hackathon 已经收到全集团 <b>151 个项目</b>，我们公司有 4 个在场。这次培训把黑客松的通用打法收窄到这一场比赛：规则、考点、最新赛程，和每个项目下一步该做什么。</p>
+  <div class="meet">这 30 分钟讲五件事：<b>① 黑客松（泛指）是什么　② 这场和一般的有什么区别　③ 评审看什么　④ 最新赛程怎么走　⑤ 我们四个项目各自怎么准备</b>。看完这一页，每个队都该知道自己本周的作业是什么。</div>
+</div>
+
+<!-- ① -->
+<section id="c1">
+  <h2><span class="n">①</span>黑客松是什么：限时把痛点变成能演示的作品</h2>
+  <p class="lead">先花 60 秒对齐这个词——它和你印象中的"程序员通宵比赛"已经不是一回事了。</p>
+
+  <p>黑客松（Hackathon）就是<b>限时做出一个能现场演示的解决方案</b>的比赛。它不考理论、不评文档，核心动作只有三个：选一个真问题 → 做出最小可演示版 → 讲给评审听。</p>
+
+  <div class="shift">
+    <div class="col old">
+      <h4>老印象</h4>
+      <ul>
+        <li>程序员的通宵编程马拉松</li>
+        <li>比谁的技术难、代码多</li>
+        <li>不会写代码就只能旁观</li>
+        <li>没做完上台很丢人</li>
+      </ul>
+    </div>
+    <div class="col new">
+      <h4>2026 年的现实</h4>
+      <ul>
+        <li>Anthropic 官方赛 13,000 人报名，<b>五个获奖者里只有一位是软件工程师</b> <span class="tg tg-fact">官方公布</span></li>
+        <li>冠军是加州律师（建筑许可审批工具），季军是心脏科医生（患者陪伴工具）</li>
+        <li>Claude Code 创始人的评语："领域知识胜过编程语法"</li>
+        <li>比的是<b>选题、取舍和表达</b>——恰好都是业务同事的主场</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pains">💡 所以"不需要懂代码"不是主办方的客气话，是这两年全球黑客松的真实走向：<b>做出来已经很便宜了，知道该做什么才值钱</b>。最了解业务痛点的人——也就是你——本来就站在起跑线前面。</div>
+</section>
+
+<!-- ② -->
+<section id="c2">
+  <h2><span class="n">②</span>我们这场和一般黑客松，差在哪四件事？</h2>
+  <p class="lead">我 7 月底做过一轮调研（精读了 60 篇参赛复盘和各大赛事的官方规则），结论是：外面的经验不能直接搬，这场有自己的规则。</p>
+
+  <div class="scroll"><table class="dec">
+    <tr><th>差在哪</th><th>一般黑客松</th><th>我们这场</th></tr>
+    <tr><td><b>时间</b></td><td>24–48 小时现场冲刺</td><td>拉几个月：征集 → 辅导 → 半决赛 → 决赛，<b>已经落地在用的项目也欢迎参赛</b></td></tr>
+    <tr class="flag"><td><b>比什么</b></td><td>常常比技术含量</td><td>官方明说"不是程序员比赛、不需要懂代码""不是比谁工程量大"——比的是<b>真实业务问题 + 实际改善</b></td></tr>
+    <tr><td><b>评审</b></td><td>工程师、技术专家</td><td>业务条线专家、院区/集团领导、飞书专家——<b>听业务故事的人</b></td></tr>
+    <tr><td><b>门槛</b></td><td>现场从零开始写</td><td>官方问答原文："只要你的作品<b>使用了飞书和 AI 能力</b>"，DIG 和飞书专家还全程陪跑</td></tr>
+  </table></div>
+
+  <div class="pains">💡 一句话总结：这场比赛离"创业路演"近，离"编程马拉松"远。要准备的不是技术答辩，是<b>一个让评审记得住的业务故事，外加一个当场跑得通的演示</b>。</div>
+</section>
+
+<!-- ③ -->
+<section id="c3">
+  <h2><span class="n">③</span>考点：评审到底看什么？</h2>
+  <p class="lead">官方材料里关于"怎么评"的每一句话我都抠出来了。核心标准只有一句，值得背下来。</p>
+
+  <p>官方核心标准原文：<b>"是否来源于真实业务问题，并能体现 AI 对效率、质量、服务或管理的实际改善。"</b>决赛评审明列三个维度：创新性、业务价值、可推广性。拆开是四个考点：</p>
+
+  <div class="mods">
+    <div class="mod core">
+      <div class="h"><span class="id">考点 1</span>真实业务问题 ⭐</div>
+      <div class="role">官方材料里出现频率最高的要求——"来自业务现场的小痛点"被反复强调。</div>
+      <div class="serve">自查：开场能不能具体到"哪个岗位的谁、每月哪件事被烦到"？说不出具体的人，就还不够真实。</div>
+    </div>
+    <div class="mod core">
+      <div class="h"><span class="id">考点 2</span>业务价值，用数字讲 ⭐</div>
+      <div class="role">评分语言写的是"<b>实际</b>改善"——定性的"大幅提升"几乎不计分，前后对比的数字才算数。</div>
+      <div class="serve">自查：有没有一句"原来 X → 现在 Y"？没有的话，这周最要紧的作业就是它。</div>
+    </div>
+    <div class="mod">
+      <div class="h"><span class="id">考点 3</span>可推广性（这场特有）</div>
+      <div class="role">"跨院区、跨 BU 复制推广的可能"是决赛明列维度——外面的比赛没有这条，最容易被忽视。</div>
+      <div class="serve">自查：别的部门拿走你的作品，要改什么、要什么权限、谁来维护？答得出三步，这个维度就稳了。</div>
+    </div>
+    <div class="mod">
+      <div class="h"><span class="id">考点 4</span>创新性</div>
+      <div class="role">在内部赛里，创新性不等于技术新，而是<b>切入角度新</b>：别人还在想的题你已经做完、别人做登记表你做决策工具。</div>
+      <div class="serve">自查：你的作品和"在 Excel 上再加一列"有什么本质区别？讲得出来就是创新。</div>
+    </div>
+  </div>
+
+  <div class="warn">⚠️ 一个隐性考点：报名表本身就是评分表的镜像——"当前进展"和"预期或已产生价值"是独立字段，意味着<b>已落地 &gt; 试点中 &gt; 还是想法</b>。我们四个项目全部已落地或上线，这是我们整体的先天优势，讲的时候别浪费。</div>
+
+  <div class="pend">
+    <div class="ph">三件还没公布的事（我去大赛群里问，结果同步给大家）</div>
+    <ul>
+      <li>三个维度有没有评分权重、各占多少</li>
+      <li>每队展示几分钟、能不能放 slides</li>
+      <li>8/15 BU 初审的具体形式（交材料？现场讲？）</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ④ -->
+<section id="c4">
+  <h2><span class="n">④</span>最新赛程：三轮评审，第一关就在 10 天后</h2>
+  <p class="lead">以下时间来自大赛群 8 月初的最新赛程通知，比 7 月邮件里的说法更新，以这版为准。</p>
+
+  <div class="kpis">
+    <div class="kpi"><div class="big">151 <span class="u">个</span></div><p>全集团已呈报项目总数（7/19 截止）——这是我们要面对的竞争规模</p></div>
+    <div class="kpi"><div class="big">20%</div><p>8/15 BU 内部初审的晋级比例——第一关先在自己 BU 里选出能打的</p></div>
+    <div class="kpi"><div class="big">3 <span class="u">轮</span></div><p>BU 初审 → 全集团半决赛（按业务条线 2–3 场）→ 决赛，评审构成每轮不同</p></div>
+  </div>
+
+  <div class="scroll"><table class="dec">
+    <tr><th>时间</th><th>环节</th><th>评审是谁</th><th>对我们的含义</th></tr>
+    <tr class="flag"><td><b>8/15</b></td><td><b>BU 内部初审</b>，选定 20% 项目进半决赛</td><td>BU 内部评审</td><td><b>最近的一道关</b>。材料 8/15 前就要能打——最先要说服的是身边的评审</td></tr>
+    <tr><td><b>8/25</b></td><td>全集团半决赛，按业务条线举办 2–3 场</td><td>业务条线专家、负责人、飞书专家</td><td>评审<b>懂行</b>，会问细节——数字和演示要经得起追问</td></tr>
+    <tr><td><b>9/10</b></td><td>AI Hackathon 决赛</td><td>集团、院区领导 + 业务条线专家 + 飞书专家</td><td>领导为主，<b>听故事、看价值、掂量能不能推广</b></td></tr>
+    <tr><td>11/30</td><td>优秀项目推广落地</td><td>——</td><td>比赛的终点不是奖，是<b>被全集团复制</b>——可推广性从头到尾都是主线</td></tr>
+  </table></div>
+
+  <div class="warn">⚠️ 两轮评审，两套讲法：<b>半决赛（8/25）面对业务条线专家</b>，可以展开细节、报测试数，答得越具体越加分；<b>决赛（9/10）领导为主</b>，讲结论、讲数字、讲复制路径，细节留给追问。同一个作品，准备两个版本的讲稿。</div>
+</section>
+
+<!-- ⑤ -->
+<section id="c5">
+  <h2><span class="n">⑤</span>外面赛场验证过、这场仍然管用的六条打法</h2>
+  <p class="lead">来自评审自述和获奖者复盘（出处见文末附录），全部翻译成这场比赛的用法。</p>
+
+  <ol class="steps">
+    <li><b>第一句先把东西说清，再带一个数字。</b>"这是一个让〔谁〕的〔哪件事〕从〔X〕变成〔Y〕的工具。"评审连着看很多项目，记不住铺垫，只记得住这样一句话。</li>
+    <li><b>先讲问题，让评审跟你一起烦。</b>评审里有院区领导和业务负责人，"排班排到晚上九点""Excel 台账对不上"这类场景他们有切身体感——时间分配参考：问题占三成，方案占七成。</li>
+    <li><b>90 秒内让人看到东西在跑，而且只走一条流程。</b>调研里评审的原话："一个强项目配一个让人困惑的演示，会输给一个评审能听懂的简单项目。"想展示的第二条流程？删掉。</li>
+    <li><b>先写演示脚本，再打磨功能。</b>五个要素：一句话问题（绑定到一个具体的人）→ 现在这个人怎么绕、代价多少 → 演示从哪个动作开始 → 唯一要评审记住的瞬间 → 收尾接到推广上。写不出脚本，说明还没想清楚要给评审看什么。</li>
+    <li><b>录一段 60–90 秒的完整备份录屏。</b>这是全部调研里共识度最高的一条，评审、获奖者、翻车者的说法完全一致：现场网络和投屏一定会出状况，<b>没有录屏等于没有后手</b>。本地存一份、云端存一份。</li>
+    <li><b>提前背四个必答题</b>——评审问的问题其实高度固定，见下表。</li>
+  </ol>
+
+  <div class="scroll"><table class="dec">
+    <tr><th>评审大概率会问</th><th>会掉分的答案</th><th>会加分的答案</th></tr>
+    <tr><td><b>"具体是谁在用？"</b></td><td class="neg">"我们部门"</td><td class="pos">点名到岗位："医疗服务部的排班员，每月底排下月班的那位"</td></tr>
+    <tr><td><b>"省了多少时间？"</b></td><td class="neg">"大幅提升了效率"</td><td class="pos">一个前后对比数字，外加这个数字怎么算的</td></tr>
+    <tr><td><b>"别的院区能直接用吗？"</b></td><td class="neg">"应该可以"</td><td class="pos">复制三步：改什么配置、要什么权限、谁来维护</td></tr>
+    <tr><td><b>"AI 和飞书具体用在哪一步？"</b></td><td class="neg">"整体都用了 AI"</td><td class="pos">指到具体功能："简历 OCR 这一步是飞书智能体做的"</td></tr>
+  </table></div>
+
+  <div class="warn">⚠️ 这里我先认领一个反面教材：7 月中帮排班工具写报名简介时，"手工排一次班要多久"这个数字我没拿到，简介里只能写"最大限度降低排班工作量"——这种定性说法在评审那里几乎不计分。<b>各队现在补数字完全来得及，而且多半只需要问当事人一句话。</b></div>
+</section>
+
+<!-- ⑥ -->
+<section id="c6">
+  <h2><span class="n">⑥</span>我们四个项目，各自怎么切题才有胜算</h2>
+  <p class="lead">以下亮点全部来自各队的实际产物（代码、截图、上线系统）——都是评审追问时你能当场打开给他看的东西。每队最后的三条升级动作，就是本周作业。</p>
+
+  <h3>🗓️ 排班工具（医疗服务部）—— 切"效率 + 管理改善"</h3>
+  <div class="scroll"><table class="dec">
+    <tr><th>亮点</th><th>在哪能看到</th><th>用在哪</th></tr>
+    <tr class="flag"><td><b>自动排班结果和排班员手工排的真实 7 月班表完全一致</b>，含请假绕排、顶班</td><td>医疗服务部专版 + 当月真实班表逐格对照</td><td>演示的高潮：现场加一条请假 → 一键重排 → 结果和人工一致</td></tr>
+    <tr><td>通用版 + 医疗专版两个版本，<b>复制这条路已经走通过一次</b></td><td>同目录两个独立文件</td><td>"可推广性"必答题的答案主体</td></tr>
+    <tr><td>规则在页面上点选，排班员自己维护；单文件、数据不出本机</td><td>设置面板 + 白盒说明</td><td>切"不用懂代码"的比赛基调；数据安全追问的答案</td></tr>
+  </table></div>
+  <p><b>本周升级动作：</b>① 问排班员拿数字——手工排一次班多久、现在多久（一句话的事）；② 讲清接飞书的下一步——排班结果已能导出 CSV，接飞书多维表格做全院区看板是现成路径 <span class="tg tg-infer">规划</span>；③ 集团医院板块的培育池里有一个"儿科排班"还在想法阶段——同一个痛点在两个 BU 独立冒头，恰好说明这是集团级的真问题，而我们这版已经落地验证，可以直接给儿科用。这段话提前准备好。</p>
+
+  <h3>🧑‍💼 人才库（HR 团队）—— 切"效率 + 服务"，全场飞书含量最高</h3>
+  <div class="scroll"><table class="dec">
+    <tr><th>亮点</th><th>在哪能看到</th><th>用在哪</th></tr>
+    <tr class="flag"><td><b>8 个 AI 能力真实接在招聘流程里</b>：简历图片 OCR、简历结构化、自动打标、岗位匹配分析、匹配打分、人才库 AI 问答、人才摘要</td><td>系统后台的能力配置，逐个可指认</td><td>"AI 用在哪一步"必答题——四个项目里 AI 证据最扎实的，也是飞书专家最想听的部分</td></tr>
+    <tr><td><b>建在飞书上、已经上线</b>，与多维表格双向同步</td><td>飞书工作台可直接打开</td><td>最有机会成为飞书对外讲的标杆案例——可以主动讲给飞书专家听</td></tr>
+    <tr><td>库里已有 <b>1,603 名候选人</b>（硕士 376、博士 10），双库 + AI 筛选 + 九宫格盘点</td><td>系统数据概览页</td><td>开场那句话里的数字；"当前进展"的硬数据</td></tr>
+  </table></div>
+  <p><b>本周升级动作：</b>① 拿一次真实急招举例——从"业务提需求"到"给出候选人名单"，原来多久、现在多久；② 演示就现场跑一次真实筛选（AI 筛选 → 匹配打分 → 九宫格），把"快"演出来而不是说出来；③ 简历是敏感个人信息，提前准备好数据权限的回答（谁能看、有没有脱敏）——领导评审可能比技术评审更在意这个。</p>
+
+  <h3>📊 理赔数据可视化分析工具（核保团队）—— 业务价值离钱最近</h3>
+  <div class="scroll"><table class="dec">
+    <tr><th>亮点</th><th>在哪能看到</th><th>用在哪</th></tr>
+    <tr class="flag"><td><b>从 v3.0 到 v3.7 的迭代记录全写在工具里</b>，每一版都有"为什么改"——"真实在用"最过硬的证据形态</td><td>工具的版本日志</td><td>"当前进展"字段；证明这不是为参赛赶出来的东西</td></tr>
+    <tr><td><b>一条流水线打通</b>：理赔报表 Excel 丢进去 → 自动分析 → 出 12 个页签的可视化报告（总赔款、案均、高额重疾、管控建议……）→ 可导 PPT</td><td>工具 + 生成的报告文件对照</td><td>演示主线，只演这一条："上传 → 出报告"</td></tr>
+    <tr><td>28 个分析维度，对应渠道客户真的会问的问题</td><td>分析报告目录</td><td>讲"业务复杂度"用——一句带过，别展开</td></tr>
+  </table></div>
+  <p><b>本周升级动作：</b>① 拿一份真实渠道报告举例——原来出一份要几天、现在几分钟；② 把 28 个维度压成 3 个渠道故事（"渠道问为什么赔付涨了 / 哪些医院贵 / 明年怎么管控——以前答一个要拉几天数据，现在打开就有"），<b>半决赛对条线专家可以展开细节，决赛对领导只讲这三个故事</b>；③ 报告的分发可以走飞书（群 / 云文档），这半句就把飞书元素接上了。</p>
+
+  <h3>💳 实体会员卡管理平台（运营团队）—— "当前进展"全场最实</h3>
+  <div class="scroll"><table class="dec">
+    <tr><th>亮点</th><th>在哪能看到</th><th>用在哪</th></tr>
+    <tr class="flag"><td><b>已部署上线、14 个活跃用户</b>，操作日志里是不同同事的真实核销、盘点记录</td><td>系统仪表盘 + 最近操作记录（带真名和时间戳）</td><td>演示时直接翻日志给评审看——"自己人真在用"最能打动院区领导</td></tr>
+    <tr><td><b>18 种卡样、6,041 张库存、7 种低库存自动预警</b>，横跨十余家合作方</td><td>仪表盘统计卡 + 卡样清单</td><td>讲痛点的真实性：这么多合作方的卡混在 Excel 台账里，错一张要人工翻半天</td></tr>
+    <tr><td>入库 → 盘点 → 流水 → 核销 → 导出全流程线上化，含权限管理</td><td>系统功能树</td><td>对比句："以前是一张 Excel 轮流填，现在是一套有流水、有权限、有预警的系统"</td></tr>
+  </table></div>
+  <p><b>本周升级动作：</b>① 补数字——月底对一次账原来几小时、现在几分钟；② "与核心保单数据暂时隔离"这一点，建议讲成主动的稳健选择："上线初期先在物料库存这个低风险域跑稳，再谈接核心系统"——提前把这段话想好，别现场组织语言；③ AI 的角色如实讲在开发侧：运营团队两个人用 Claude Code 把系统做了出来——<b>这本身就是"效率先锋"主题最直接的例证</b>，不需要硬造产品内的 AI 功能。</p>
+
+  <div class="pains">💡 如果有机会把四个作品放在一起讲：它们正好覆盖"效率先锋"的四种形态——<b>排班（管理）、招聘（服务）、理赔分析（业务价值）、物料库存（流程）</b>，而且全部出自业务团队自己之手。这就是我们的集体故事：AI 不是 IT 部门的项目，是每个部门手里的工具。</div>
+</section>
+
+<!-- ⑦ -->
+<section id="c7">
+  <h2><span class="n">⑦</span>从今天到 8/15：每队的作业清单</h2>
+  <p class="lead">BU 初审前 10 天，真正不能省的就这六件事，每队加起来不超过 4 小时。</p>
+
+  <ol class="steps">
+    <li><b>本周内拿到你的"原来 X → 现在 Y"。</b>四个队缺的数字惊人一致，而且都只需要问当事人一句话。这是优先级最高的作业。</li>
+    <li><b>写演示脚本（五要素），定下"一句希望评审转述的话"。</b>演示围着这句话做，装不进这句话的功能不演。</li>
+    <li><b>把讲稿里每句话对到能当场打开的东西。</b>对不上的删掉——半决赛评审是懂行的业务条线专家，经不起虚的。</li>
+    <li><b>录 60–90 秒备份录屏</b>，本地 + 云端各存一份。</li>
+    <li><b>8/11–8/13 模拟答辩。</b>我来组织：用 Claude 分别扮演业务条线专家和飞书专家，对每队跑一轮追问，四个必答题过关为止。</li>
+    <li><b>三件没公布的事我去群里问</b>（初审形式 / 展示时长 / 评分权重），结果同步到群里。</li>
+  </ol>
+
+  <div class="warn">⚠️ 别等半决赛通知才动手——<b>8/15 的 BU 初审就要按 20% 筛人</b>，材料现在就要按"能打"的标准准备。</div>
+
+  <details>
+    <summary>附录 · 这份课件的材料出处</summary>
+    <div class="inner">
+      <ul>
+        <li><b>赛事规则与主题</b>：DIG × 飞书官方两封邮件（同目录 赛事说明邮件.txt）；最新赛程来自大赛群通知截图（同目录 最新的赛程.jpg，含 151 个项目呈报和 8/15、8/25、9/10、11/30 四个时间点）</li>
+        <li><b>通用打法与出处</b>：《黑客松参赛玩法说明书》（同目录，2026-07-31）——小红书 60 篇参赛复盘精读 + 微信公众号 14 篇 + 约 45 个海外来源（评审自述、官方规则、获奖者复盘），每条结论可追到具体出处</li>
+        <li><b>四项目实据</b>：各队的代码、系统截图和报名材料</li>
+        <li><b>Anthropic 黑客松获奖数据</b>：官方公布获奖名单（2026-02），详见玩法说明书第 1 章及其溯源表</li>
+      </ul>
+    </div>
+  </details>
+</section>
+
+<footer>
+  AI Office Hour · 黑客松参赛培训 · 2026-08-06 · Alex Zheng ｜ 配套阅读：《黑客松参赛玩法说明书》（同目录）｜ 赛程如有更新，以大赛群最新通知为准
+</footer>
+
+</div>
+<script>
+const links=document.querySelectorAll('nav a');
+const secs=[...links].map(a=>document.querySelector(a.getAttribute('href')));
+addEventListener('scroll',()=>{let i=secs.findIndex(s=>s&&s.getBoundingClientRect().top>90)-1;
+if(i<-1)i=secs.length-1;if(i<0)i=0;links.forEach((a,j)=>a.classList.toggle('on',j===i));},{passive:true});
+</script>
+<div id="gwm-tile" aria-hidden="true"></div><div id="gwm-line" aria-hidden="true">&#169; 2026 Alex Zheng &#183; alexzheng-unzen.github.io &#183; redacted copy, not for redistribution</div>
+<script id="cg-js">
+(function(){
+  var OPEN = 'a[href^="mailto:"], footer .links, input, textarea, select, [contenteditable]';
+  var CREDIT = "Copyright (c) 2026 Alex Zheng (\u90d1\u6653\u742a). All rights reserved. https://alexzheng-unzen.github.io/";
+  function allowed(n){
+    while (n && n.nodeType !== 1) n = n.parentNode;
+    return !!(n && n.closest && n.closest(OPEN));
+  }
+  document.addEventListener('contextmenu', function(e){
+    if (!allowed(e.target)) e.preventDefault();
+  }, true);
+  document.addEventListener('dragstart', function(e){
+    var n = e.target;
+    if (n && n.nodeType === 1 && /^(IMG|PICTURE|SVG|CANVAS)$/i.test(n.tagName)) e.preventDefault();
+  }, true);
+  /* anything that does get copied carries the source with it */
+  document.addEventListener('copy', function(e){
+    try {
+      var sel = String(window.getSelection());
+      if (!sel || sel.length < 24 || !e.clipboardData) return;
+      e.clipboardData.setData('text/plain', sel + '\n\n' + CREDIT);
+      e.preventDefault();
+    } catch (err) {}
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<!-- Copyright (c) 2026 Alex Zheng (郑晓琪). All rights reserved.  https://alexzheng-unzen.github.io/ -->
+<html lang="zh-CN">
+<head>
+<meta name="robots" content="noindex, noai, noimageai, noarchive">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>社媒与舆情监测系统 Social Listening · 集团 7 月 AI 创新案例分享</title>
+<style>
+:root{
+  --blue:#3966CA; --blue-d:#27406e; --cyan:#00D4F1; --orange:#F08519;
+  --green:#2BB346; --red:#E6252F; --bg:#EBF0FA; --bg2:#E0F1FF;
+  --ink:#0F172A; --muted:#64748b; --line:#dde5f2; --card:#fff;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"OPPO Sans","Microsoft YaHei",-apple-system,Arial,sans-serif;font-size:16px;line-height:1.7}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px 72px}
+
+nav{position:sticky;top:0;z-index:10;background:rgba(235,240,250,.95);backdrop-filter:blur(6px);
+  display:flex;gap:6px;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid var(--line);margin-bottom:8px}
+nav a{font-size:13px;color:var(--muted);text-decoration:none;padding:5px 11px;border-radius:8px}
+nav a:hover,nav a.on{background:#fff;color:var(--blue)}
+
+.hero{background:linear-gradient(135deg,#3966CA 0%,#27406e 100%);color:#fff;border-radius:16px;
+  padding:44px 40px;margin:18px 0 36px;position:relative;overflow:hidden}
+.hero .ey{font-size:12px;letter-spacing:3px;color:#bcd2ff;font-weight:600}
+.hero h1{font-size:34px;line-height:1.25;margin:12px 0 14px;letter-spacing:.5px}
+.hero .sub{font-size:17px;color:#dde9ff;max-width:820px;margin:0 0 18px}
+.hero .sub b{color:#fff}
+.hero .meet{font-size:14.5px;background:#fff;padding:16px 20px;border-radius:10px;
+  color:var(--ink);max-width:820px;line-height:1.85;box-shadow:0 2px 12px rgba(15,23,42,.22)}
+.hero .meet b{color:var(--blue)}
+
+section{margin:44px 0}
+h2{font-size:24px;margin:0 0 4px;letter-spacing:.3px}
+h2 .n{color:var(--blue);font-weight:800;margin-right:8px}
+h3{font-size:17px;margin:30px 0 6px;color:var(--ink)}
+.lead{color:var(--muted);font-size:15px;margin:0 0 20px;max-width:820px}
+p{margin:0 0 14px;max-width:840px}
+.small{font-size:13px;color:var(--muted);max-width:840px}
+
+.shift{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0}
+.shift .col{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+.shift .col.old{opacity:.9}
+.shift .col.new{border:2px solid var(--blue);background:linear-gradient(180deg,#fff,#f6f9ff)}
+.shift h4{margin:0 0 12px;font-size:14px;letter-spacing:.5px}
+.shift .old h4{color:var(--muted)} .shift .new h4{color:var(--blue)}
+.shift ul{margin:0;padding-left:18px} .shift li{margin:8px 0;font-size:14.5px}
+
+.pains{background:var(--bg2);border-left:4px solid var(--blue);border-radius:8px;padding:14px 18px;margin:18px 0;font-size:14.5px;color:var(--blue-d)}
+.warn{background:#fff7ec;border-left:4px solid var(--orange);border-radius:8px;padding:14px 18px;margin:18px 0;font-size:14.5px;color:#9a5409}
+
+.ex{background:#fff;border:2px solid var(--orange);border-radius:12px;padding:20px 24px;margin:18px 0}
+.ex .tag{display:inline-block;background:#fef0dc;color:#9a5409;font-size:12px;font-weight:700;padding:3px 10px;border-radius:6px;margin-bottom:10px}
+.ex .gut{color:var(--muted);text-decoration:line-through;font-size:14.5px}
+.ex .data{font-size:16px;font-weight:600;margin-top:6px} .ex .data b{color:var(--blue)}
+
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 22px;border-top:3px solid var(--blue)}
+.kpi .big{font-size:26px;font-weight:800;color:var(--blue);line-height:1.1;letter-spacing:.5px}
+.kpi .big .u{font-size:15px;font-weight:600;color:var(--muted)}
+.kpi p{font-size:13px;color:var(--muted);margin:8px 0 0;line-height:1.6}
+
+.mods{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:18px 0}
+.flow{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}
+.mod{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 22px;border-top:3px solid var(--blue)}
+.mod.core{border-top-color:var(--orange);background:linear-gradient(180deg,#fffdf8,#fff)}
+.mod .h{font-size:16px;font-weight:700;margin:0 0 6px}
+.mod .h .id{color:var(--blue);margin-right:6px} .mod.core .h .id{color:var(--orange)}
+.mod .role{font-size:14px;margin:6px 0;color:var(--ink)} .mod .role b{color:var(--blue)}
+.mod .serve{font-size:13px;color:var(--muted)}
+.mod details{margin-top:12px;border-top:1px dashed var(--line);padding-top:10px}
+.mod summary{cursor:pointer;font-size:12px;font-weight:700;color:var(--blue);list-style:none;letter-spacing:.3px}
+.mod summary::-webkit-details-marker{display:none}
+.mod summary::before{content:"▸ "}
+.mod details[open] summary::before{content:"▾ "}
+.mod details ul{margin:8px 0 0;padding-left:16px}
+.mod details li{font-size:12.5px;color:var(--muted);margin:5px 0;line-height:1.65}
+.mod details li b{color:var(--ink)}
+
+.steps{counter-reset:s;list-style:none;padding:0;margin:16px 0}
+.steps li{counter-increment:s;background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 18px 14px 58px;position:relative;margin-bottom:10px;font-size:14.5px}
+.steps li::before{content:counter(s);position:absolute;left:16px;top:12px;width:28px;height:28px;background:var(--blue);color:#fff;border-radius:50%;text-align:center;line-height:28px;font-weight:700;font-size:14px}
+.steps li b{color:var(--blue)}
+
+.pend{background:#fff;border:2px dashed var(--blue);border-radius:12px;padding:18px 22px;margin:18px 0;font-size:14.5px}
+.pend .ph{font-weight:700;color:var(--blue);font-size:15px;margin:0 0 8px}
+.pend ul{margin:6px 0 0;padding-left:18px} .pend li{font-size:14px;margin:6px 0}
+.pend .slot{display:inline-block;background:#f4f7fd;border:1px dashed #c9dbf7;border-radius:6px;color:var(--muted);font-size:12.5px;padding:1px 10px;margin-left:6px}
+
+footer{margin-top:50px;border-top:1px solid var(--line);padding-top:18px;font-size:12px;color:var(--muted)}
+
+/* 质感增强层 */
+html{scroll-behavior:smooth}
+body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+section{margin:58px 0}
+h2{font-size:26px;font-weight:800} h3{margin-top:40px}
+.lead{margin-bottom:24px;line-height:1.75} p{line-height:1.78}
+.hero{padding:54px 48px;box-shadow:0 20px 50px -16px rgba(57,102,202,.5)}
+.hero::after{content:"";position:absolute;right:-90px;top:-90px;width:340px;height:340px;
+  background:radial-gradient(circle,rgba(0,212,241,.20),transparent 70%);border-radius:50%;pointer-events:none}
+.kpi,.mod,.pend,.shift .col,.ex{border-color:#e8eef8;
+  box-shadow:0 1px 2px rgba(15,23,42,.04),0 12px 30px -16px rgba(15,23,42,.20)}
+.kpi,.mod{transition:transform .18s ease,box-shadow .18s ease}
+.kpi:hover,.mod:hover{transform:translateY(-3px);
+  box-shadow:0 6px 14px rgba(15,23,42,.06),0 20px 42px -16px rgba(15,23,42,.28)}
+
+@media(max-width:760px){.shift,.mods,.kpis,.flow{grid-template-columns:1fr}.hero h1{font-size:26px}.hero{padding:32px 24px}}
+</style>
+<meta name="copyright" content="Copyright (c) 2026 Alex Zheng (郑晓琪). All rights reserved.">
+<meta name="author" content="Alex Zheng">
+<style id="cg">
+/* content guard */
+html{-webkit-touch-callout:none}
+body{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+/* whitelist: everything a recruiter legitimately needs to copy stays selectable */
+footer .links,footer .links a,a[href^="mailto:"],input,textarea,select,[contenteditable]{
+-webkit-user-select:text;-moz-user-select:text;-ms-user-select:text;user-select:text}
+img,picture,svg,canvas{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
+</style>
+<style id="gwm">
+/* guide watermark */
+#gwm-tile{position:fixed;inset:-50%;z-index:2147483646;pointer-events:none;
+background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='220'><text x='10' y='120' transform='rotate(-24 210 110)' font-family='Arial,sans-serif' font-size='18' fill='%23000' fill-opacity='0.055'>&#169; 2026 Alex Zheng &#183; alexzheng-unzen.github.io</text></svg>");
+background-repeat:repeat}
+#gwm-line{position:fixed;right:12px;bottom:10px;z-index:2147483647;pointer-events:none;
+font:12px/1.4 Arial,"Microsoft YaHei",sans-serif;color:#444;background:rgba(255,255,255,.82);
+padding:3px 8px;border-radius:4px;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
+@media print{#gwm-tile,#gwm-line{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav>
+  <a href="#c1">① Background &amp; Pain Point</a>
+  <a href="#c2">② How It Works</a>
+  <a href="#c3">③ Results</a>
+  <a href="#c4">④ Calibration</a>
+  <a href="#c5">⑤ For Other BUs</a>
+</nav>
+
+<div class="hero">
+  <div class="ey">集团 7 月 AI 创新案例分享 · CASE 01 · SOCIAL LISTENING · 2026-07-30</div>
+  <h1>Social Listening System<br>社媒舆情监测系统</h1>
+  <p class="sub"><b>多平台 · 系统抓取 · 信息分析分流</b><br>竞品官网、微信公众号、小红书、监管及官方网站等</p>
+  <div class="meet">靠 <b>Prompt 设计</b>快速筛选、打标签、分级，分析总结后送达各部门看板。<br><b>不再靠人工检索，也不靠平台算法推送。</b></div>
+</div>
+
+<section id="c1">
+  <h2><span class="n">①</span>Background &amp; Pain Point：人工收集信息，费时费力还容易漏</h2>
+  <p class="lead">我们的业务涉及理赔、控费、医疗网络、产品支持等多个方向——外部环境一变，成本和服务承诺立刻受影响。所以竞品动态、监管政策、客户吐槽都是业务的直接输入。但过去，这些信息得靠每个部门自己去检索。</p>
+  <div class="shift">
+    <div class="col old">
+      <h4>Before · 人找信息</h4>
+      <ul>
+        <li>每个部门各自主动检索，人工收集<b>费时费力，还容易错漏</b></li>
+        <li>剩下的靠人脉打听、靠平台算法推送——问到什么、刷到什么算什么</li>
+        <li>竞品动作、政策变化、客户投诉：<b>被动从外界听到时，往往已经太迟</b></li>
+        <li>各自收藏、散落群聊，无法沉淀复用，人一走就带走了</li>
+      </ul>
+    </div>
+    <div class="col new">
+      <h4>Now · 信息找人</h4>
+      <ul>
+        <li>多路信源定向、大量采集：竞品官网 / 微信公众号 / 小红书 / 监管及官方网站（海外社媒亦可接入）</li>
+        <li>靠 Prompt 设计快速筛选、<b>打上标签并分级</b>，与我们无关的直接过滤</li>
+        <li>分析总结后<b>直送各部门看板</b>，高危舆情置顶预警</li>
+        <li>全部入库、条条可回溯原文，判定标准越校越准</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="c2">
+  <h2><span class="n">②</span>How It Works：定向采集 → Prompt 筛选打标 → 送达看板</h2>
+  <p class="lead">三步流水线，采集到送达全链自动衔接，人只看结果。采集端由 Exa / Tavily 搜索接口与自建浏览器运行时 agent-browser-runtime 驱动。</p>
+  <div class="flow">
+    <div class="mod">
+      <div class="h"><span class="id">1</span>Collect · 定向采集</div>
+      <p class="role">竞品官网、微信公众号、小红书三路定期自动运行，监管及官方网站按需批量采集——按 117 个监控词<b>定向、大量抓取</b>。</p>
+      <p class="serve">监控词按四个维度选定：品牌与竞品舆情 37 / 产品与服务动态 27 / 政策与行业趋势 38 / 用户怨言与争议 15。小红书另设「品牌哨兵」：提到我们品牌的帖子单独盯防，每轮必查。</p>
+    </div>
+    <div class="mod core">
+      <div class="h"><span class="id">2</span>Tag &amp; Tier · Prompt 筛选打标</div>
+      <p class="role">判定标准写进 Prompt，大模型逐条阅读、打标签、分级：<b>Tier 1 高价值必读 / Tier 2 部门参考 / Tier 3 行业背景</b>，与我们无关的直接过滤。</p>
+      <p class="serve">同时判断这条该送给哪个部门——<b>系统的判断力，全在这套 Prompt 的设计里。</b></p>
+    </div>
+    <div class="mod">
+      <div class="h"><span class="id">3</span>Deliver · 送达部门看板</div>
+      <p class="role">分析总结后进看板：首页滚动条播最新信号，<b>各部门看板各看各的</b>，高危舆情置顶预警。</p>
+      <p class="serve">每条信息可点赞 / 点踩，同事的反馈直接用于校正大模型下一轮的筛选与判级。</p>
+    </div>
+  </div>
+  <div class="pains">💡 Prompt 判定标准的演化路径：最初是我和大模型脑暴出的部门假设——猜每个部门关心什么；现在用部门问卷逐份校正，换成同事亲口说的业务口径（见 ④）。</div>
+</section>
+
+<section id="c3">
+  <h2><span class="n">③</span>Results：已完成的业务赋能</h2>
+  <p class="lead">信息抓回来不是为了存档，是要反哺业务。下面三个场景，都是同事真实用过、拿到东西的。</p>
+  <div class="kpis">
+    <div class="kpi">
+      <div class="big">4 <span class="u">路</span></div>
+      <p>竞品官网 / 微信公众号 / 小红书 / 监管及官方平台四路采集打通；其中公众号 44 个信源按 T0–T3 分级治理</p>
+    </div>
+    <div class="kpi">
+      <div class="big">495 <span class="u">条</span></div>
+      <p>2026-07-29 单日新增情报（官网 46 / 公众号 134 / 小红书 315，含品牌哨兵 77 条）</p>
+    </div>
+    <div class="kpi">
+      <div class="big">117 <span class="u">个</span></div>
+      <p>监控关键词，本周从 98 个扩到 117 个（新补互联网医院资质备案、港陆医疗、外国人来华就医等盲区）</p>
+    </div>
+  </div>
+  <div class="flow">
+    <div class="mod">
+      <div class="h"><span class="id">A</span>Crisis Alert · 危机舆情发现（客户经理）</div>
+      <p class="role">同业负面帖被自动捕获并判级，<b>客户经理第一时间掌握</b>；我们自己的品牌另有哨兵盯防。</p>
+      <p class="serve">小红书上针对众安产品的多条投诉帖（「请给我孩子一个说法」等）全部入库，其中两条被判为 Tier 1（最高级）。</p>
+      <details><summary>Evidence · 库内原帖</summary><ul>
+        <li>「众安保险请给我孩子一个说法！」——<b>Tier 1</b> · 发帖 2026-06-01 · 库内 id 3019</li>
+        <li>「众安保险—你的良心不会痛吗？」——<b>Tier 1</b> · 发帖 2025-12-19 · 库内 id 3018</li>
+        <li>「避雷 众安保险 简直坑大了！」——Tier 2 · 发帖 2026-06-11 · 库内 id 4005</li>
+        <li>三条均已入库存证，离线档案库可检索回溯；小红书外链有时效（token 过期即失效），门户可见面只保留点得开的链接——系统自建存证正是为此</li>
+      </ul></details>
+    </div>
+    <div class="mod">
+      <div class="h"><span class="id">B</span>User Research · 新品调研（产品团队）</div>
+      <p class="role">目标客群与需求洞察<b>直接取自系统采集的社媒一手数据</b>，不再从零搜集。</p>
+      <p class="serve">少儿高端医疗险调研：用户笔记与评论中「拒赔 / 理赔难」是最高频痛点，为产品主打「理赔确定性」提供了一手依据。</p>
+      <details><summary>Evidence · 一手数据与关键发现</summary><ul>
+        <li>数据底盘：自抓 <b>45 篇笔记正文 + 720 条真实评论 + 22 个关键词信息流</b>；调研全程引用约 805 篇笔记 / 2.5 万条评论</li>
+        <li>发现一：720 条评论中「问医生 / 在线问诊 / 家庭医生」类词 <b>0 条</b>——「有人告诉我没大碍」是未被言说的潜在需求</li>
+        <li>发现二：话题被「比价 / 避坑 / 配置」内容压倒性占据（最高赞 8,879「新生儿保险水太深」）——获客要靠内容种草而非关键词竞价</li>
+        <li>产出：目标客群画像 + 高频痛点与需求清单（JTBD）+ 竞品空白点，直接进产品调研包</li>
+      </ul></details>
+    </div>
+    <div class="mod">
+      <div class="h"><span class="id">C</span>Policy Tracking · 政策信息采集（运营部门）</div>
+      <p class="role">政府公开信息<b>批量采集、整理打包直接交付</b>，不再靠人手动翻网站。</p>
+      <p class="serve">为运营同事采集国家医保局「全国医疗服务项目编码」全量数据；监管机构官方公众号列为最高优先级信源。</p>
+      <details><summary>Evidence · 交付物与校验</summary><ul>
+        <li>交付《全国医疗服务项目编码_全量.xlsx》：<b>7,881 条</b>项目 × 8 列字段（2026-06-17 抓取自国家医保局公开库）</li>
+        <li>与官网计数接口返回值 <b>7,881 完全一致</b>，抽样逐字段核对吻合，无遗漏</li>
+        <li>公开接口批量抓取、脚本可复现，随包附操作手册，运营同事可自行更新</li>
+      </ul></details>
+    </div>
+  </div>
+  <div class="pend">
+    <p class="ph">📊 Overview · 全库规模（2026-07-29 查库，开讲前已复核）</p>
+    <ul>
+      <li>情报分级分布：<b>Tier 1 高价值 464 / Tier 2 部门参考 532 / Tier 3 行业背景 181</b></li>
+      <li>全库累计 <b>2,418</b> 条，其中 <b>1,177</b> 条与业务相关、进入门户与档案库可查；另有 1,241 条经 AI 判定与我们无关，直接过滤（约占一半）</li>
+      <li>累计产出舆情<b>研判卡 7 张</b>（高危 1 / 中危 1 / 低危 5）——高、中两张均已人工复核、处置结案并撤下预警区</li>
+    </ul>
+  </div>
+</section>
+
+<section id="c4">
+  <h2><span class="n">④</span>Calibration：Prompt 判定标准，从「我猜的」到「同事亲口说的」</h2>
+  <p class="lead">系统好不好用，取决于判定标准准不准。第一版标准是我和大模型脑暴出的工程假设；部门需求问卷上线后，正逐份校正成各部门自己的业务口径。</p>
+  <div class="flow">
+    <div class="mod">
+      <div class="h"><span class="id">1</span>初始 · 和大模型脑暴假设</div>
+      <p class="role">我和大模型一起脑暴：<b>猜每个部门关心什么</b>——从预授权、理赔到 HR，逐个部门列出该盯的信息，先写进分流器 Prompt 让系统跑起来。</p>
+      <p class="serve">这一版判定标准是工程假设，还没经过业务确认。</p>
+    </div>
+    <div class="mod">
+      <div class="h"><span class="id">2</span>过程 · 问卷调研真实需求</div>
+      <p class="role">给各部门发需求问卷，让同事亲口说<b>「什么算重要、什么不要」</b>——答卷逐份回收、逐份固化成判定标准。</p>
+      <p class="serve">问卷按真实部门设计，同事一眼认出自己的版块。</p>
+    </div>
+    <div class="mod">
+      <div class="h"><span class="id">3</span>结果 · 校准分流器 Prompt</div>
+      <p class="role">把同事的原话落回 Prompt：<b>该收的补上、不该收的剔除</b>，判定标准从「我猜的」换成各部门自己的业务口径。</p>
+      <p class="serve">问卷还推翻了我的一个原始假设——实证见下框。</p>
+    </div>
+  </div>
+  <div class="ex">
+    <span class="tag">Evidence · 答卷直接改写了分流器 Prompt（原 → 现）</span>
+    <p class="gut">原 Prompt：用工、社保、员工福利政策类内容 → 判给 HR（我猜的）</p>
+    <p class="data">现 Prompt：只收<b>具体到同业公司</b>的人事信号（裁员 / 搬迁 / 组织调整 = 定向挖人才的时机），宏观政策类直接过滤——HR 同事的原话。</p>
+    <p class="gut">原 Prompt：预授权相关信息 → 一律判给医疗网络（我猜的）</p>
+    <p class="data">现 Prompt：<b>审核 / 时效 / 管控口径</b> → 医疗网络；<b>被卡 / 结算卡壳</b>（执行侧）→ 理赔运营——预授权与运营两份答卷交叉印证出的拆分规则。</p>
+    <p class="small">其余答卷同样换回了可落地的判定信息：预授权同事把「预授权时效 / 审核时效」列进最高权重监控；保险研发同事确认创新药、医保新政对商保的影响、海外健康科技模式都要收，推荐的两个行业公众号已定向接入；运营同事给出行动触发器「竞品上了新东西，有人问我们跟不跟」，并确认「只是知道一下」也算有效——相关性闸门因此不收得过紧。</p>
+  </div>
+</section>
+
+<section id="c5">
+  <h2><span class="n">⑤</span>For Other BUs：集团其他 BU 拿去能做什么</h2>
+  <p class="lead">这套三段式架构本身不绑行业：定向采集 → Prompt 筛选打标 → 送达部门看板。已落地用户投诉预警、新品调研、政策信息采集等场景，市场、BD、战略、产品等职能都能直接套用。要换的只有三样——<b>信源清单、监控词表、Prompt 里的判定标准</b>。换完，它就是你们自己的情报系统。</p>
+  <div class="flow">
+    <div class="mod">
+      <div class="h">Marketing · 市场与品牌</div>
+      <p class="role">品牌口碑与同业负面帖自动捕获、判级，<b>负面信号当天预警</b>；自家品牌另设哨兵盯防。</p>
+      <p class="serve">对应已落地场景 A（危机舆情发现）：换一份品牌词表就能跑。</p>
+    </div>
+    <div class="mod">
+      <div class="h">Product · 产品与研发</div>
+      <p class="role">目标客群与需求洞察<b>直接取自社媒一手数据</b>，调研不再从零搜集。</p>
+      <p class="serve">对应已落地场景 B（新品调研）：监控词表换成你们的品类即可。</p>
+    </div>
+    <div class="mod">
+      <div class="h">Strategy &amp; BD · 战略与商务</div>
+      <p class="role">同业动态、监管政策、行业信号<b>汇进一个看板定期送达</b>，决策与谈判前情报先到位。</p>
+      <p class="serve">对应已落地场景 C（政策信息采集）：信源清单换成你们盯的机构。</p>
+    </div>
+  </div>
+  <div class="pains">💡 接入只要三步：<b>①</b> 列出你们要盯的信源 → <b>②</b> 发一轮部门问卷定「什么算重要」（问卷方法直接抄我们的）→ <b>③</b> 门户开一个你们的版块。会后找我，15 分钟能说清怎么起步。</div>
+</section>
+
+<footer>市场部 · 郑晓琪 · 2026-07-30 · 库内数字经 2026-07-30 开讲前查库实测复核；场景实据取自对应交付物原件</footer>
+
+</div>
+<script>
+const links=document.querySelectorAll('nav a');
+const secs=[...links].map(a=>document.querySelector(a.getAttribute('href')));
+addEventListener('scroll',()=>{let i=secs.findIndex(s=>s&&s.getBoundingClientRect().top>90)-1;
+if(i<-1)i=secs.length-1;if(i<0)i=0;links.forEach((a,j)=>a.classList.toggle('on',j===i));},{passive:true});
+</script>
+<div id="gwm-tile" aria-hidden="true"></div><div id="gwm-line" aria-hidden="true">&#169; 2026 Alex Zheng &#183; alexzheng-unzen.github.io &#183; redacted copy, not for redistribution</div>
+<script id="cg-js">
+(function(){
+  var OPEN = 'a[href^="mailto:"], footer .links, input, textarea, select, [contenteditable]';
+  var CREDIT = "Copyright (c) 2026 Alex Zheng (\u90d1\u6653\u742a). All rights reserved. https://alexzheng-unzen.github.io/";
+  function allowed(n){
+    while (n && n.nodeType !== 1) n = n.parentNode;
+    return !!(n && n.closest && n.closest(OPEN));
+  }
+  document.addEventListener('contextmenu', function(e){
+    if (!allowed(e.target)) e.preventDefault();
+  }, true);
+  document.addEventListener('dragstart', function(e){
+    var n = e.target;
+    if (n && n.nodeType === 1 && /^(IMG|PICTURE|SVG|CANVAS)$/i.test(n.tagName)) e.preventDefault();
+  }, true);
+  /* anything that does get copied carries the source with it */
+  document.addEventListener('copy', function(e){
+    try {
+      var sel = String(window.getSelection());
+      if (!sel || sel.length < 24 || !e.clipboardData) return;
+      e.clipboardData.setData('text/plain', sel + '\n\n' + CREDIT);
+      e.preventDefault();
+    } catch (err) {}
+  });
+})();
+</script>
+</body>
+</html>

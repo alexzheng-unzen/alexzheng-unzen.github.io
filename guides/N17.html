@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<!-- Copyright (c) 2026 Alex Zheng (郑晓琪). All rights reserved.  https://alexzheng-unzen.github.io/ -->
+<html lang="zh-CN">
+<head>
+<meta name="robots" content="noindex, noai, noimageai, noarchive">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>黑客松参赛玩法说明书 · 2026-07-31</title>
+<style>
+  :root{
+    --blue:#3966CA; --ink:#1a1f2e; --muted:#5b6478; --line:#e4e8f0; --bg:#f4f6fb;
+    --card:#fff; --pos:#1f9d6b; --neg:#d4453b; --amber:#b07d00; --amberbg:#fdf6e3;
+    --grayp:#eef1f6; --judge:#1f6feb; --single:#9a6b00;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    color:var(--ink);background:var(--bg);line-height:1.78;font-size:15px;}
+  .wrap{max-width:1020px;margin:0 auto;padding:0 26px;}
+  header.cover{background:linear-gradient(135deg,#16213e 0%,#3966CA 100%);color:#fff;padding:54px 0 44px;}
+  .kicker{font-family:"SF Mono",Consolas,monospace;font-size:12px;letter-spacing:.16em;opacity:.72;margin-bottom:14px;}
+  header.cover h1{font-family:Georgia,serif;font-weight:600;font-size:31px;margin:0 0 12px;line-height:1.35;}
+  header.cover p{font-size:15px;opacity:.93;max-width:790px;margin:0;font-weight:300;}
+  .corecmd{background:rgba(255,255,255,.13);border-radius:8px;padding:13px 17px;margin-top:18px;font-size:13.8px;}
+
+  nav.jump{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;
+    box-shadow:0 2px 10px rgba(20,30,60,.05);}
+  nav.jump .wrap{display:flex;flex-wrap:wrap;gap:6px;padding-top:10px;padding-bottom:10px;}
+  nav.jump a{font-size:12.5px;color:var(--muted);text-decoration:none;padding:4px 11px;border-radius:20px;
+    border:1px solid var(--line);white-space:nowrap;}
+  nav.jump a:hover{color:var(--blue);border-color:var(--blue);background:#f2f6ff;}
+
+  .legend{font-size:12.5px;color:var(--muted);margin:18px 0 4px;}
+  .tag{display:inline-block;font-size:11px;font-weight:700;padding:1px 7px;border-radius:4px;
+    font-family:"SF Mono",Consolas,monospace;vertical-align:1px;}
+  .t-judge{background:#e6effe;color:var(--judge);}
+  .t-multi{background:#e3f6ed;color:var(--pos);}
+  .t-single{background:#fdeedb;color:var(--single);}
+  .t-neg{background:#fae8e6;color:var(--neg);}
+
+  section.ch{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:26px 0;overflow:hidden;
+    box-shadow:0 4px 20px rgba(20,30,60,.06);}
+  .ch-head{background:linear-gradient(120deg,#23335c,#3966CA);color:#fff;padding:20px 26px;}
+  .ch-head .no{font-family:"SF Mono",monospace;font-size:12px;opacity:.66;letter-spacing:.1em;}
+  .ch-head h2{font-size:22px;margin:4px 0 8px;font-weight:650;}
+  .ch-head .sub{font-size:13.5px;opacity:.9;font-weight:300;}
+  .ch-body{padding:10px 26px 24px;}
+
+  .blk{margin:22px 0 0;}
+  .blk-h{font-size:15.5px;font-weight:750;margin:0 0 8px;display:flex;align-items:flex-start;gap:8px;}
+  .blk-h .ic{font-size:17px;line-height:1.5;}
+  .blk p{margin:6px 0;}
+  .src{color:var(--muted);font-size:12.5px;}
+  .src a{color:var(--judge);text-decoration:none;} .src a:hover{text-decoration:underline;}
+  blockquote{margin:10px 0;padding:10px 16px;background:#fafbfe;border-left:3px solid var(--blue);
+    border-radius:0 8px 8px 0;font-size:13.8px;color:#2b3348;}
+
+  .know{background:var(--amberbg);border:1px solid #ecd9a3;border-left:4px solid var(--amber);
+    border-radius:0 10px 10px 0;padding:13px 18px;margin:14px 0;font-size:13.8px;}
+  .know .kh{font-weight:750;color:var(--amber);margin-bottom:4px;}
+
+  .clash{border:1px solid #f0cfc9;border-radius:12px;overflow:hidden;margin:16px 0;}
+  .clash-h{background:#fbf0ef;color:var(--neg);font-weight:750;font-size:14px;padding:10px 16px;
+    border-bottom:1px solid #f0cfc9;}
+  .clash-body{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+  .clash-col{padding:13px 16px;font-size:13.5px;}
+  .clash-col:first-child{border-right:1px solid #f0cfc9;background:#fdfaf9;}
+  .clash-col .cw{font-weight:750;margin-bottom:5px;font-size:13px;}
+  .clash-verdict{background:#eef3fc;border-top:1px solid #c5d6f5;padding:11px 16px;font-size:13.4px;}
+  .clash-verdict b{color:var(--blue);}
+  @media(max-width:680px){.clash-body{grid-template-columns:1fr;}
+    .clash-col:first-child{border-right:0;border-bottom:1px solid #f0cfc9;}}
+
+  .scroller{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.2px;min-width:520px;}
+  th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top;}
+  th{background:var(--grayp);font-weight:700;}
+  td.n{white-space:nowrap;}
+
+  .checklist{background:#f7faff;border:1px solid #c5d6f5;border-radius:12px;padding:16px 20px;margin:16px 0;}
+  .checklist h4{margin:0 0 8px;font-size:14.5px;color:var(--blue);}
+  .checklist ul{margin:4px 0;padding-left:20px;} .checklist li{margin:5px 0;}
+  .tline{background:#16213e;color:#fff;font-family:"SF Mono",Consolas,monospace;font-size:12px;
+    padding:3px 9px;border-radius:4px;display:inline-block;margin-bottom:4px;}
+
+  ul{margin:6px 0;padding-left:20px;} li{margin:4px 0;}
+  .takeaway{background:#16213e;color:#fff;border-radius:10px;padding:14px 18px;margin:18px 0 0;font-size:14px;}
+  .takeaway b{color:#9fc0ff;}
+  details{background:#fafbfe;border:1px solid var(--line);border-radius:10px;padding:10px 16px;margin:14px 0;}
+  details summary{cursor:pointer;font-weight:700;font-size:14px;color:var(--blue);}
+  .warn{background:#fbf0ef;border:1px solid #f0cfc9;border-left:4px solid var(--neg);border-radius:0 10px 10px 0;
+    padding:13px 18px;margin:14px 0;font-size:13.8px;}
+  .warn .wh{font-weight:750;color:var(--neg);margin-bottom:4px;}
+  .big{background:#eef3fc;border:1px solid #c5d6f5;border-radius:12px;padding:14px 18px;margin:14px 0;font-size:14px;}
+  .big b{color:var(--blue);}
+  footer{padding:34px 0 56px;color:var(--muted);font-size:13px;}
+</style>
+<meta name="copyright" content="Copyright (c) 2026 Alex Zheng (郑晓琪). All rights reserved.">
+<meta name="author" content="Alex Zheng">
+<style id="cg">
+/* content guard */
+html{-webkit-touch-callout:none}
+body{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+/* whitelist: everything a recruiter legitimately needs to copy stays selectable */
+footer .links,footer .links a,a[href^="mailto:"],input,textarea,select,[contenteditable]{
+-webkit-user-select:text;-moz-user-select:text;-ms-user-select:text;user-select:text}
+img,picture,svg,canvas{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
+</style>
+<style id="gwm">
+/* guide watermark */
+#gwm-tile{position:fixed;inset:-50%;z-index:2147483646;pointer-events:none;
+background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='220'><text x='10' y='120' transform='rotate(-24 210 110)' font-family='Arial,sans-serif' font-size='18' fill='%23000' fill-opacity='0.055'>&#169; 2026 Alex Zheng &#183; alexzheng-unzen.github.io</text></svg>");
+background-repeat:repeat}
+#gwm-line{position:fixed;right:12px;bottom:10px;z-index:2147483647;pointer-events:none;
+font:12px/1.4 Arial,"Microsoft YaHei",sans-serif;color:#444;background:rgba(255,255,255,.82);
+padding:3px 8px;border-radius:4px;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
+@media print{#gwm-tile,#gwm-line{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+
+<header class="cover"><div class="wrap">
+  <div class="kicker">玩法说明书 · GAME MANUAL · 2026-07-31</div>
+  <h1>AI 已经把"做出来"变得很便宜了，那黑客松现在到底在比什么？</h1>
+  <p>把黑客松当一款新游戏拆开：规则是什么、分数从哪来、老玩家踩过哪些坑、最后 3 分钟怎么把分拿走。材料全部来自一手来源——小红书 202 条笔记（精读 <b>60 篇正文</b>）、微信公众号 58 篇命中、以及国外官方规则原文、评委自述与获奖作品复盘。<strong>互相矛盾的说法一律两边都列，反面证据照写。</strong></p>
+  <div class="corecmd">🎯 <b>核心命题（全程不脱离）：</b>当人人都能在 48 小时内做出一个能跑的 demo，胜负手已经不在"能不能做出来"，而在<strong>选题的判断力</strong>、<strong>取舍的纪律</strong>和<strong>最后 3 分钟的表达</strong>。</div>
+</div></header>
+
+<nav class="jump"><div class="wrap">
+  <a href="#m">方法与局限</a>
+  <a href="#c0">0 · 游戏本质</a>
+  <a href="#c1">1 · 怎么构思</a>
+  <a href="#c2">2 · 怎么分工</a>
+  <a href="#c3">3 · 怎么赢评委</a>
+  <a href="#c4">4 · 赛前准备</a>
+  <a href="#c5">5 · AI 时代新坑</a>
+  <a href="#c6">6 · 提交页与视频</a>
+  <a href="#c7">7 · 反向证据</a>
+  <a href="#c8">8 · 四张清单</a>
+  <a href="#src">溯源总表</a>
+</div></nav>
+
+<div class="wrap">
+<p class="legend">证据标注：<span class="tag t-judge">评委/官方</span> 规则原文或评委自述　<span class="tag t-multi">多源印证</span> ≥2 个独立来源　<span class="tag t-single">单点</span> 只有一个来源　<span class="tag t-neg">反向</span> 批评/失败/代价</p>
+
+<!-- ========== 方法与局限 ========== -->
+<section class="ch" id="m">
+  <div class="ch-head">
+    <div class="no">METHOD · 先说清楚这份东西是怎么来的</div>
+    <h2>三条采集线，两个必须承认的缺口</h2>
+    <div class="sub">不写"业内普遍认为"。每条结论都能追到具体的人和具体的出处。</div>
+  </div>
+  <div class="ch-body">
+    <div class="scroller"><table>
+      <tr><th>来源</th><th>怎么抓的</th><th>拿到什么</th><th>缺口</th></tr>
+      <tr>
+        <td class="n">小红书</td>
+        <td>8 组关键词搜索（黑客松 / 经验 / 复盘 / AI黑客松 / 获奖 / 第一次参加 / demo路演 / 组队），限速采集；两轮筛选，第二轮专挑批评帖与获奖拆解</td>
+        <td><b>202 条去重笔记</b>，其中 <b>60 篇精读全文</b>，共约 4 万字</td>
+        <td>点赞数字段未取到，无法按热度排序</td>
+      </tr>
+      <tr>
+        <td class="n">微信公众号</td>
+        <td>搜狗微信搜索 6 组关键词</td>
+        <td><b>58 篇去重命中 → 14 篇正题全部取到正文</b>，共 <b>49,600 字</b></td>
+        <td><b style="color:#1f9d6b">已补齐 ✅</b>　前两条路都堵死：搜狗跳转链弹人机验证页（<b>不破码</b>）；公众号后台接口鉴权虽已打通但撞微信 <code>freq control</code>，硬刷会锁账号故主动停止。最终解法是<b>不解验证码</b>——只读验证页 URL 里的 <code>target_url</code> 参数拿到真实文章地址，再用未被标记的客户端取回，<b>14/14 成功</b>。</td>
+      </tr>
+      <tr>
+        <td class="n">国外</td>
+        <td>官方规则页（Devpost / MLH / 各厂商赛）+ 评委自述 + 主办方 playbook + 获奖作品页 + Reddit / HN / dev.to / Medium</td>
+        <td>约 <b>45 个可溯源来源</b>，含 <b>6 场赛事的评分权重原文</b>、<b>JetBrains 5 位评委访谈</b>、<b>MLH 官方组织者指南</b>、<b>Devfolio AI 评审机制</b></td>
+        <td>X/Twitter 与 YouTube 未覆盖；PennApps 2024 后 rubric 未找到；"几个人上台"无一手实证</td>
+      </tr>
+    </table></div>
+    <div class="warn">
+      <div class="wh">⚠️ 三条诚实标注</div>
+      ① <b>公众号已补齐</b>——14 篇正文全部取到（49,600 字），其中 <b>Anthropic「Build with Opus 4.6」黑客松五大获奖项目的完整拆解</b>是本报告后期新增的最重要一块材料，见第 1、5 章。<br>
+      ② <b>小红书内容天然偏"愿意发帖的人"</b>——获奖帖远多于失败帖，幸存者偏差明显。第 7 章专门收批评和反例，请连着读。<br>
+      ③ 部分英文来源<b>页面未标注日期</b>（Devpost 若干博客、HackerEarth 长文），报告里已逐条标出，请勿当权威时效源引用。
+    </div>
+  </div>
+</section>
+
+<!-- ========== 第0章 ========== -->
+<section class="ch" id="c0">
+  <div class="ch-head">
+    <div class="no">CHAPTER 00 · 先搞清楚你在玩什么游戏</div>
+    <h2>规则不是一套，是两套——而且互相矛盾</h2>
+    <div class="sub">这一章不搞懂，后面所有技巧都会用错地方。</div>
+  </div>
+  <div class="ch-body">
+
+    <div class="big">
+      <b>本次调研最重要的一个发现：</b>「校园赛（MLH 体系）」和「厂商赛（OpenAI / Google / AWS / Anthropic 生态）」的官方规则，在四件事上<b>完全相反</b>。你按错了那套准备，努力方向会整个偏掉。
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">⚔️</span>两套规则的正面冲突（全部官方原文）</div>
+      <div class="scroller"><table>
+        <tr><th>议题</th><th>MLH 校园赛官方规则</th><th>厂商赛官方规则</th></tr>
+        <tr>
+          <td class="n"><b>代码质量</b></td>
+          <td>"代码乱、没注释、算法低效都没关系……<b>如果你的代码没到生产就绪，我们不会因此扣你分。</b>"</td>
+          <td>OpenAI Build Week：评 "code reflect genuine effort and a <b>working, non-trivial implementation</b>"；AWS：Technical Execution 占 <b>50%</b>，看 well-architected、可复现</td>
+        </tr>
+        <tr>
+          <td class="n"><b>Pitch</b></td>
+          <td>"<b>不鼓励做 pitch 和演示。</b>你不会因为 pitch 质量或点子质量被评分。"MLH 还专门告诉评委<b>别看商业面</b>——"这是黑客松和创业比赛的根本区别。"</td>
+          <td>Gemini 3：Presentation/Demo 占 10%；OpenAI：评 "credible, specific case for solving a real problem for a <b>real audience</b>"</td>
+        </tr>
+        <tr>
+          <td class="n"><b>原创性</b></td>
+          <td>"<b>hack 不必'创新'。</b>如果有人想做一个常见点子，应该被允许，并按 hack 的质量来评。"</td>
+          <td>Gemini 3：Innovation/Wow Factor 占 <b>30%</b>；Warren Marusiak（Atlassian 评委）扣分项就是"炒冷饭、市场上已有的点子"</td>
+        </tr>
+        <tr>
+          <td class="n"><b>有没有用</b></td>
+          <td>"<b>你可以做一个完全没用的东西</b>，只要你在学、在开心，那就是好 hack！有时候一个没意义的项目就是最好的 hack！"</td>
+          <td>Gemini 3：Potential Impact 占 20%；AWS：Potential Value/Impact 占 20%，看 measurable impact</td>
+        </tr>
+        <tr>
+          <td class="n"><b>没做完</b></td>
+          <td>"<b>即使你的 hack 是坏的也鼓励你去展示</b>……Completion 只是评分标准的一部分，你还是可能拿到好成绩。"</td>
+          <td>SoCal Claude Builder Club：<b>"mockups-only 不参与 top prizes"</b>；页面明写 "This isn't a vibe-coding competition"</td>
+        </tr>
+      </table></div>
+      <p class="src">来源：<a href="https://github.com/MLH/mlh-policies/blob/main/standard-hackathon-rules.md">MLH standard-hackathon-rules.md</a>（活文档）、<a href="https://openai.devpost.com/rules">openai.devpost.com/rules</a>（2026-07）、<a href="https://gemini3.devpost.com/rules">gemini3.devpost.com/rules</a>（2025-12～2026-02）、<a href="https://aws-agent-hackathon.devpost.com/rules">aws-agent-hackathon.devpost.com/rules</a>、<a href="https://socal-cbc-hackathon.devpost.com/">socal-cbc-hackathon.devpost.com</a>（2026-04）</p>
+      <div class="know">
+        <div class="kh">💡 怎么判断自己在哪一套里？</div>
+        看三件事：<b>① 谁办的</b>——学校社团 + MLH 背书 = 校园赛；厂商冠名 = 厂商赛。<b>② 有没有公布权重</b>——公布了百分比的基本都是厂商赛。<b>③ 交付形态</b>——展位巡场（science fair）多为校园赛；线上提交 + 视频 + Devpost 页面多为厂商赛。<br>
+        国内的"小红书黑客松巅峰赛""AdventureX""美团 AI 黑客松"等，评分导向更接近<b>厂商赛</b>（看落地、看影响、看路演）。
+      </div>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">📊</span>评分维度与权重总表（官方原文）</div>
+      <p><span class="tag t-judge">官方规则</span></p>
+      <div class="scroller"><table>
+        <tr><th>赛事</th><th>维度与权重</th><th>打分机制</th><th>时效</th></tr>
+        <tr>
+          <td class="n"><b>OpenAI Build Week</b></td>
+          <td><b>四项等权重</b>：Technological Implementation / Design（要"完整连贯的产品体验，不只是技术验证"）/ Potential Impact / Quality of the Idea</td>
+          <td><b>两阶段</b>：Stage One 为 pass/fail（是否切题 + 是否真用了指定 API）；平局按<b>列出顺序</b>的第一项决胜</td>
+          <td>2026-07 ✅</td>
+        </tr>
+        <tr>
+          <td class="n"><b>Gemini 3 Hackathon</b></td>
+          <td><b>Technical Execution 40%</b> / Innovation·Wow 30% / Potential Impact 20% / Presentation·Demo 10%</td>
+          <td>每项 1–5 分取平均；Stage One 先 pass/fail 筛</td>
+          <td>2025-12～2026-02 ✅</td>
+        </tr>
+        <tr>
+          <td class="n"><b>AWS AI Agent Global</b></td>
+          <td><b>Technical Execution 50%</b> / Potential Value·Impact 20% / Creativity 10% / Functionality 10% / Demo Presentation 10%</td>
+          <td><b>只有 Stage One 的高分项目进 Stage Two</b></td>
+          <td>2025 ✅</td>
+        </tr>
+        <tr>
+          <td class="n"><b>MLH 标准规则</b></td>
+          <td><b>四项等权重</b>：Technology（"技术上多让人 Wow"）/ Design / Completion / <b>Learning</b>（"团队有没有挑战自己、学新东西"）</td>
+          <td>原文补一句："这些标准指导评委，但<b>评委最终可以凭直觉决定</b>"</td>
+          <td>活文档 ✅</td>
+        </tr>
+        <tr>
+          <td class="n"><b>TreeHacks 2026</b>（Stanford）</td>
+          <td>三项（未公布权重）：Creativity（"想得如此出格，让你开始怀疑本来是不是有个框"）/ Technical Complexity / Social Impact</td>
+          <td>另有 30+ 赞助商 track 独立评审</td>
+          <td>2026-02 ✅</td>
+        </tr>
+        <tr>
+          <td class="n"><b>HackMIT</b></td>
+          <td><b>不公布 rubric</b>——用 Gavel <b>两两对比</b>系统，评委不打绝对分，只回答"A 和 B 哪个更好"</td>
+          <td>见下方"物理约束"</td>
+          <td>持续使用 ✅</td>
+        </tr>
+        <tr>
+          <td class="n">PennApps（约 2018）</td>
+          <td>Technical Difficulty（"只是给 API 涂个口红，还是真的翻过技术难关？<b>这是通用奖项最重要的标准</b>"）/ Originality / Polish / Usefulness</td>
+          <td>—</td>
+          <td>🕰 旧，2024 后版本未找到</td>
+        </tr>
+      </table></div>
+      <div class="warn">
+        <div class="wh">⚠️ 一条极易被忽略的机制事实</div>
+        Devpost 官方帮助文档写明：<b>"The Devpost online judging platform does not currently support varying weights in criteria."</b>（平台不支持不同权重）<br>
+        推论：凡是公布了百分比权重的赛事（AWS 50%、Gemini 40%），评审<b>必然在 Devpost 平台之外线下跑</b>。平台内评审一律等权重。
+      </div>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">⏳</span>评审的"物理约束"——最被参赛者忽略的一层</div>
+      <p><span class="tag t-judge">官方指南</span> 这一节解释了为什么所有 demo 技巧都长成那个样子。</p>
+      <div class="scroller"><table>
+        <tr><th>约束</th><th>数字</th><th>对你的含义</th></tr>
+        <tr><td class="n">MLH 现场评审</td><td><b>每队 3 分钟</b>；评委预算 4 分钟/项目（2 分钟展示+demo、1 分钟提问与计分、1 分钟走路）</td><td>你要能<b>重复讲三遍且每遍一样稳</b>（MLH 建议每项目 3 位评委看）</td></tr>
+        <tr><td class="n">MLH 决赛机制</td><td><b>Stack Ranking（名次制）不是加总分</b>——每位评委只报自己那组的 top 3，记 3/2/1 分</td><td>"平均分不错"没用，<b>必须进某位评委的前三</b></td></tr>
+        <tr><td class="n">Gavel（HackMIT）</td><td><b>"平均每位评委只看了全场 5% 的项目"</b>；机制是两两对比</td><td>你不是跟全场比，是跟<b>随机配对的少数几个</b>比——目标是在一次正面对撞里赢</td></tr>
+        <tr><td class="n">Devpost 线上赛</td><td>官方给主办方的建议量级："通常最多发 30 个项目给评委，预期打分约 5 小时" → <b>约 10 分钟/项目</b></td><td>视频 + 提交页文案就是全部，评委<b>可能根本不跑你的代码</b></td></tr>
+        <tr><td class="n">Devpost 评委界面</td><td>只有 <b>1–5 星</b>，每个 criterion 一次。原文："<b>(There is no other mechanism for judges to provide feedback.)</b>"</td><td>你<b>不会拿到任何评语</b>。别指望赛后反馈</td></tr>
+        <tr><td class="n">厂商赛规模</td><td>Gemini 3 收到 <b>4,500+ 份提交</b>；评审延期四次（3/4 → 4/1 → 4/8 → 4/13-17）</td><td>大赛评审周期长、延期是常态</td></tr>
+        <tr><td class="n">提交率</td><td>MLH 2026 赛季（2025-08～2026-03）平均<b>每 4 位签到选手产出 1 个项目</b></td><td>"交上去"本身就淘汰掉了 75% 的人</td></tr>
+      </table></div>
+      <p class="src">来源：<a href="https://guide.mlh.io/general-information/judging-and-submissions/judging-plan">MLH Organizer Guide · Judging Plan</a>（标注 Last updated 约 2026 Q1）、<a href="https://anishathalye.com/2015/03/07/designing-a-better-judging-system/">Anish Athalye · Designing a Better Judging System</a>（2015）与 <a href="https://anishathalye.com/gavel-an-expo-judging-system/">Gavel</a>（2016-09-19）、<a href="https://help.devpost.com/article/64-judging-public-voting">Devpost 判分帮助页</a>、<a href="https://help.devpost.com/article/103-how-to-judge-an-online-hackathon">Devpost 评委指引</a>（2024-11-01）、<a href="https://gemini3.devpost.com/updates">Gemini 3 updates</a></p>
+      <div class="know">
+        <div class="kh">💡 Gavel 为什么不打绝对分？</div>
+        作者 Anish Athalye 的论点：<b>"人在做比较判断时，比在确定绝对分数时准确得多。"</b>而且绝对打分有<b>顺序依赖</b>问题——"评审结果会依赖于作品被评审的顺序"。所以他改成两两对比 + Crowd-BT 算法排序。<br>
+        这条和下面那位评委说的"评委是在跟刚看过的 6 个排序"是同一件事的两个证据——<b>一个来自算法设计者，一个来自现役评委</b>。
+      </div>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">🧠</span>评委不是在给你打绝对分，是在跟刚看过的项目排序</div>
+      <p><span class="tag t-multi">多源印证</span></p>
+      <blockquote>"Judges are not evaluating your project against an ideal. They are ranking it against the six they just saw while trying to remember which one had the map."<br>
+      <span class="src">— dev.to 作者 kurbaitaev，2026 年 7 月十天内连判三场，2026-07-27</span></blockquote>
+      <p>由此推出一条极其实用的准则：</p>
+      <blockquote>"Pick the sentence you want a judge to repeat to another judge an hour later. Build the demo that earns that sentence. Cut everything that does not."<br>
+      <span class="src">（挑一句你希望评委一小时后转述给另一个评委的话，照着这句话做 demo，其余全砍）</span></blockquote>
+      <p class="src">⚠️ 反向意见：Devpost 评委 Richard Moot（Square）说他刻意反着来——"我鼓励评委尽力<b>按个体评估</b>，因为很容易变成拿项目互相比较。"<b>说明这是评委自己也在对抗的偏差，但偏差确实存在。</b></p>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">💰</span>规则：出钱的人往往就是打分的人</div>
+      <p><span class="tag t-multi">多源印证</span></p>
+      <blockquote>"booth 前面的工程师往往就是评委，他们选项目的标准是谁最能展示他们公司的技术。"<br>
+      <span class="src">— 小红书《新人黑客松获胜指南（精简版）》，作者扒了油管上所有获奖者视频后的总结</span></blockquote>
+      <blockquote>"The sponsors are the judges. They're in the room. Use them."<br>
+      <span class="src">— John Kim，7–8 次冠军 / 累计约 $4 万奖金 / 前 Meta / TechCrunch Disrupt 冠军，2026-04-06</span></blockquote>
+      <p>实录：在 TechCrunch Disrupt 直接问地图公司工程师"你们 JavaScript SDK 是不是缺某个动画功能"，对方说一直想做没空做，于是问"如果我今晚做出来，你们选我们吗"，得到 yes 之后<strong>砍掉已经写了 6 小时的代码全面转向</strong>，最后赢了。</p>
+      <p class="src">⚠️ 例外：MLH 明确告诉评委<b>不要看商业面</b>，所以纯校园赛里这条的适用性下降。但只要有赞助商 track，这条就成立。</p>
+    </div>
+
+    <div class="takeaway">
+      <b>Takeaway ——</b> 报名之后第一件事不是想点子，是判断<b>你在哪一套规则里</b>，然后搞清楚四件事：<b>谁赞助、评分表怎么写（含权重）、最终交付什么、评委有多少时间看你</b>。这四件事没搞清就开始写代码，等于蒙着眼睛打靶。
+    </div>
+  </div>
+</section>
+
+<!-- ========== 第1章 ========== -->
+<section class="ch" id="c1">
+  <div class="ch-head">
+    <div class="no">CHAPTER 01 · 你的第一个问题</div>
+    <h2>怎么构思项目：选题是唯一一件 AI 替不了你的事</h2>
+    <div class="sub">失败案例的共同根因几乎都在这一步，而不在开发。</div>
+  </div>
+  <div class="ch-body">
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">📋</span>动作 1：先读评分表，再读赛题</div>
+      <p><span class="tag t-multi">多源印证</span></p>
+      <blockquote>"The rubric tells you what gets rewarded, while the problem statement only tells you what to build, and most teams confuse the two."<br>
+      <span class="src">— AngelHack（办过 450+ 场赛事的主办方），2026-06-08</span></blockquote>
+      <blockquote>"Read the rules before. Don't start writing anything before you really understand the problem space, the objectives of the hackathon, and <b>what the judges are probably looking out for</b>."<br>
+      <span class="src">— Jan-Niklas Wortmann（JetBrains DevRel，评委），2026-06</span></blockquote>
+      <p>具体怎么用：评分表里"创新性占 30%"→ 奖励对简单问题的巧妙切角；"Technical Execution 占 50%"→ 你得留出时间写 README 和架构图。<strong>没公布评分表就直接找主办方要。</strong>而且赢家是在每次重大取舍前重读一遍，不是开头看一次。</p>
+      <p>中文侧完全对上——《第一次参加黑客松，我们差点输在团队协作》复盘的第一个坑就是：</p>
+      <blockquote>"没先按照评分标准统一目标。大家一开始都在讨论要做什么，却没有先想清楚评委到底看什么，导致后面做了不少<b>和评分关系不大的工作</b>。"</blockquote>
+      <p class="src">⚠️ 还有一条很反常识的官方数据——Karen Bajza-Terlouw（Databricks 评委）："我做的第一件事是<b>过一遍黑客松要求的各项条件</b>。作为评委，<b>看到有那么多提交连基本要求都没满足，这挺让人吃惊的。</b>"</p>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">🎯</span>动作 2：从"你自己被烦到的事"起手，不从"最酷的新工具"起手</div>
+      <p><span class="tag t-multi">多源印证</span></p>
+      <blockquote>"不要 start with '什么是最酷的新工具'，而要 start with '<b>有什么是我现在能做、而以前做不了的</b>'。"<br>
+      <span class="src">— Bonnie Xu（OpenAI，JetBrains 黑客松评委），2026-06（中译）</span></blockquote>
+      <blockquote>"最强的创意往往来自你亲身遇到的问题，而不是比赛当天才去硬想。大家都喜欢的'酷'= 有用 + 用意想不到的方式解决真实问题。"<br>
+      <span class="src">— 小红书《Hackathon赢了$97k后学到的最重要五件事》</span></blockquote>
+      <p>最有说服力的样本是一个中文帖，题目就是从自己家里来的：</p>
+      <blockquote>"外婆快八十了，没用过智能手机——不是没教过，教过很多遍。微信语音她找不到那个绿色图标，老人机她记不住哪个键是谁，放大字体也没用，<b>她不识字</b>。于是她慢慢变成了一个'只等电话响'的人。<br><br>
+      所以这五天我们只做一件事：<b>造一台不用学的电话。没有屏幕，没有按键，没有菜单。</b>她只要说'给孙女打电话'，电话就真的响。"<br>
+      <span class="src">— 小红书《第一次参加黑客松，我给外婆造了部"手机"🏆》，两人队伍，Qoder 赛道二等奖</span></blockquote>
+      <p>同一篇还给了一条对新手很实用的旁门：<strong>如果自己没有成熟想法，直接加入已经准备好 idea 的队伍</strong>，比现场临时头脑风暴高效得多。</p>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">🏆</span>硬证据：一场 13,000 人报名的黑客松，五个获奖者里只有一个是程序员</div>
+      <p><span class="tag t-judge">官方公布</span> Anthropic「Build with Opus 4.6」黑客松（2026-02 公布结果）——<b>13,000 人报名 → 500 人入选 → 277 人在 6 天内完成，合计产出超 2,100 万行代码</b>。获奖名单是本次调研里对"怎么构思"最有说服力的一组数据：</p>
+      <div class="scroller"><table>
+        <tr><th>奖项 / 项目</th><th>作者身份</th><th>解决的问题</th></tr>
+        <tr><td class="n">🥇 冠军 <b>CrossBeam</b></td><td><b>加州人身伤害律师</b> Mike Brown</td><td>加州 ADU 建筑许可<b>首次提交超 90% 被驳回</b>，每轮修正数周、成本超 $30,000。做了个带 <b>13 个自定义 skill 的多智能体系统</b>，自动比对驳回信与图纸，覆盖加州政府法典 66310-66342 条及各城市变体，把流程压到 20 分钟级</td></tr>
+        <tr><td class="n">🥈 亚军 <b>Elisa</b></td><td>独立开发者 Jon McBee</td><td>女儿要做七年级发明展项目，但终端/依赖/报错对 12 岁小孩是天书。做了拖拽积木界面接 AI agent——<b>前端是积木，后端是 agent</b>。6 天独立完成 39,000 行代码</td></tr>
+        <tr><td class="n">🥉 季军 <b>Post-Visit AI</b></td><td><b>布鲁塞尔心脏科医生</b> Michal</td><td>病人"在诊室里点头，出门后发懵"。把行业里做滥了的<b>"面向医生的 AI 记录员"反转成"面向患者的 AI 陪伴"</b>，用百万 token 上下文基于个人病历做精准解读</td></tr>
+        <tr><td class="n">🏅 荣誉 <b>Tara</b></td><td><b>乌干达道路检查员</b> Kyeyune</td><td>行车记录仪视频 → AI 识别路面状况与粗糙度 → 输出维护优先级与投资建议。<b>5 小时出报告，原来要数周</b></td></tr>
+        <tr><td class="n">🏅 荣誉 <b>Conductor</b></td><td>电子音乐人</td><td>MIDI 键盘上弹和弦，AI 跟着走、指挥四轨生成乐队伴奏。<b>底层 C/WASM 引擎，延迟约 15ms</b>。定位是"人先演奏，AI 跟随"</td></tr>
+        <tr><td class="n">🏅 荣誉 <b>FenceFlow</b></td><td>击剑爱好者</td><td>蒙特卡罗对战模拟 + 欺诈检测的锦标赛管理系统</td></tr>
+      </table></div>
+      <p><b>五个获奖者里只有一位是软件工程师，只有两位懂编程。</b>Claude Code 创建者 Boris Cherny 的评语是：</p>
+      <blockquote>"编程基本已被解决……<b>领域知识胜过编程语法。</b>"</blockquote>
+      <div class="know">
+        <div class="kh">💡 这组案例真正的可复用之处：三个判断标准</div>
+        中文侧一篇拆解把它归纳成三条，<b>满足任意两条就值得下注</b>：<br>
+        <b>① 专家瓶颈</b> —— 这个领域是否因为专家不够而产生系统性延迟？（许可审批、医疗诊后、道路检查）<br>
+        <b>② 规则可编码</b> —— 痛点是否源于<b>规则复杂但结构化</b>？"规则足够结构化所以可以被编码，但又足够复杂所以人会频繁出错"<br>
+        <b>③ 信息不对称</b> —— 是否存在一方有知识/权力优势、另一方被动接受？（医生 vs 患者、企业 vs 消费者）<br>
+        <span class="src">— 公众号《黑客松获奖案例：发现2026年AI创业的六大范式》（碳硅边界，2026-02-24）</span>
+      </div>
+      <p>底层逻辑的转变，同一篇总结得很干净：</p>
+      <blockquote><b>旧范式：</b>技术团队 → 寻找问题 → 构建产品 → 说服用户<br>
+      <b>新范式：</b>领域专家 → 已知痛点 → AI 编程 → 直接部署</blockquote>
+      <p class="src">⚠️ 需要标注的是：这份"六大范式"拆解里有一部分商业数据（定价、市场规模、签约情况）来自另一篇公众号的<b>二次推演而非官方公布</b>，本报告只采用了<b>获奖名单、作者身份、痛点描述</b>这些能与 Anthropic 官方公布对上的部分，商业数字未采信。</p>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">🧪</span>动作 3：有争议的选题，先花 30–60 分钟做最小实验</div>
+      <p><span class="tag t-single">单点，但复盘链条完整</span></p>
+      <blockquote>"有个'智能耳机'方向，大家觉得延迟高就直接放弃了，没人先花 30 分钟做个最小实验验证。后来做的'闲置管理+AI消费建议'，也是几个人觉得能做就开干，没对比过<b>需求强度、可演示性、赛道契合</b>。"<br><br>
+      "这三件事其实是一条链：<b>选题依据不清 → 产品主线模糊 → 功能优先级和演示故事定不下来 → 最后一晚什么都在补</b>。"<br>
+      <span class="src">— 小红书《熬到凌晨2点，我在黑客松学到的3件事》，AdventureX，未获奖</span></blockquote>
+      <div class="know">
+        <div class="kh">💡 把它做成一张表：Nick Singh 的选题打分法</div>
+        前 Facebook/Google 工程师、HackUVA 2016 冠军、后来当过评委的做法：<strong>开个表格，每个点子一行，每个评估维度一列，打分后取平均分最高的那个。</strong>他用的列：<br>
+        ① 能不能讲出有情绪的故事　② demo 可交互性 / 视觉冲击（原话："能不能互动？看起来有意思吗——想想烟花、闪灯、飞行的无人机？能不能好笑？"）　③ 技术含量（纯 API 拼接会输给有 ML/CV/NLP 成分的）<br>
+        <span class="src">合起来用：上面那三个维度偏"能不能做完"，Nick Singh 的三列偏"做完之后好不好卖"。两套并用覆盖比较全。</span>
+      </div>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">✂️</span>动作 4：把 scope 砍到"几小时能做完"</div>
+      <p><span class="tag t-multi">多源印证</span> 旧金山一场黑客松的 Best Overall Demo 第一名，实际写代码只有 2.5 小时：</p>
+      <blockquote>"黑客松里最重要的，不只是技术，而是 scope。<b>很多时候不是你做不出来，而是你一开始就把题目做大了。</b>"<br><br>
+      "我能做完，靠的不是堆很多技术，而是先逼自己想清楚三件事：<b>① 这个问题是不是真的存在？② 我能不能在几小时内做出最小可演示版本？③ 别人能不能在 30 秒内看懂它的价值？</b>"<br>
+      <span class="src">— 小红书《旧金山黑客松第一名｜2.5小时做了个AI技能》，项目 BidRadar 已开源</span></blockquote>
+      <p>评委侧的独立印证：</p>
+      <blockquote>"Your demo should show what your app does <b>in one flow</b>. If it's too long, <b>cut down on your features</b>."<br>
+      <span class="src">— Colin Lowenberg（Nebius，评委），2026-06。注意这句的逻辑：demo 太长不是节奏问题，是 <b>scope 问题</b>。</span></blockquote>
+      <p>还有一个"小到不可思议"却拿奖的样本：</p>
+      <blockquote>"在一堆宏大的项目里做了个小小的需求，把我自己在用的一部分记录系统封装成了 onboarding skill……<b>没想到这么简单的东西反而因为直接，受到了大家的喜爱和认可</b>，三个非技术的人竟然不只是重在参与还有奖拿。"<br>
+      <span class="src">— 小红书《一个🦞日记skill，获得了黑客松二等奖》</span></blockquote>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">🚫</span>动作 5：避开五类必死选题</div>
+      <p><span class="tag t-judge">评委</span></p>
+      <div class="scroller"><table>
+        <tr><th>反模式</th><th>为什么扣分</th><th>来源</th></tr>
+        <tr><td class="n"><b>已有产品的更差版本</b></td><td>"如果你整段 pitch 能被压缩成某个现有平台上的<b>一个勾选框</b>，请重新考虑你的 scope。"（"学生版 Airbnb" = 一个"三个月以下租期"的筛选框）</td><td>JACHack 2025 评委 Guong Le，2026-04-10</td></tr>
+        <tr><td class="n"><b>拿着锤子找钉子</b></td><td>见下方评委原话，2026 年 AI 赛道最高频死法</td><td>AdventureX 评委</td></tr>
+        <tr><td class="n"><b>一稿多投 / 老项目换皮</b></td><td>Maria Yarotska（NEAR）："<b>Devpost 上能看到一个人参加过的黑客松历史。</b>如果我看到同一个项目换了标签或稍微改了界面……那可能是个危险信号。"MLH 官方作弊核查也专查这条</td><td>Devpost 5 位评委 + MLH cheating check</td></tr>
+        <tr><td class="n"><b>点子和赛题无关，硬套上去</b></td><td>Richard Moot（Square）："我见过不少提交，几乎像是他们有一个<b>与本次比赛无关的点子，然后硬塞进来</b>。"Warren Marusiak（Atlassian）："如果它没有真正命中赛题，<b>就很难给满分</b>。"</td><td>Devpost 5 位评委</td></tr>
+        <tr><td class="n"><b>某一维度做到极致、其他全空</b></td><td>Richard Moot："真正严重拉低分数的，是<b>在某一项标准上过度投入而牺牲了其余全部</b>……比如极度后端重、几乎没有前端、没有 UI。"</td><td>Devpost 5 位评委</td></tr>
+      </table></div>
+      <blockquote>"AdventureX 黑客松，现场项目看着非常热闹，但说实话，不少项目都陷入同一个问题：<b>拿着锤子到处找钉子，费力去解决一个【原本不存在的需求】</b>。"<br><br>
+      "最近字节 TRAE 黑客松晋级结果也出了，我翻完了初赛 1000 个项目，我主观判断这个【点子】能落地商业化的，<b>只看到 4 个，0.4%</b>。"<br>
+      <span class="src">— 小红书《评委燃尽了，闭幕式前说两句尖锐的真话》，作者为 ex-VC 投资人、AdventureX 评委</span></blockquote>
+      <p class="src">⚠️ 0.4% 是该评委的<b>主观判断</b>，非官方统计，作者本人也写明"我主观判断"。当作方向提醒，不要当数据引用。</p>
+    </div>
+
+    <div class="clash">
+      <div class="clash-h">⚔️ 争议 1：要不要围着赞助商赛道选题？</div>
+      <div class="clash-body">
+        <div class="clash-col">
+          <div class="cw">正方：一个项目吃多个赛道</div>
+          "大部分队伍只挑一个赞助商赛道去做。但你可以同时满足好几个，而大多数人想不到这么干。"——John Kim 把 4 个赞助商的产品串成一条产品链（打电话 → 语音 agent → agent 框架 → 控制机器人 → MCP server 托管），一个项目吃四个赛道。
+        </div>
+        <div class="clash-col">
+          <div class="cw">反方：来自赞助商赛道负责人本人</div>
+          "现在有一种 'sponsormaxxing' 的风气……有风险：如果你想赢某个赞助商赛道，你会被按<b>是否深度集成</b>来评判。"他要的不是"把图片丢进来存一下"，而是在 AI pipeline 里做图像优化再合成视频。<br>
+          另一个坑叫 "platformmaxxing"：把平台所有功能试一遍，<b>很可能把免费额度烧穿</b>。<span class="src">— Cloudinary（Hack Canada / LA Hacks 赛道负责人），2026-05-03</span>
+        </div>
+      </div>
+      <div class="clash-verdict"><b>怎么落地：</b>冲突的不是"多赛道"，是"浅接一堆 API"。可行做法：<b>主赛道做深（能讲出你踩了这个 API 的哪个坑），副赛道顺带满足（不额外花时间）</b>。第三方警告：Nick Singh 提醒"追 API 奖金可能变成危险的分心，如果这个 API 限死了你能做的东西类型，你会很难讲出独特的故事"。</div>
+    </div>
+
+    <div class="takeaway">
+      <b>Takeaway ——</b> 选题阶段值得花掉总时长的 5–8%（有 6 战 6 中的人在 24 小时赛里花了近 2 小时选题）。判断一个点子该不该做，用三问：<b>需求真不真、几小时能不能做出可演示版、30 秒能不能讲懂</b>。三个有一个否，换。
+    </div>
+  </div>
+</section>
+
+<!-- ========== 第2章 ========== -->
+<section class="ch" id="c2">
+  <div class="ch-head">
+    <div class="no">CHAPTER 02 · 你的第二个问题</div>
+    <h2>怎么分配工作：赢的队不是干得最多的，是取舍最狠的</h2>
+    <div class="sub">团队协作是中文复盘里出现频率最高的翻车点，高过技术。</div>
+  </div>
+  <div class="ch-body">
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">👥</span>队伍规模：主流说小队，但新手有个明确例外</div>
+      <div class="scroller"><table>
+        <tr><th>主张</th><th>理由</th><th>来源</th><th>标注</th></tr>
+        <tr><td class="n"><b>3 人跨职能 &gt; 4 人全技术</b></td><td>"四个后端开发的队伍，几乎每次都输给一个均衡的三人队。"配置：1 前端快手 / 1 后端或基建 / 1 强表达者且拥有 demo 脚本</td><td>AngelHack（450+ 场）</td><td><span class="tag t-judge">主办方</span></td></tr>
+        <tr><td class="n"><b>2–3 人是黄金配置</b></td><td>"大团队会把大量时间浪费在沟通与代码冲突上"</td><td>小红书《Hackathon赢了$97k后…》</td><td><span class="tag t-single">单点</span></td></tr>
+        <tr><td class="n"><b>最多 2 人</b></td><td>减少协调开销、决策更快</td><td>Claude Code Hackathon 指南，2026-04-20</td><td><span class="tag t-single">单点</span></td></tr>
+        <tr><td class="n">按人数配比</td><td>2人=1码1讲；3人=2码1讲；4人=3码1讲；5人=3码1讲1设计</td><td>szeyusim（2024–25 共 8 次获奖）</td><td><span class="tag t-single">单点</span></td></tr>
+        <tr><td class="n">三个<b>角色</b>不一定三个人</td><td>PM+主讲（谈赞助商、锁方向、盯时钟）/ Deep diver（能消失 4 小时啃最难那块）/ Generalist（串集成补窟窿）</td><td>John Kim</td><td><span class="tag t-single">单点</span></td></tr>
+      </table></div>
+      <p><b>一条间接实证：</b>Anthropic Opus 4.8 Build Day（2026-06-13，12 小时，310 人参赛，1500+ 申请）<strong>前三名全是 2 人组</strong>——Tekton、Sim Francisco、Custom Universe。</p>
+      <p class="src">⚠️ 反向：2026-07 连判三场的评委明确说 "Team size or credentials. I did not know or care who had which job. <b>Solo builders did fine.</b>"；Maria Yarotska（NEAR）则说"超大团队不算红旗，但……有点粉红"（因为 MLH 作弊核查会查"是不是每个队员都有贡献"）。</p>
+      <div class="clash">
+        <div class="clash-h">⚔️ 争议 2：新手到底该进小队还是大队？</div>
+        <div class="clash-body">
+          <div class="clash-col">
+            <div class="cw">主流：越小越好</div>
+            以上全部指向 2–3 人，理由是沟通成本和代码冲突。
+          </div>
+          <div class="clash-col">
+            <div class="cw">反方：新手请务必进 4–5 人大团队</div>
+            "如果你对自己技术的定位是新手，只想体验和观察，<b>请务必加入 4-5 人的大团队</b>。在多人团队里划水或打辅助（做 PPT、点外卖、做测试）是没有心理负担的。<b>人少巨累</b>，且多线程工作会让你的产能急剧下降。"<span class="src">— 小红书《如何准备参加一次黑客松》</span>
+          </div>
+        </div>
+        <div class="clash-verdict"><b>不是矛盾，是目标不同：</b>小队是<b>为了赢</b>的配置，大队是<b>为了第一次能活下来并学到东西</b>的配置。所以先回答"我这次来干嘛"——这正好是同一篇的第一条建议：<b>"放弃'既要又要'，带着唯一目标去，才不会在赛程中陷入内耗。"</b></div>
+      </div>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">🧬</span>跨职能到底长什么样：一个 1.5 小时的极端样本</div>
+      <p><span class="tag t-single">单点，但过程写得极细</span> 帝国理工 Claude 黑客松，<strong>完全临时组队</strong>：一个学医、一个 UX designer、一个学法律、两个 CS。</p>
+      <blockquote>"我们是彻底的临时组队，但<b>分工清晰到可怕</b>：有人在画界面，有人在建模，有人在写演讲，<b>一个半小时就把 Demo + PPT + 演讲脚本全部搞定</b>。"<br><br>
+      项目 Core Clarity（给核电站做可解释安全层）的开场第一句：<b>"AI 系统最大的问题不是不聪明，而是会瞎紧张 —— 84.6% 的误报率，让整个行业都在做无用功。"</b><br><br>
+      "然后我们把所有技术细节都换成能听懂的表达：真正的事故只占 13.2%，极度稀缺 → 不能用人工合成数据，因为涉及国安 → 所以我们靠'更聪明的数据处理'让模型把那 13% 的关键事件放大 7-8 倍关注 → 最后用 Logistic Regression（完全可解释的模型）做决策层。"<br><br>
+      最终 demo："输入数据 → 给出一个 YES/NO 和 90% 信心度。<b>给操作员一个简单、不纠结、不需要猜的答案。</b>"<br>
+      <span class="src">— 小红书《帝国理工黑客松：临时组队 1.5 小时做出核电》，50 条评论</span></blockquote>
+      <p class="src">⚠️ 该帖高赞质疑：<b>"所以医学和法律学生写 ppt 呗，然后核心逻辑的片子还是得 cs 写+做 demo"</b>——跨职能组队的常见争议，一并保留。</p>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">⏱️</span>时间表：三份可直接抄的分段</div>
+      <div class="scroller"><table>
+        <tr><th>赛制</th><th>分段</th><th>来源</th></tr>
+        <tr>
+          <td class="n">24 小时</td>
+          <td>
+            <b>前 2h</b>：定题 + <b>冻结 scope</b> + 选栈 + 写 user flow + 只定一个核心功能<br>
+            <b>接下来 6h</b>：只做核心功能 + 基础 UI + 最小后端。<b>明令禁止：登录页、动画、多余页面</b><br>
+            <b>接下来 4h</b>：加一个 wow factor（AI 组件 / 自动化 / 可视化）——"wow factor 常常决定前三"<br>
+            <b>接下来 4h</b>：集成、测试、修 bug<br>
+            <b>最后 3–4h</b>：demo 脚本 + slides + pitch + 录视频
+          </td>
+          <td>Kavisha Mathur，8 次冠军，2026-02-11</td>
+        </tr>
+        <tr>
+          <td class="n">48 小时</td>
+          <td><b>前 12h</b>：定最终方案 + 分工　<b>中间 24h</b>：核心开发 + demo 打磨　<b>最后 12h</b>：优化细节 + 路演稿 + <b>彩排</b></td>
+          <td>小红书《港大Jennie｜AI黑客松备赛分享》</td>
+        </tr>
+        <tr>
+          <td class="n">按比例</td>
+          <td>规划 <b>15%</b> / 建核心 AI 功能 <b>25%</b> / 建最薄的产品外壳 <b>35%</b> / 打磨与排练 <b>25%</b></td>
+          <td>AngelHack，2026-06-17</td>
+        </tr>
+      </table></div>
+      <p><span class="tag t-multi">多源印证</span> 三条独立来源给了同一个硬指标——<strong>骨架跑通卡在总时长的 25%–50% 处</strong>：</p>
+      <ul>
+        <li>AngelHack：24 小时赛第 6 小时、48 小时赛第 12 小时必须有端到端骨架（"故意做得很丑"）</li>
+        <li>评委版更狠："Get one end-to-end path running by the halfway mark, however ugly. <b>Improve it after, do not extend it.</b>"（过半必须跑通一条路径，多丑都行。之后是改好它，<b>不是加长它</b>）</li>
+        <li>中文侧："在约定进程（比如过半）时，必须有一个能跑通的<b>最烂版本</b>……跑通最重要，故事最重要，<b>完成度可以靠叙事来补</b>。" + "<b>在跑出 MVP 前不要中途换方向。</b>"</li>
+      </ul>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">📝</span>开赛第 1 小时花 10 分钟签"团队协议"</div>
+      <p><span class="tag t-multi">多源印证</span> 两份清单高度重合，合并后：</p>
+      <div class="checklist">
+        <h4>✅ 团队协议（开赛 1 小时内定完）</h4>
+        <ul>
+          <li><b>每 3 小时同步一次</b>，不是可选项</li>
+          <li><b>main 分支锁死</b>，全走 feature branch；改核心功能时<b>一个人 push，其他人不准动</b></li>
+          <li>设一个<b>"砍 scope"信号</b>：任何人可以说"这太多了"，其他人必须听，不许有情绪</li>
+          <li>每项任务必须有<b>负责人 + 产出 + 截止时间 + 验收标准 + 备用方案</b>——"很多任务看起来'有人在做'，到了最后才发现并没有真正完成"</li>
+          <li><b>关键岗位必须有备份</b>——"一旦某个成员没时间，相关工作就会直接停下来"</li>
+          <li>组队时说清<b>真实可投入时间</b>（不是"我有空"，是"我周六下午 2-8 点在"）</li>
+          <li>全程正常 commit——<b>MLH 官方作弊核查会看提交时间线和每个人的贡献</b></li>
+        </ul>
+        <span class="src">来源：Kavisha Mathur（8 冠）+ 小红书《第一次参加黑客松，我们差点输在团队协作》的 P0 Checklist + MLH cheating check</span>
+      </div>
+      <blockquote>"一个人兜底可以救一次比赛，<b>但不该成为团队默认的工作方式</b>。"<br>
+      <span class="src">— 同上。反面样本：《最后7天，黑客松把我逼成了六边形战士》——队友都很忙、任务只做了一部分，最后一人包了云端架构、前端、端侧适配、后端调度、发帖、用户访谈、PPT、剪视频、上台 pitch 和答辩。</span></blockquote>
+    </div>
+
+    <div class="clash">
+      <div class="clash-h">⚔️ 争议 3：睡不睡？</div>
+      <div class="clash-body">
+        <div class="clash-col">
+          <div class="cw">不睡派（有量化模型）</div>
+          40 小时赛、4 人队：普通队按正常作息约 80 人时；极限队（干 16h → 睡 8h → 再干 16h）= 128 人时。<b>不是多 30%，是 160%。</b><br>
+          但作者自己承认："坦白说，绝大多数队伍做不到……<b>我从没和任何一个能集体做到这点的队伍打过比赛。</b>"<span class="src">— joeykoh</span>
+        </div>
+        <div class="clash-col">
+          <div class="cw">睡派（有现场问卷）</div>
+          Junction 2018 现场问卷 n=52：<b>76% 的人睡了 6 小时以上</b>，只有 1 人完全没睡；赛道冠军并没有比别人睡得少；3 个"困了就睡"的人里有 2 个赢了赛道。<br>
+          作者标注了局限：只有 4 个赛道冠军样本，统计显著性存疑。<span class="src">— Vadim Liventsev，2018-12-17</span>
+        </div>
+      </div>
+      <div class="clash-verdict"><b>可执行的第三条路：轮换。</b>48 小时赛两人睡两人干，<b>绝不让全队同时倒</b>（Kavisha Mathur）。中文侧一个 WAIC 一等奖的实录是"<b>困了就睡半小时起来，困了就睡半小时起来</b>"，本人评价："说实话不是很想再来一次了……"</div>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">🩸</span>没人提的隐性代价：黑客松结束那天，账单才开始</div>
+      <p><span class="tag t-neg">反向</span><span class="tag t-single">单点，但金奖得主自述</span> 一位刚拿下黑客松金奖的人，在获奖后写了一篇自我怀疑的复盘。这是整份调研里唯一一篇讲"赢了之后的代价"的：</p>
+      <blockquote>"按理说，这应该是开香槟的时刻……但我这两天并没有那种胜利的喜悦，反而陷入了一场挺严重的自我怀疑。"<br><br>
+      "我发现自己处于一种极其诡异的状态：<b>脑子里的秩序感强得像精密钟表，但手头的节奏感却乱得像一团乱麻。</b>"<br><br>
+      "<b>为了保住黑客松的进度，我强行把另外两件极其重要的事压后到了这一周。</b>于是这周一睁眼，我就面临着三线作战的'救火'局面……继上周末黑客松之后，这周我大概又熬了三四个通宵。"<br>
+      <span class="src">— 公众号《从黑客松金奖到多线作战：关于"秩序感"与"节奏感"的深度复盘》（新器集，2026-01-24）</span></blockquote>
+      <p>他归因到两件事，都不是"不够努力"：</p>
+      <ul>
+        <li><b>任务切换的代价</b>——"人的大脑并不是一台可以瞬间切换任务的计算机。当我从黑客松的复杂算法逻辑中抽身，去回复学员关于'环境配置'的基础问题时，大脑需要经历一个痛苦的'降噪'过程。<b>这种切换不仅流失了时间，更损耗了心智带宽。</b>"</li>
+        <li><b>知识的诅咒</b>——"当我掌握了某项技能后，我就会下意识地认为这件事很简单……这些我眼里的'常识'，其实非常消耗执行时间。当几十个这样的'微小细节'叠加在一起，工作量就像滚雪球一样压了过来。"</li>
+      </ul>
+      <div class="checklist">
+        <h4>✅ 他的破局法：风险分级清单法（可直接抄进黑客松排期）</h4>
+        <ul>
+          <li><b>① 颗粒化拆解</b>——不写"写教程"，写"注册流程截图（10分钟）/ 环境搭建说明（20分钟）/ FAQ 汇总（15分钟）"。<b>"只有拆得足够细，你才能看清这些任务背后的真实工作量。"</b></li>
+          <li><b>② 任务分三级</b>——<b>体力活</b>（不动脑、纯手速，放在精力涣散的下午）/ <b>脑力活</b>（路径清晰但要专注，需整块时间）/ <b>高风险项</b>（容易出 Bug、如尝试新框架，<b>最容易导致节奏失控</b>）</li>
+          <li><b>③ 冗余设计</b>——"以前我习惯把计划排得严丝合缝，觉得这样才叫'高效'。现在我明白，<b>真正的效率是承认摩擦力的存在。</b>如果我预估一个技术调研需要 2 小时，<b>我会直接在日历上划掉 3 小时。</b>"</li>
+        </ul>
+      </div>
+      <blockquote>"逻辑上的'稳'，决定了你能走多远；而执行上的'节奏感'，决定了你能走多久。<br>
+      如果你总是在熬夜救火、总是在最后一刻心惊胆战地交付，那么哪怕你逻辑再强，<b>你也是在刀尖上跳舞</b>。"</blockquote>
+      <p class="src">👉 对照第 2 章前面那条"48h 赛两人睡两人干"——两者说的是同一件事的两端：<b>赛中的轮换保住这一场，赛前的冗余保住下一周。</b></p>
+    </div>
+
+    <div class="takeaway">
+      <b>Takeaway ——</b> 分工的本质不是"谁写哪块代码"，是<b>谁有权喊停</b>。三件事必须在开赛第一小时定下来：<b>唯一目标、砍 scope 的信号、每个任务的验收标准</b>。做不到这三条，人越多输得越快。
+    </div>
+  </div>
+</section>
+
+<!-- ========== 第3章 ========== -->
+<section class="ch" id="c3">
+  <div class="ch-head">
+    <div class="no">CHAPTER 03 · 你的第三个问题（重头）</div>
+    <h2>怎么在最后 3 分钟拿走分数</h2>
+    <div class="sub">"更多的黑客松是在 pitch 阶段赢的，而不是在写代码阶段。"</div>
+  </div>
+  <div class="ch-body">
+
+    <div class="big">
+      <b>JetBrains 那篇评委访谈的总结公式，是本次调研里最值得背下来的一句：</b><br>
+      "Success mostly comes down to three things: <b>leading with the problem, showing one thing working, and letting it be obvious that you care.</b>"<br>
+      <span class="src">（先讲问题 · 让一样东西真的跑起来 · 让人明显看得出你在乎）— JetBrains，2026-06</span>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">🧩</span>能直接套的 4 句话框架</div>
+      <p><span class="tag t-judge">评委</span> 来自一位 ex-VC 投资人、AdventureX 评委，一天看完 30 多个项目后写的：</p>
+      <div class="checklist">
+        <h4>🎤 4 句话 Pitch 框架（以某赛道 TOP1"AI 健身教练姿态辅助系统"为例重写）</h4>
+        <ul>
+          <li><b>1️⃣ 我们看到的痛点是……</b> → 用户想要 1v1 的健身指导。</li>
+          <li><b>2️⃣ 常规的解决方法是……</b> → 找私教，但支付不起昂贵费用，也不见得能找到足够专业的。</li>
+          <li><b>3️⃣ 我们的解决方法是……</b> → 通过 AI + 智能硬件判断发力姿势是否标准，让每个用户都能普惠地享受私教指导。</li>
+          <li><b>4️⃣ 我们做出这个方案的难点是……</b> → 需要用视觉算法、机电信号等识别姿势。</li>
+        </ul>
+        <span class="src">— 小红书《3分钟黑客松pitch｜像十年老founder讲清项目》。作者注：这套框架也适用于面试、商务谈判、卖货，甚至项目启动前的战略梳理。真投资 pitch 还要加：痛点市场规模 + 盈利天花板。</span>
+      </div>
+      <p>这条建议的分量在于它的观察前提——<strong>"在最后五进一的关键 pitch 上，我周围好几个评委在一开始都没有听懂。"</strong>连进了决赛五强的项目，评委都可能听不懂开场。</p>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">⏱️</span>90 秒内必须看到东西在跑</div>
+      <p><span class="tag t-judge">评委</span></p>
+      <blockquote>"You have to be able to <b>show something working within about 90 seconds</b>."<br>
+      <span class="src">— Jono Bacon（Stateshift CEO，JetBrains 黑客松评委），2026-06</span></blockquote>
+      <p>整篇的定调更狠：<strong>"A strong project with a confusing demo loses to a simpler project that the judges understand."</strong>（一个强项目配一个让人困惑的 demo，输给一个评委能听懂的简单项目）</p>
+      <p>赞助商赛道负责人给的 2–3 分钟分配：<strong>Hook 15 秒</strong>（自我介绍 + 问题 + 一个可代入的场景）→ <strong>Demo 60–90 秒</strong>（只走核心功能）→ <strong>Tech 30 秒</strong>（最难那个技术坎）。</p>
+      <div class="scroller"><table>
+        <tr><th>时间轴</th><th>内容</th><th>来源</th></tr>
+        <tr><td class="n">0:00–0:10</td><td>自我/队伍介绍（10 秒，不要更长）</td><td>TAIKAI pitch 模板</td></tr>
+        <tr><td class="n">0:10–0:50</td><td><b>问题</b>，且要让评委<b>跟你一起烦躁</b></td><td>Jono Bacon（评委），2026-06</td></tr>
+        <tr><td class="n"><b>≤1:30</b></td><td><b>必须让评委看到东西在跑</b></td><td>Jono Bacon（评委），2026-06</td></tr>
+        <tr><td class="n">中段 ~2min</td><td>demo 本体，<b>只走一条流</b></td><td>Colin Lowenberg（评委）/ MLH</td></tr>
+        <tr><td class="n">最后 0:30</td><td>收尾 + 强结论 + <b>报队伍号和名称</b></td><td>TAIKAI / 小红书《黑客松24小时实战》</td></tr>
+      </table></div>
+    </div>
+
+    <div class="clash">
+      <div class="clash-h">⚔️ 争议 4（最关键的一组）：开场第一句先讲问题，还是先讲"这是什么"？</div>
+      <div class="clash-body">
+        <div class="clash-col">
+          <div class="cw">A 派：先讲问题，让评委先"疼"</div>
+          "先说你要解决的是什么问题。<b>你需要让评委和你共享对这个问题的愤怒。</b>"（Jono Bacon，评委）<br>
+          Avi Press 补一句："<b>大家总是跳过这步。</b>"<br><br>
+          "大多数队伍把约 5% 的 demo 时间花在问题上、95% 花在方案上，然后对自己的'影响力'得分很低感到意外。<b>赢家的配比更接近 30% 问题 / 70% 方案。</b>"（AngelHack）<br><br>
+          中文侧同向："讲故事，别上来就说用了什么架构什么模型，<b>先讲一个场景'你有没有遇到过这种情况……'让评委先共情</b>再引出方案。"
+        </div>
+        <div class="clash-col">
+          <div class="cw">B 派：先给锚点，故事后置（2026-07 现役评委）</div>
+          "得分高的队伍开场是一句朴素的陈述：<b>这是一个为 Y 做 X 的工具。</b>失分的队伍开场是铺垫——市场规模、个人故事、一个花了四十秒才讲到产品的问题陈述。等产品终于出现时，我已经花掉三分之一的时间却还不知道自己在看什么。"<br><br>
+          "评委不是对你的故事有敌意。<b>他们只是在没有锚点的情况下记不住它。</b>先给锚点，故事才有地方安放。"<span class="src">— dev.to/kurbaitaev，2026-07-27</span>
+        </div>
+      </div>
+      <div class="clash-verdict"><b>两派其实都在反对同一件事：40 秒还没说到产品。</b>可行的合流写法——<b>第 1 句给一句话锚点（为 Y 做 X 的工具）→ 第 2–4 句给具体到某个人的问题场景 → 立刻进 demo。</b>这样既满足 B 派的"先锚点"，又保住 A 派要的 30% 问题时长。<br>
+      上面帝国理工那个案例正好是完美示范：<b>"AI 系统最大的问题不是不聪明，而是会瞎紧张——84.6% 的误报率，让整个行业都在做无用功。"</b>一句话里同时给了锚点、问题和数字。</div>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">🎬</span>先写 demo 脚本，再写正经代码</div>
+      <p><span class="tag t-multi">多源印证（四方独立同构）</span></p>
+      <blockquote>"如果你在开始写代码前写不出这个脚本，说明你还不知道自己要做什么……<b>花两小时写脚本，通常能省下六小时去做那些根本不会出现在最终 demo 里的功能。</b>"<br>
+      <span class="src">— AngelHack。五要素：① 一句话问题（<b>绑定一个具体的人</b>，不是一个人群）② before state（今天这人怎么绕过去、代价多少）③ trigger（demo 从哪个动作开始，让评委知道该看哪）④ "aha" moment（唯一一个要评委记住的瞬间）⑤ close（一句话把 demo 接到规模/影响上）</span></blockquote>
+      <blockquote>"从 demo 开始，然后倒着建。我们前两小时在勾勒到底要给评委看什么、用什么输入、输出长什么样、'wow' 的瞬间在哪。<b>每一个架构决策都过一遍'这会让 demo 更好吗'。</b>"<br>
+      <span class="src">— MIT LLM Hackathon for Chemistry and Materials 一等奖，2025-09-25</span></blockquote>
+      <blockquote>"先在提交表里写 elevator pitch 和 project story——<b>这几乎就是你的 demo 视频脚本，而且是在你写第一行代码之前就完成的。</b>"<br>
+      <span class="src">— shemmarie（25 场参赛），Devpost 官方博客</span></blockquote>
+      <blockquote>"没提前写 Demo Story，功能越堆越多，却串不成一个让人记住的场景。" → "🔹开发前先写完整 Demo Story，<b>再反推必须做的功能</b>"<br>
+      <span class="src">— 小红书《熬到凌晨2点》（从失败方向印证）</span></blockquote>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">🛟</span>Plan B：这是全场共识度最高的一条，无人反对</div>
+      <p><span class="tag t-multi">多源印证</span></p>
+      <ul>
+        <li><b>组织方写进规则</b>：Global Public Health Hackathon 2026 在规则里强烈建议准备预录 demo 视频，<b>"以防 live API 调用失败"</b></li>
+        <li><b>评委</b>："录一段 60 秒的工作流程录屏当保险。<b>我评过的大多数活动，wifi 都挂过。</b>"（dev.to/kurbaitaev）</li>
+        <li><b>获奖者实录</b>（中文，最新）："决赛日会场网络拥堵，语音链路直接断连——<b>救场的是前一天晚上录好的完整跑通视频。</b>"（《我给外婆造了部"手机"》，二等奖）</li>
+        <li><b>没准备的后果</b>："第二天路演，场馆网络崩了，在线功能全挂，<b>只能举着手机给观众看之前跑通的页面</b>……"（《熬到凌晨2点》，未获奖）</li>
+        <li><b>又一次实录</b>："路演前两个小时服务器排队、模型接口超时。<b>幸好提前录了备份视频</b>。"（《48小时黑客松insight》）</li>
+        <li><b>连规则临时变更都能接住</b>：John Kim 在剩 2 小时时全队去录视频，"大多数队伍还深陷在代码里"。结果主办方临时宣布因机器人技术故障全部改放录屏——"<b>一半队伍手忙脚乱，但我们早就准备好了。</b>"</li>
+        <li><b>中文侧最直白</b>："视频一定要提前录好，这是你的救命稻草……<b>没有录屏等于没有 Plan B，你就是在裸奔。</b>"</li>
+      </ul>
+      <p>还有一条关键的心理框架，解释了为什么必须有 Plan B：</p>
+      <blockquote>"judges do not penalize you for 'the demo gods being unkind' — <b>they penalize you for not making it to the punchline.</b>"<br>
+      <span class="src">（评委不会因为"演示之神不眷顾"扣你分，只会因为你<b>没走到高潮</b>扣你分）— HackerEarth，⚠️该站 CMS 日期不可信，但这条被 JetBrains 2026-06 的评委原话独立印证</span></blockquote>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">⌛</span>专门解决"等模型输出的尴尬空白"</div>
+      <p><span class="tag t-multi">工程手段有实证，舞台手段是建议</span> 这是 AI 类 demo 独有的问题，值得单独列。</p>
+      <div class="scroller"><table>
+        <tr><th>手段</th><th>具体动作</th><th>效果 / 来源</th></tr>
+        <tr><td class="n"><b>预热</b></td><td><b>App 一初始化就发一次请求</b>，不要等用户第一次操作才发</td><td>"最容易拿到的延迟优化之一，<b>但几乎没人默认这么做</b>"</td></tr>
+        <tr><td class="n"><b>流式输出</b></td><td>SSE / WebSocket 逐 token 推送</td><td>总时长不变，但首 token 毫秒级到达——观众的<b>感知等待从 8 秒变成 80 毫秒</b></td></tr>
+        <tr><td class="n"><b>预生成缓存</b></td><td>提前把 demo 路径跑一遍存成本地 JSON；写 <code>if (apiFail) return cachedResponse</code></td><td>cache hit 直接返回完整结果（~5ms）</td></tr>
+        <tr><td class="n"><b>静态话术缓存</b></td><td>问候、确认、错误提示、导航提示这类固定文案一次生成永久缓存</td><td>能干掉 <b>30–50% 的 API 调用</b></td></tr>
+        <tr><td class="n"><b>Mock + 预填</b></td><td>"能 mock 的全 mock，<b>确保所有表单都已填好</b>，和用户的来回流程顺畅"</td><td>Colin Lowenberg（评委），2026-06</td></tr>
+        <tr><td class="n"><b>视频剪辑</b></td><td>录屏后剪掉延迟</td><td>Gemini Live Agents Challenge "Best of Live Agents" 得主自承："<b>right now the demo hides that lag through video editing.</b>"</td></tr>
+        <tr><td class="n"><b>舞台台词</b><span class="tag t-single">建议</span></td><td>点击提交那一刻<b>嘴里立刻开始讲技术亮点</b>，讲完正好出结果</td><td>把延迟当成叙事节拍而不是事故。<b>绝不静默。</b></td></tr>
+      </table></div>
+    </div>
+
+    <div class="clash">
+      <div class="clash-h">⚔️ 争议 5：mock 到什么程度？</div>
+      <div class="clash-body">
+        <div class="clash-col">
+          <div class="cw">尽量 mock</div>
+          "能 mock 的全 mock，确保所有表单都已填好、和用户的来回流程顺畅。"<span class="src">— Colin Lowenberg（Nebius，评委），2026-06</span>
+        </div>
+        <div class="clash-col">
+          <div class="cw">核心绝不能 mock</div>
+          "不要 mock 任何<b>核心</b>的东西，评委通常看得出来什么是 mock 的，而且会扣分。数据源和第三方 API 需要的话可以 mock，<b>但绝不要 mock 评委专门来看的那个功能。</b>"<span class="src">— AngelHack</span><br><br>
+          John Kim 同口径："happy path 必须能跑。<b>你声称做到的最难那件事，必须真的能用。</b>"
+        </div>
+      </div>
+      <div class="clash-verdict"><b>分界线很清楚：</b>mock 数据源和第三方 API ✅；mock 你 pitch 里号称最难的那件事 ❌。判断方法——问自己"<b>如果评委现在指着这个功能说'再演一次'，我敢不敢？</b>"</div>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">🎙️</span>台上的具体动作</div>
+      <p><span class="tag t-single">单点，但都是可当场执行的</span></p>
+      <ul>
+        <li><b>开场加个梗。</b>"让评委笑出来 = 印象深刻。别平平淡淡开场。"</li>
+        <li><b>超时了也要把话说完。</b>"有人一超时就自动停，大错特错！正确做法：继续说，把核心价值点重述一遍。"</li>
+        <li><b>结尾疯狂点题。</b>"最后一定要说队伍号码和名称！如果涉及投票，再次强调你解决的问题价值。"</li>
+        <li><b>做对比。</b>"'现在大家都是这样做的，但我们可以这样做'，一对比价值感立刻出来。"</li>
+        <li><b>讲清楚"这件事很难"。</b>"技术在路演中占比很小，但关键是：如何让评委知道'这件事很难解决'？<b>不是秀代码，是讲清楚技术壁垒。</b>"</li>
+        <li><b>elevator pitch 是最重要的 30 秒。</b>"评委在你开口的前半分钟就已经形成了判断。"</li>
+        <li><b>只排练开场 30 秒。</b>"大声排练开场三十秒。不是整场 demo，是开场。<b>分数是在那里定下来的。</b>"（评委）</li>
+        <li><b>抱紧 Mentor。</b>"黑客松配的评委/Mentor 就是你的隐藏外挂！时刻交流进度……<b>路演现场 Mentor 会给部分项目站台。</b>"</li>
+      </ul>
+      <p class="src">来源：小红书《黑客松24小时实战｜10条血泪经验分享》《黑客松演示环节怎么办？四招教你稳赢！》《几个参加黑客松之后悟出的血泪教训》；dev.to/kurbaitaev</p>
+      <p>还有一个反直觉但结果说明问题的样本——WAIC 一等奖团队（一个学艺术史的交易者 + 一个退休计算机教师，非技术科班）：</p>
+      <blockquote>"可以继续打磨产品的时间实在有限，<b>我把路演前的两天全部用来打磨路演的演讲。</b>结果是好的，路演结束当天，我们收到了包括来自主办方的大量的好评。"<br>
+      <span class="src">— 小红书《人生第一次黑客松就去WAIC拿一等奖的故事》</span></blockquote>
+    </div>
+
+    <div class="clash">
+      <div class="clash-h">⚔️ 争议 6：被问到没做完的功能，该硬扛还是该交底？</div>
+      <div class="clash-body">
+        <div class="clash-col">
+          <div class="cw">硬扛派</div>
+          "绝对不要被问倒……被问到不会的？别说'这个我没想过'，换成'<b>这是个很好的方向，我们下一步正好计划……</b>'"<span class="src">— 小红书《黑客松演示环节怎么办？》</span><br><br>
+          John Kim：把没做的功能<b>框成设计决策而不是缺口</b>——"我们有意把它砍掉以聚焦核心体验"，听起来远好过"我们时间不够了"。
+        </div>
+        <div class="clash-col">
+          <div class="cw">交底派（评委实证）</div>
+          "对什么能用、什么不能用、怎么实现的，<b>要非常直接</b>。评委看得出你在绕着一个还不存在的功能说话。<b>坦诚反而读起来像自信。</b>"<span class="src">— Avi Press（Scarf 创始人 CEO，评委）</span><br><br>
+          "说'什么都不会崩'的队伍瞬间失去可信度，而点出自己弱点的队伍，得到的比失去的多。<b>承认一个局限，在我的评分表上是加分的。</b>"
+        </div>
+      </div>
+      <div class="clash-verdict"><b>两者可以并存，不能做的只有一件事：含糊其辞。</b>「这是我们有意砍掉的」= 框成设计决策 ✅；「规模化后先崩的是 X」= 主动交底 ✅；「呃……这个……理论上是可以的」= 立刻掉分 ❌。评委原话：<b>"Blur reads as hiding."</b>（含糊会被读成隐瞒）</div>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">❓</span>评委会问的固定问题，提前把答案背下来</div>
+      <p><span class="tag t-judge">评委</span></p>
+      <div class="scroller"><table>
+        <tr><th>问题</th><th>什么答案会掉分</th><th>什么答案会加分</th></tr>
+        <tr><td class="n"><b>"这具体是给谁用的？"</b></td><td>"运动员" —— 这不是答案</td><td>"一个有 4 万粉丝、没有经纪人的地区级格斗选手" —— 这是答案</td></tr>
+        <tr><td class="n"><b>"这个周末你们具体做了哪部分？"</b></td><td>含糊带过</td><td>干净回答，包括"我们把现成件接起来了，新写的部分是这个"</td></tr>
+        <tr><td class="n"><b>"规模化之后最先崩的是什么？"</b></td><td>"没什么会崩" —— 瞬间失去可信度</td><td>点名一个真实的弱点</td></tr>
+        <tr><td class="n"><b>"下个季度，哪个团队能真用起来？"</b></td><td>泛泛而谈</td><td>点名一个具体团队和具体场景</td></tr>
+        <tr><td class="n"><b>"核心那 20% 的逻辑谁写的、怎么工作的？"</b></td><td>解释不了 = 露馅</td><td>能讲清楚差异化那部分</td></tr>
+      </table></div>
+      <p class="src">来源：dev.to/kurbaitaev（前三问）、AI Beavers 评委指南 2026-04-25（第四问）、HackerEarth（第五问，⚠️日期不可信）</p>
+      <p>线上赛的版本更狠——HackerRank 六月赛第 1 名（15,295 报名 / 2,039 交付可跑 agent），赛制含 30 分钟真人语音答辩，AI 评委已提前读完代码、输出和全部对话记录：</p>
+      <blockquote>"我的答辩分（30 分里拿 25.2）比代码分更能拉开我和后两名的差距。<b>我们的代码分相差不到半分。build 让你进门，答辩决定名次。</b>"<br><br>
+      "我做的最高杠杆的一件事：<b>让 AI 编程助手扮演评委，跑了一次完整的模拟答辩</b>，一题一题过我预期会被追问的东西，反复打磨答案直到精确而不是啰嗦。"<br>
+      <span class="src">— Sristee Shrivastava，2026-06-30。评委问题的形状："为什么选单 agent 而不是多 agent pipeline，<b>另一种方案具体会在哪里损失准确率</b>？"</span></blockquote>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">🚮</span>这些东西不加分（评委实测）</div>
+      <p><span class="tag t-judge">评委</span> 连判三场的评委列的"没能影响我打分的项"：</p>
+      <ul>
+        <li><b>超过"可读"程度的 UI 打磨</b>——"过了某个点，反而让我怀疑后端的时间去哪了"</li>
+        <li><b>技术栈选择</b>——"没有人因为用了某个栈而得分更高"</li>
+        <li><b>团队规模与履历</b>——"单人参赛者表现得也很好"</li>
+        <li><b>Slide deck</b>——"它们只是在填时间，不构成说服。<b>我唯一想要的一页 slide，是那个东西跑起来的一张截图，用来在 wifi 挂掉时兜底。</b>"</li>
+      </ul>
+      <div class="clash">
+        <div class="clash-h">⚔️ 争议 7：slides 到底要不要？</div>
+        <div class="clash-body">
+          <div class="clash-col">
+            <div class="cw">要，而且是决胜点</div>
+            "我真心认为我们赢下 MadHacks 2023，是因为我们花了整个上午练习和打磨 pitch。"（Jeremy Kintana，6 战 6 中）<br>
+            硬规则：<b>一页一个概念、10 英尺外能读清、每页最多 20 词（理想 10 词）、不用 bullet point、最多 3 个颜色。</b>（Kavisha Mathur）
+          </div>
+          <div class="clash-col">
+            <div class="cw">不要</div>
+            "Slide decks. They fill time. They do not persuade."（dev.to/kurbaitaev）<br>
+            Devpost 官方博客里 25 场参赛者 shemmarie 也说：视频要"短、有意思、<b>不要幻灯片/deck</b>、视觉上吸引人"。<br>
+            MLH 更直接：<b>"不鼓励做 pitch 和演示。"</b>
+          </div>
+        </div>
+        <div class="clash-verdict"><b>看赛制。</b>报到时就该问清楚：<b>有没有 slides？能不能边放边讲？给多长时间？是一对一走桌还是面对评委团？</b>——"路演"和"走桌 demo"是两种完全不同的打法，MLH 体系（走桌）和厂商赛（路演/视频）在这条上正好相反。</div>
+      </div>
+    </div>
+
+    <div class="takeaway">
+      <b>Takeaway ——</b> 把 demo 当成产品本身来做。三个不能省的动作：<b>① 先写 demo 脚本再写代码　② 录一段 60 秒备份录屏　③ 大声排练开场 30 秒</b>。这三件加起来不超过 3 小时，但覆盖了评委打分的绝大部分。
+    </div>
+  </div>
+</section>
+
+<!-- ========== 第4章 ========== -->
+<section class="ch" id="c4">
+  <div class="ch-head">
+    <div class="no">CHAPTER 04 · 补充线（你没问，但信号很强）</div>
+    <h2>赛前准备：赢家在开赛前就已经领先 6 小时</h2>
+    <div class="sub">"没有这些准备，活动的前六小时都花在配环境而不是搭东西上，丢掉这六小时的队伍很少能追回来。"</div>
+  </div>
+  <div class="ch-body">
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">📜</span>报名之前：先读一遍参赛条款，你的作品可能不完全属于你</div>
+      <p><span class="tag t-judge">评委/参赛者双身份</span><span class="tag t-neg">反向</span> 这条来自一个很有意思的案例。调查记者 Henk van Ess 在 Anthropic 那场黑客松里做了个叫 <b>FlipSide</b> 的工具——用"对抗性语义分析"双重阅读合同，同时展示"消费者以为的意思"和"条款的实际含义"。</p>
+      <p>然后他<b>把这个工具用在了黑客松自己的参赛条款上</b>：</p>
+      <blockquote>检测结果：<b>"主观行为政策 + 无条件 IP 许可 = 他们无限期保留你的作品。"</b><br>
+      <span class="src">— 该发现所依据的论文已提交 CHI 2026 会议。转述自公众号《黑客松获奖案例：发现2026年AI创业的六大范式》（碳硅边界，2026-02-24）</span></blockquote>
+      <div class="warn">
+        <div class="wh">⚠️ 报名前值得花 10 分钟确认的三件事</div>
+        <b>① IP 归属</b>——赛事条款里有没有"无条件许可"（unconditional license）？你的作品赛后还能不能自己商业化？<br>
+        <b>② 行为条款的主观性</b>——"主观行为政策"意味着主办方可以单方面判定并据此处理你的作品。<br>
+        <b>③ 保留期限</b>——是"活动期间"还是"无限期"？<br>
+        这三条对<b>打算把黑客松作品继续做成产品的人</b>尤其关键——第 7 章里"值得参加的六条判据"其中一条就是"结束之后有真实下文"，而条款直接决定了你有没有"下文"的权利。
+      </div>
+      <p class="src">⚠️ 诚实标注：这是<b>单一来源的转述</b>，我没有拿到该黑客松条款原文逐条核对，也没有验证"无限期保留"这一判定是否成立。<b>请当作"该去核对条款"的提醒，而不是对某场赛事的结论。</b>不同赛事条款差别很大，MLH 体系就明确要求作品赛后保持公开、归作者所有。</p>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">🧰</span>提前搭完的是"环境"，不是"项目"</div>
+      <p><span class="tag t-judge">主办方</span> AngelHack 的赛前清单：boilerplate、部署流水线、账号权限、<b>赞助商赛道的 API key</b>、sandbox/testnet 权限（申请周期比想象长）、一条已经端到端测过的 build pipeline。</p>
+      <p>这条在 Hacker News 上 2010 年就有一模一样的说法："如果你在浪费时间下载安装队里其他人已经在用的软件，那全是浪费的时间。"——16 年过去没变过。</p>
+      <blockquote>"提前整理好通用代码框架、基础设计素材、行业数据报告，<b>不用提前做完整个项目，但要把底层模板备好</b>，把时间留给创意优化和现场调试。"<br>
+      <span class="src">— 小红书《港大Jennie｜AI黑客松备赛分享》</span></blockquote>
+      <div class="warn">
+        <div class="wh">⚠️ 边界在哪：MLH 官方作弊核查会查这些</div>
+        GitHub 是否<b>赛前就开始提交</b>？是否活动一开始就一个巨型 commit？README 里是否提到<b>别的赛事</b>？<b>每个队员都有贡献吗</b>？单人选手一个周末做出过于高级的项目？视频/录屏里的<b>时间戳</b>是否落在比赛周末？视频<b>发布时间</b>是否在比赛周末？这个项目<b>是否投过别的黑客松</b>？<br>
+        <span class="src">— <a href="https://guide.mlh.com/general-information/judging-and-submissions/cheating-check">MLH Cheating Check</a>（官方，所有获奖项目都会被查）</span><br>
+        <b>合规的准备范围</b>：环境、脚手架、API key、能力清单 ✅；项目代码 ❌。<b>但"点子"通常不在限制之列</b>——6 战 6 中的人明说："规则要求所有代码在比赛期间产生，但注意，这句话<b>没说点子</b>。"<br>
+        另有官方"Delta 评分"制度：Global Public Health Hackathon 2026 规定带既有代码参赛必须提交周末前的项目状态日志，<b>评委只给窗口内新增的部分打分</b>。
+      </div>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">🍽️</span>把自己的能力拆成模块，现场组队直接"报菜名"</div>
+      <p><span class="tag t-single">单点，但极其可执行</span></p>
+      <blockquote>"提前把自己的能力拆成模块：<b>AI 结构化输出 / Agent 工作流 / 后端接口</b>，现场组队直接报菜名。"<br>
+      <span class="src">— 小红书《熬到凌晨2点，我在黑客松学到的3件事》</span></blockquote>
+      <p>低技术版本（现场找队友的土办法，回头率据说 80%）：<strong>"在纸板上写下你的需求，然后拿着纸板闲逛。"</strong></p>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">🤝</span>现场 social 的四个动作（给社恐的）</div>
+      <p><span class="tag t-single">单点，但很具体</span> 来自 Cursor 邀请的黑客松：</p>
+      <div class="checklist">
+        <h4>✅ 10 分钟融入现场</h4>
+        <ul>
+          <li><b>前几个人先硬着头皮开口</b>——"当作小小热身，先让自己从'旁观者'进入'参与者'"</li>
+          <li><b>带着目标去</b>——"提前想清楚：你想找技术伙伴、用户、投资人，还是行业资源？<b>目标是筛选器，关键词是信号。</b>"</li>
+          <li><b>准备好自己的四句话</b>——我是谁 / 我在做过什么 / 我能提供什么 / 我在寻找什么。"名校、大厂的背书能降低信任成本，但<b>光环只能帮你拿到注意力</b>"</li>
+          <li><b>随身带"可以拿出来 share 的东西"</b>——"不要只说'我对 AI 很感兴趣'，太泛泛了。准备一个 Demo、作品，甚至你近期用到、学到、思考过的内容。<b>兴趣很容易表达，具体东西才能证明你真的做过。</b>"</li>
+        </ul>
+        <span class="src">— 小红书《文科生如何10分钟之内融入黑客松cafe chat》</span>
+      </div>
+      <p>这条和第 0 章"赞助商就是评委"直接相连——<strong>现场 social 不是社交，是情报采集</strong>。另一条中文侧的印证："社交=刷印象分……多聊聊大家的想法、思维逻辑，刷个脸熟，<b>投票时别人自然会想到你</b>。"</p>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">🔒</span>技术栈用最熟的，绝不现学</div>
+      <p><span class="tag t-multi">多源印证</span></p>
+      <ul>
+        <li>"不要拿新语言或新 web 框架做实验，那只会拖慢你……<b>这不是尝试'本月最佳 JavaScript 框架'的时间和场合。</b>"（Nick Singh）</li>
+        <li>"用你已经熟悉的工具，<b>和你已经熟悉的人</b>一起工作。"（Jan-Niklas Wortmann / JetBrains 评委）</li>
+        <li>"如果你必须用某个特殊的库，<b>赛前就去试</b>。你绝不想在比赛中途才发现这个库的文档很烂。"（Reddit r/hackathon）</li>
+        <li>"折腾了快一天，最后换了一个更笨但更稳的方案，半小时就跑通了。<b>稳定性大于先进性。</b>选技术方案时问自己一句：<b>如果明天就要 demo，这个方案我敢不敢？</b>"（《48小时黑客松insight》）</li>
+        <li>反向补充：Jan-Niklas 还说 "<b>shipping a good demo matters more than having the most reliable, highest-quality code.</b> A hackathon rewards the working demo, not the clean architecture nobody sees."</li>
+      </ul>
+    </div>
+
+    <div class="takeaway">
+      <b>Takeaway ——</b> 赛前准备的分水岭是<b>「可复用的」vs「项目专属的」</b>：环境、脚手架、密钥、能力清单、社交话术都可以提前备；项目代码不行。这条线画清楚，你能在开赛时比别人领先 6 小时，还不违规。
+    </div>
+  </div>
+</section>
+
+<!-- ========== 第5章 ========== -->
+<section class="ch" id="c5">
+  <div class="ch-head">
+    <div class="no">CHAPTER 05 · 2025–2026 新变量</div>
+    <h2>AI 时代特有的坑：技术平权之后，比什么？</h2>
+    <div class="sub">这一章是本次调研里信号最新的部分。</div>
+  </div>
+  <div class="ch-body">
+
+    <div class="big">
+      <b>2026 年最大的规则变化：评委开始用 AI 逐行核对"你说的"和"你交的"。</b>吹牛成本第一次被量化了。
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">🔬</span>Devfolio 的 AI 审计层：claim ↔ code 对账</div>
+      <p><span class="tag t-judge">平台官方</span> Devfolio 做的不是"AI 评委"，而是 <b>evidence layer</b>——agent 用 <code>read</code>/<code>grep</code>/<code>ls</code> 走一遍仓库，逐条核对 pitch 里的 claim 与代码是否对得上，产出带 <code>file:line</code> 引用的审计。</p>
+      <blockquote>"It can notice that a team claimed a custom model and <b>shipped a wrapper</b>. It can notice that a README describes a backend the repo does not contain."<br><br>
+      实际扣分记录：<b>"Reduced Technical Execution from 8 → 5.</b> The submission claims 'multi-tenant isolation with row-level security,' but <code>db/policies.sql</code> only checks that a user is authenticated."<br><br>
+      另一例：<b>"docked Originality from 7→4"</b>，因为 <code>src/model.ts:42</code> 显示所谓"自研架构"其实是 <code>transformers.AutoModel.from_pretrained('bert-base-uncased')</code>。<br>
+      <span class="src">— Swarnim Walavalkar，《The Discerning Machine》，Devfolio Blog，2026-05-18</span></blockquote>
+      <p>同文里对参赛者最有杀伤力的一句：</p>
+      <blockquote>"<b>A polished README becomes a longer list of claims to check. A blank README has less to disprove.</b>"<br>
+      <span class="src">（精美的 README 只是变成一张更长的待核对清单；空白 README 反而没什么可被证伪的）</span></blockquote>
+      <div class="know">
+        <div class="kh">💡 这条的可执行含义</div>
+        <b>不是"少写 README"</b>——README 在多数赛制里是加分项。是<b>"写的每一句技术宣称，都要能在仓库里指到具体文件"</b>。<br>
+        实操：提交前把 pitch 和 README 逐句过一遍，指不到文件的那句<b>直接删掉</b>。少吹一点、句句可查，比吹满被砍分划算。
+      </div>
+      <p>同源的另外两个观察：出现了 <b>"feature stuffing"</b>（AI 让堆功能变廉价，于是大家堆功能）；以及<b>评委反馈"现在所有项目的设计看起来都一样"</b>——建议参赛者把 AI 省下来的时间投到设计质量上。</p>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">⚖️</span>技术平权之后，赢家给的答案：故事 + 审美</div>
+      <p><span class="tag t-single">单点，但是一等奖的第一人称</span></p>
+      <blockquote>"所有人都在用 AI 写代码。<b>技术门槛被拉平了。</b>48 小时，每个队都能极速产出 demo。<b>那评委在看什么？你在讲什么故事。你的产品完不完整。</b>"<br><br>
+      "故事是最难的。因为技术平权了，demo 谁都能出——但'这个东西到底在解决谁的什么问题'，<b>这个问题 AI 回答不了，只有你能回答。</b>"<br><br>
+      "AI 让你更快地产出了，但<b>如果没有审美，你只是更快地产出没有审美的东西。</b>"<br><br>
+      "在写第一行代码之前，我先回答了一个问题：<b>'用户看到这个产品，会联想到什么？'</b>……如果要问为什么我们能得一等奖，一定要分享一个点：<b>先定调，再动手。</b>"<br>
+      <span class="src">— 小红书《黑客松拿了一等奖，不是因为我代码写得最好》</span></blockquote>
+      <p>评委侧的独立呼应：<b>"AI 把'做出来'这件事变得更容易，但分水岭更清晰了……当'能做出来'不再稀缺，大家会更快被拉回到基本问题：你到底在解决什么真实需求？最小闭环能不能成立？"</b></p>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">🎮</span>一份完整的 AI 黑客松工作流实录（得奖，游戏方向）</div>
+      <p><span class="tag t-single">单点，但过程颗粒度最细</span> 这是本次调研里唯一一份把"AI 到底帮了什么、哪里必须靠人"拆到工序级的复盘：</p>
+      <ul>
+        <li><b>赛前一周先试工具，不直接写。</b>试了 Pencil（偏设计工具，非素材流水线）、MuleRun（偏 agent 托管），最后选定 <code>Claude-Code-Game-Studios</code>——"它最有价值的地方不是自动生成游戏，而是<b>把 Claude Code 的工作方式组织成一个更像游戏工作室的流程</b>：多个专职 agent、成套工作流和规则、强调文档分工校验"</li>
+        <li><b>先用 ChatGPT 把需求收敛成文档，再交给编码。</b>"这一步很重要，因为 <b>AI 编码最怕需求模糊。文档越清楚，返工越少。</b>"</li>
+        <li><b>真正编码时间不到 4 小时</b>——"最花时间的其实不是写代码，而是把需求讲清楚"</li>
+        <li><b>赛题"你只能做一件事"反而帮他做了减法</b>：玩家只负责移动、技能自动化、AI 参与叙事和决策。"操作复杂度一下就降下来了，同时 AI 的存在也不再是噱头"</li>
+      </ul>
+      <p><b>AI 的能力边界，他给了两条很具体的判断：</b></p>
+      <blockquote>"AI 很擅长先把'能跑的东西'搭出来，但比赛里真正拉开差距的，还是<b>画面、反馈和节奏</b>。"<br><br>
+      "AI 更擅长生成<b>大画面</b>，不太擅长生成<b>小而清晰、可直接拿来做角色头像的平面图标</b>。"<br><br>
+      "<b>AI 可以很快给你一个 60 分版本，但从 60 分到 80 分，还是要靠非常具体的反馈和反复调优。</b>"<br>
+      <span class="src">— 公众号《一次 AI 游戏黑客松复盘：从灵感、踩坑到最终得奖》（狮子的牙齿，2026-03-31）</span></blockquote>
+      <p>最后的技术组合与一句总结：<b>Claude Code 主力编码 / ChatGPT 整理需求 / Gemini 音效与视觉素材 / PS 手动做遮罩切图</b>。</p>
+      <blockquote>"AI 做游戏已经不是'能不能做'的问题，而是<b>'你会不会组织它'</b>的问题。"<br>
+      "对我来说，这次不是'AI 替我做游戏'，而是<b>'我学会了怎么组织 AI 做游戏'</b>。"</blockquote>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">🪤</span>失败方的诚实复盘：难的不是写代码，是"结构化"和"审美标准"</div>
+      <p><span class="tag t-neg">反向</span><span class="tag t-single">单点</span> 一位数据分析师，公司内部赛 200+ 队进 45 强、<b>没进 15 强决赛</b>。她指出的卡点比获奖帖更有信息量：</p>
+      <blockquote>"很多人觉得现在用 AI 写代码、画原型、生成视频都不难，确实如此。<b>但真正的难点在于'结构化'和'审美标准'（taste）。</b>"<br><br>
+      "当我试图将美发师复杂的营销逻辑（比如 Before/After 的完美对比）提炼成 Agent 能够稳定执行的<b>标准化流程</b>时，我卡壳了。短时间内，在一个自己不熟悉的非标行业里，<b>把'美感'和'网感'变成结构化的代码逻辑，真的太难了。</b>"<br><br>
+      "虽然我能总结出爆款的表面规律，但因为缺乏欧美发型师的真实体感，我很难深刻理解'用户为什么买单'。<b>我只能看到表象。</b>这恰恰证明了：<b>真实的行业经验和对特定垂类场景的深度理解，依然是极高的护城河。</b>"<br>
+      <span class="src">— 公众号《AI黑客松比赛真实复盘：200支团队突围前45》（艾理Emily，2026-03-10）</span></blockquote>
+      <p>她做对的一件事值得单独抄——<b>选场景时的减法逻辑</b>：面对众多海外中小商家场景，最终<b>放弃餐饮、选美发</b>，理由是三条可验证的判断：① 短时间内保证 MVP 效果必须只打透一个场景；② 美发行业<b>利润率更好、商家更愿意付钱</b>；③ 发型的 <b>Before/After 视觉呈现在社媒上更容易出效果</b>（= 可演示性强）。</p>
+      <p class="src">👉 注意这和第 1 章那三个选题维度（需求强度 / 可演示性 / 赛道契合）是同一套东西，只是她用在了"选哪个行业"而不是"选哪个点子"上。</p>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">🎭</span>"answer" vs "act"：2026 年的分水岭</div>
+      <p><span class="tag t-single">观点，但表述最锋利</span></p>
+      <blockquote>"There's a meaningful difference between a tool that <b>answers</b> and a tool that <b>acts</b>."<br>
+      <span class="src">（一个"回答"的工具和一个"行动"的工具，有本质区别）— Claude Code Hackathon 指南，2026-04-20</span></blockquote>
+      <p>配套的反模式清单：❌ 花哨界面 + "看它能干啥"式演示　❌ 单 prompt 工具（评委已经看腻）　❌ 野心大但做一半（"<b>一个打磨好的可用 MVP 每一次都打败一个野心勃勃的半成品</b>"）</p>
+      <p>✅ 正面判据：一句话答得出 <b>"who is this for, and what does their day look like without it?"</b>；具体到"这个工具帮工程师每周省 3 小时"；"<b>最好的提交可以直接当 YC 申请用</b>"。</p>
+      <p><span class="tag t-judge">官方规则印证</span> 多个 2026 Claude 系黑客松的 Technical Execution 明确写：判断 Claude 是不是"<b>让这个项目成立的核心，而不是加上去的</b>"（core to what makes the project work rather than just added on）。</p>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">🤖</span>AI 写的代码"看起来完美、跑起来没报错，但算的根本不是你要的东西"</div>
+      <p><span class="tag t-multi">多源印证</span></p>
+      <blockquote>"AI 负责样板代码、集成胶水和 UI 脚手架。<b>新颖的逻辑手写</b>，因为评委会追问你代码里差异化的部分，如果你解释不了，他们会察觉到那个断层。调试 AI 代码有时比自己写还慢，这意味着瓶颈从生成转移到了验证。"<br>
+      <span class="src">— AngelHack，2026-06</span></blockquote>
+      <blockquote>团队中途发现 AI 写的向量相似度函数"<b>看起来毫无瑕疵、运行也不报错，但它压根没在计算我们需要的相似度分数</b>"。结论："即使在黑客松的冲刺里，人工验证也是不可协商的。"<br>
+      <span class="src">— Klaviyo 团队，55 队取 3 的 Grand Prize，2025-09-08</span></blockquote>
+      <p>行业侧的同向表述：<b>"Agents can generate code faster than humans can verify it. The bottleneck has shifted from writing speed to review capacity."</b></p>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">📐</span>eval 已经从"加分项"变成"必答题"</div>
+      <p><span class="tag t-judge">主办方</span> AngelHack 2026 agent 黑客松 playbook 给出的标准五指标（组织方提供<b>共享 eval harness，让队伍从 day 1 就对着它建</b>）：</p>
+      <div class="scroller"><table>
+        <tr><th>指标</th><th>定义</th></tr>
+        <tr><td class="n"><b>Task completion rate</b></td><td>测试场景中达成目标的百分比</td></tr>
+        <tr><td class="n"><b>Tool-use accuracy</b></td><td>agent 是否在正确的步骤调用了正确的工具</td></tr>
+        <tr><td class="n"><b>Cost per run</b></td><td>每个成功任务的 token 花费与 API 成本</td></tr>
+        <tr><td class="n"><b>Latency</b></td><td>从 prompt 到完成的时间</td></tr>
+        <tr><td class="n"><b>Hallucination rate</b></td><td>虚假陈述或编造工具调用的频率</td></tr>
+      </table></div>
+      <p>获奖项目正在把"可验证性"做成卖点：</p>
+      <ul>
+        <li><b>LORE</b>（GitLab 2026 大奖）：8 个协同 agent + 知识图谱路由 + <b>43 个测试</b>（黑客松项目里罕见的严谨）。评委 April Guo 原话：<b>"This feels like a product, not a hackathon project."</b></li>
+        <li><b>Sim Francisco</b>（Anthropic Build Day 第二名）：1 万个基于人口普查的合成居民数字孪生；<b>预测 2024 大选 81.3% vs 实际 83.8%</b>——即"自带 eval 结果"</li>
+        <li><b>Tekton</b>（第一名）：3D 重建唐代建筑，<b>每个组件可溯源到历史出处</b>；用独立 verifier 子 agent + 自纠错循环</li>
+        <li><b>Aegis</b>（GitLab Runner Up）：每个决策都给可解释理由 + <b>已部署到 Google Cloud、production-ready</b></li>
+        <li><b>Klaviyo</b>：每条建议<b>带历史事故引用</b>——"This matches incident 2025-06-28 where throttling to 15% resolved database timeouts within 20 minutes."</li>
+      </ul>
+      <div class="know">
+        <div class="kh">💡 共同模式（归纳）</div>
+        赢的项目都在 demo 里<b>露出了"可验证性"</b>——测试数、溯源链、eval 对照、决策解释。<b>这正好是"套壳"最难伪造的东西。</b>
+      </div>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">🔍</span>评委会对你的核心主张做"对抗性实测"</div>
+      <p><span class="tag t-judge">评委</span> AI Slop Scan Hackathon（43 支队伍）评委、CNCF Kubestronaut、KubeCon 安全赛道程序委员：</p>
+      <blockquote>"在程序委员会待久了你会很快学到：<b>呈现质量和实质内容是两个独立变量。</b>有些最差的投稿排版最漂亮，有些最好的看起来很糙。所以你不再读它的主张，而是开始测试它……<b>我不问这个工具说不说自己能抓 slop，我问的是：我故意喂它 slop 的时候，它抓到了吗？</b>"<br><br>
+      结果：把一段 AI 生成的招聘启事喂给某检测工具，工具给了 100 和 91 分（判为真人写的）。检测准确率直接打 0 分。<br>
+      <span class="src">— Myroslav Mishov 访谈，2026-06-26</span></blockquote>
+      <p>他给的最高分给了一个<strong>主动换问题</strong>的队伍——不做"这是不是 AI 写的"（不可证伪），改做"这段文字是否显示出思考痕迹"（可测量）：</p>
+      <blockquote>"A detector built on a verifiable question can be tested, debugged, and trusted. <b>A detector built on an unfalsifiable one can only be believed.</b>"</blockquote>
+      <p class="src">👉 <b>直接含义：</b>如果你的项目核心主张是"我能识别/判断/检测某件事"，假设评委会当场拿一个刁钻样本喂给它。要么保证核心能力真的稳，要么把问题重新定义成可测量的版本。<b>不要把不可证伪的主张写进 pitch 的第一句。</b></p>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">📈</span>一组行业背景数据</div>
+      <p><span class="tag t-judge">平台数据</span> Devpost AI Trends Report 2026（⚠️页面未标日期）：</p>
+      <ul>
+        <li>企业 AI 黑客松<b>同比增长 83%</b>（2025）</li>
+        <li><b>社区赛每 4 份提交有 1 份是 agentic</b>；企业赛是 1/10；预计 2026 年底分别到 1/3 和 1/5</li>
+        <li><b>"参加过 6 场以上黑客松的开发者，把 AI 项目推上生产环境的比率是新手的 2.2 倍。"</b></li>
+      </ul>
+      <p class="src">主办方侧的反面警告：AngelHack 列的五大坑之一是 <b>"Missing deployment pathways"</b>——"获奖原型最后躺在 Notion 文件夹里"；另一个坑是 <b>"judges score videos and vibes"</b>（评审不一致）。</p>
+    </div>
+
+    <div class="takeaway">
+      <b>Takeaway ——</b> AI 时代的胜负手前移了：<b>从"能不能实现"移到了"该不该做 + 你能不能证明"</b>。三个动作：把 AI 用在胶水和脚手架上、把人留在选题判断和核心逻辑上；<b>说出口的每句技术话都要能指到文件</b>；在 demo 里主动露出可验证性（测试数 / eval / 溯源）。
+    </div>
+  </div>
+</section>
+
+<!-- ========== 第6章 提交页 ========== -->
+<section class="ch" id="c6">
+  <div class="ch-head">
+    <div class="no">CHAPTER 06 · 线上赛专章</div>
+    <h2>提交页与 demo 视频：很多人在这里白输</h2>
+    <div class="sub">线上赛里，视频 + 提交页就是全部——评委可能根本不跑你的代码。</div>
+  </div>
+  <div class="ch-body">
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">📹</span>视频的硬规矩（各家官方原文）</div>
+      <div class="scroller"><table>
+        <tr><th>主办方</th><th>视频要求</th><th>代码/README</th><th>其他硬性</th></tr>
+        <tr>
+          <td class="n"><b>MLH</b></td>
+          <td><b>2 分钟以内</b>；<b>必须在比赛当周末制作</b>；<b>开头必须报出赛事名</b>（"Hey I'm Sam and this is my demo for CorgiHacks."）；赛后必须保持 public，否则<b>改选他人</b>。原文强调：<b>"视频应该是 demo，不是 presentation"</b></td>
+          <td>代码必须公开，赛后保持 public，否则改选他人</td>
+          <td>不得一稿多投；不得含赛前工作；<b>AI 工具必须在提交里列出并如实回答</b></td>
+        </tr>
+        <tr>
+          <td class="n"><b>OpenAI Build Week</b><br>（2026-07）</td>
+          <td><b>少于 3 分钟</b>，"<b>Judges are not required to watch beyond three minutes</b>"；必须有音频；<b>必须传 YouTube 且公开</b></td>
+          <td>仓库 public，或 private 但分享给指定邮箱。<b>README 硬要求</b>："描述你在整个项目中如何与 Codex 协作……<b>这是评委评估技术实现和点子质量的重要部分。</b>"</td>
+          <td>需提供 Codex Session ID；旧项目须提供时间戳日志证明新增部分；<b>"Judges are not required to test the Project"</b>（可能只看视频+文字）</td>
+        </tr>
+        <tr>
+          <td class="n"><b>Gemini 3</b></td>
+          <td>超过 3 分钟的内容<b>可能不被评委观看</b></td>
+          <td>Presentation 项明列会看 <b>"documentation or an architectural diagram"</b></td>
+          <td>Stage One 先 pass/fail 查全部要件</td>
+        </tr>
+        <tr>
+          <td class="n"><b>SoCal CBC</b><br>（Anthropic 生态）</td>
+          <td>—</td>
+          <td>必须公开 GitHub</td>
+          <td>项目描述<b>必须覆盖</b>：解决什么问题给谁 / 技术概览 / <b>可能出什么错、做了什么防护</b> / 如何"赋能而非替代人" / 伦理考量。<b>Mockups-only 不参与 top prizes</b></td>
+        </tr>
+        <tr>
+          <td class="n"><b>Devpost 通用</b></td>
+          <td>必须公开托管在 YouTube 或 Vimeo 才能嵌入给评委</td>
+          <td>常见必填：仓库 URL、MIT License、"黑客松期间你如何改进了项目"的说明</td>
+          <td>缩略图 3:2、≤5MB；文件 ≤35MB。<b>带 Devpost 预审图标的赛事：提前 1 周提交可获官方资格预检</b></td>
+        </tr>
+      </table></div>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">🎞️</span>视频怎么剪（官方 + 多冠选手）</div>
+      <ul>
+        <li><b>先写脚本，按秒切分</b>：开场多少秒 / 讲 idea 多少秒 / 讲组件多少秒 / 实际 demo 多少秒 / 收尾多少秒</li>
+        <li><b>别用 ChatGPT 写脚本</b>——"它的输出往往太泛，而且<b>它不会比你更懂怎么描述你的项目</b>"（Thegu5，10 场参赛）</li>
+        <li><b>开头就要总览</b>——"评委很可能连着看好几个项目，所以一定要<b>用一个快速总览开场</b>"</li>
+        <li><b>60/40 法则</b>——"花 <b>60% 时间解释、40% 真正演示</b>"（Nathan，40 场参赛 / 30+ 奖项）</li>
+        <li><b>不要放幻灯片</b>——"短、有意思（<b>不要 slide show / deck</b>）、视觉上吸引人"（shemmarie，25 场参赛）</li>
+        <li><b>别为压时长加速音频</b>；用你最熟的工具（PPT / Google Slides / OBS / Canva），别在赛中学新工具</li>
+        <li><b>留 2–3 小时</b>给打磨、录制、上传；很多赛事不给延期，<b>没做完视频 = 直接失格</b></li>
+        <li><b>检查 YouTube 权限设置</b>——Devpost 官方点名这个坑（设成 private 评委看不到）</li>
+        <li><b>录两遍</b>，一遍是备份（AngelHack）</li>
+      </ul>
+      <p class="src">来源：<a href="https://info.devpost.com/blog/6-tips-for-making-a-hackathon-demo-video">Devpost《6 tips for making a hackathon demo video》</a>（社区贡献者含 151 场参赛的 Babatunde Onabajo）、<a href="https://info.devpost.com/blog/user-story-nathan">Devpost 专访 Nathan</a>（⚠️两页均未标日期）</p>
+      <blockquote>"The demo video gives the most amount of scope... the video becomes crucial in giving us our first indicator of <b>how much time was invested</b>."<br>
+      <span class="src">— Richard Moot（Square 评委）</span></blockquote>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">📄</span>提交页：Devpost 官方模板 + 一个冠军的实际做法</div>
+      <p>官方 project story 标准结构：</p>
+      <blockquote><code>## Inspiration → ## What it does → ## How we built it → ## Challenges we ran into → ## Accomplishments that we're proud of → ## What we learned → ## What's next → ## Built With</code>（Built With 里<b>赞助商工具必须打上标签</b>）</blockquote>
+      <p><b>EcoLafaek</b>（AWS AI Agent Global Hackathon 冠军）在这个模板上多做的六件事，可直接抄：</p>
+      <div class="checklist">
+        <h4>✅ 冠军提交页做对了什么</h4>
+        <ul>
+          <li><b>标题行下方立刻放 Live Demo + Documentation 两个链接</b>——评委不用找</li>
+          <li><b>Inspiration 里放第三方权威数据</b>——引用 JICA 调查"Dili 每天产生 300+ 吨垃圾、100+ 吨未被收运"。不是"我觉得这个问题很重要"，是<b>可核查的数字</b></li>
+          <li><b>How we built it 直接嵌架构图</b> + 指向独立架构文档站</li>
+          <li><b>Challenges 写具体技术坑 + 解法</b>（多轮 tool calling 顺序错乱 → 改 tool description schema、加系统提示、加对话历史）——这正是 AI 审计最难挑刺的写法</li>
+          <li><b>Accomplishments 用可验证运行数据</b>：线上域名、50+ 条真实上报、3+ 活跃用户、25+ agent 交互。小标题就叫 <b>"Production Deployment with Real Users"</b></li>
+          <li>结尾加自定义章节 <b>"Impact Metrics We're Tracking"</b>（超出模板）</li>
+        </ul>
+      </div>
+      <p>AWS 官方获奖评语的措辞值得反推：<b>"impressively leverages multi-modal reasoning and AgentCore to autonomously chain tools"</b> + <b>"effectively empowers the community to tackle the over 100 tons of daily uncollected waste"</b>——即<strong>技术手法名词 + 量化影响</strong>，与其 50% Technical Execution / 20% Impact 的权重完全对应。</p>
+      <p class="src">另一条来自 40 场参赛者：<b>留至少 15% 的赛程做提交打磨</b>；用 <b>GIF + 内嵌图片 + Markdown 加粗关键词</b> 抓评委注意力。</p>
+    </div>
+
+    <div class="takeaway">
+      <b>Takeaway ——</b> 线上赛的提交页不是"交作业"，是<b>你唯一的销售页面</b>。三条硬约束记死：<b>视频 ≤3 分钟（MLH ≤2 分钟）、YouTube 公开、留 15% 赛程做提交</b>。三条软技巧：<b>顶部放可点的 Live Demo、Inspiration 用可核查数字、Accomplishments 用真实运行数据</b>。
+    </div>
+  </div>
+</section>
+
+<!-- ========== 第7章 反向 ========== -->
+<section class="ch" id="c7">
+  <div class="ch-head">
+    <div class="no">CHAPTER 07 · 反向证据（最值钱的一章）</div>
+    <h2>也有人参加完就祛魅了，理由值得看</h2>
+    <div class="sub">小红书上获奖帖远多于失败帖，幸存者偏差严重。这一章专门放反面。</div>
+  </div>
+  <div class="ch-body">
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">💢</span>反向 1：AdventureX 现场差评（两篇独立，同一届）</div>
+      <p><span class="tag t-neg">反向</span></p>
+      <blockquote>"①审核乱……我的申请一直卡在第一步（卡了大概两周），一直到正式开始前一天晚上十点钟才告知被拒绝。<br>
+      ②管理乱……有些小展台都不在主会场也没有提示。<br>
+      ③产品很无聊，是真的很无聊。<b>单纯做 ai tool 卖 token 的公司得有十家</b>，宣传不同黑客松的得有五家……很多公司要么硬件功能完全不闭合要么根本没带硬件来。<br>
+      ⑤是性压抑交友平台，是精英主义炫耀平台，是小红书博主探店平台……总体呈现一种<b>自我狂欢且浮躁</b>之感。"<br>
+      <span class="src">— 小红书《AdventureX极其混乱。》102 条评论。作者置顶评论："真情实感的写的帖子已然是被工作人员攻击了"</span></blockquote>
+      <blockquote>"就算有 AI 编码工具加持，短短五天的开发周期里，参赛作品大多<b>只是拼接现有接口</b>……整场活动技术氛围很淡，反而充满浮躁的圈层狂欢。"<br>
+      <span class="src">— 小红书《AdventureX 黑客松 太烂了！》53 条评论</span></blockquote>
+      <p class="src">⚠️ 平衡视角：该帖高赞回复是"任何事情都是循序渐进的……从九岁小朋友到初中生、高中生，大家都有自己的想法和执行能力，<b>为所有人种下一颗创新创造的种子，我觉得这个意义就足够了</b>。"</p>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">🧊</span>反向 2："我已经祛魅了"——一篇很冷静的退出理由</div>
+      <p><span class="tag t-neg">反向</span></p>
+      <blockquote>"大多数参赛选手是奔着<b>创造的快感</b>来的，享受'做出来'的成就感，至于这个东西能不能用、有没有人需要、能不能落地，<b>并没有一个客观的评价</b>。而且随着加入的人越来越多，想法高度同质重叠。"<br><br>
+      "更让我冷下来的是对主办方和投资人的观察：主办方肯定是有目的的，但是表露的有多明显要看水平；<b>投资人能不能言之有物，还是为了说而说，还有可能是带着自家项目来评分的。</b>"<br><br>
+      "黑客松可以去，但要先想清楚自己的目的。<b>为了玩的快乐，值得去；为了找同频的人，有可能但靠运气；为了商业化落地，你需要非常刻意地筛选。</b>"<br>
+      <span class="src">— 小红书《黑客松可以，但我已经祛魅了》</span></blockquote>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">😤</span>反向 3："认真做了一个能落地的产品，反而没获奖"</div>
+      <p><span class="tag t-neg">反向</span> 结果反直觉的样本，和第 1 章"要做能落地的"直接相左：</p>
+      <blockquote>"我是文科生，黑客松刚开始只能做一些<b>天马行空的 demo，拿了 7 个奖</b>。我却一直心虚，因为知道落地性很低，所以一直想做一个真正能落地的产品。于是在某个更大的赛场，我和 2 位顶尖技术精英及 1 位设计精英组队，做了一个非常成熟、能直接落地、解决痛点的产品，<b>可却没有任何奖</b>。"<br>
+      <span class="src">— 小红书《认真做了一个能落地的产品，反而没获奖》52 条评论</span></blockquote>
+      <p class="src">⚠️ 该帖后半段提出"黑客松是资本做局、故意捧不落地的 demo、然后抄袭能商业化的产品"的推测。<b>这是作者的主观怀疑，没有证据支撑，本报告不采信为结论</b>，但"落地性强反而落选"这个<b>现象</b>本身有记录价值——它和第 0 章两套规则、以及"赞助商要的是能展示他们技术的项目"是自洽的：<b>能落地 ≠ 能展示赞助商的技术</b>；在 MLH 体系里更是明说了"有没有用不重要"。</p>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">🤨</span>反向 4：获奖项目本身也被质疑</div>
+      <p><span class="tag t-neg">反向</span> 一位 vibe coding 博主整理 bolt.new 史上奖金最高黑客松（前十名超 $35 万现金）的胜出项目后写：</p>
+      <blockquote>"除了冠军视频编辑器和那个做 IoT 农业的，<b>我不觉得剩下 8 个产品有特别高的实现门槛</b>……至于视频编辑器，<b>这项目是不是偷偷拿到本地开发，我觉得是大概率的。</b>"<br><br>
+      但同一篇也给了很正面的观察："虽然实现门槛不高，但好几个项目印象深刻：一站式 API 密钥管理、专供清洁公司的 CRM、男性互助会、给保加利亚青少年的趣味数学学习平台。<b>他们针对的用户非常小众，但都有明确的付费意愿。</b>"<br>
+      <span class="src">— 小红书《史上最壕bolt.new黑客马拉松：胜出项目赏析》36 条评论，高赞回复："看不懂前两个为什么获奖，像是在学校的课程 proj 水平"</span></blockquote>
+      <p>另一条同类观察，来自杭州某黑客松获奖项目的评论区：<b>"一眼 codex 风格。。。"</b>——说明"AI 味"本身已经开始成为观众的扣分点。</p>
+      <p>国外侧有一条措辞更冲的一手吐槽：</p>
+      <blockquote>"<b>前端几乎就是全部。你的项目实际能不能跑、有没有任何实际应用，完全没有举证责任。</b>只要看起来酷，投资人和非技术的人就会买账。"<br>
+      "那里有整整 <b>90% 的项目就是 vibe coded 的垃圾。连点子都是 AI 出的。</b>你能看出来——好几个人做了标题、描述和实现都一模一样的同一个东西。"<br>
+      "很多酷点子在训练数据分布之外，这些现在几乎不出现在黑客松里了。<b>AI 说它们'太难了'，人们就干脆避开。</b>"<br>
+      <span class="src">— HackEurope 2026 参赛者复盘，2026 年春</span></blockquote>
+      <p class="src">⚠️ 这条和第 5 章"评委用 AI 逐行对账"直接冲突——<b>说明评委质量本身是最大变量</b>。这正好接上下一节。</p>
+    </div>
+
+    <div class="blk">
+      <div class="blk-h"><span class="ic">🧭</span>所以：怎么挑一场值得去的黑客松？</div>
+      <p><span class="tag t-single">单点，但这是本次调研里最实用的一份"选场子"清单</span></p>
+      <div class="checklist">
+        <h4>✅ 判断一场黑客松值不值得参加（六条判据）</h4>
+        <ul>
+          <li><b>① 时间够紧。</b>24–72 小时是甜点区间。"超过一周的'创业大赛'本质上是另一种东西——它在考你怎么写商业计划书，不是考你怎么跑出 demo。"</li>
+          <li><b>② 最终交付物是可跑的 demo，不是 slides。</b>"评委要不要在你的 laptop 上戳一下你做的东西，是这件事是不是黑客松的分水岭。"</li>
+          <li><b>③ 评委是懂行的人。</b>"如果评委是大学老师加政府代表加校友嘉宾，恭喜你，你参加的是创业课结课汇报。"</li>
+          <li><b>④ 主题有真实约束，但不死板。</b>"约束足够窄到逼你做选择，但又足够宽到容下不同的 taste。"</li>
+          <li><b>⑤ 现场密度高。</b>"24 小时不关门……半夜两点能找到人帮你 debug。"</li>
+          <li><b>⑥ 结束之后有真实下文。</b>"如果颁完奖大家就解散了、群也死了，那这场 hackathon 的价值就只活在那 48 小时里。"</li>
+        </ul>
+        <span class="src">— 小红书《一个真正值得参与的黑客松有什么特点？》。作者点名认可：AdventureX、EAZO、Tone Jam；明确排除："学校里挂着'创新创业'名字的大赛、地方政府办的'AI 大赛'、企业赞助的'创意马拉松'——大部分都不在这个名单里。"</span>
+      </div>
+      <p class="src">⚠️ 注意这份清单把 AdventureX 列为"公认的好场子"，而反向 1 的两篇差评正是冲着 AdventureX 去的。<b>同一场活动口碑两极——这本身就是信息</b>：大场子的体验方差极大，取决于你是去做东西还是去看展。<br>
+      官方侧的一条印证：MLH 建议评审用 <b>science-fair 摊位式</b>而非分房间制，理由是"分房间的队伍只跟同房间的项目比，<b>经常很难做到公平</b>"——组织质量确实会直接改变你的胜负。</p>
+    </div>
+
+    <div class="takeaway">
+      <b>Takeaway ——</b> 去之前先回答一个问题："<b>如果这场没有奖、没有排名、没有评委、没有奖金，只有一群人聚在一起做东西，我还去吗？</b>"（出自小红书《黑客松没获奖怎么办？》）——这个问题的答案决定了你该按哪一章去准备，也决定了没拿奖那天你会不会难受。
+    </div>
+  </div>
+</section>
+
+<!-- ========== 第8章 清单 ========== -->
+<section class="ch" id="c8">
+  <div class="ch-head">
+    <div class="no">CHAPTER 08 · 可直接照做</div>
+    <h2>四张清单：赛前 / 赛中 / Demo 前 60 分钟 / 提交页</h2>
+    <div class="sub">上面所有内容压缩成能打勾的动作。</div>
+  </div>
+  <div class="ch-body">
+
+    <div class="checklist">
+      <h4>📋 清单 A：报名之后、开赛之前</h4>
+      <ul>
+        <li>☐ 判断<b>你在哪一套规则里</b>（MLH 校园赛 vs 厂商赛）——这决定后面所有取舍</li>
+        <li>☐ 拿到<b>评分表和权重</b>（没公布就问主办方要）；按权重分配工时</li>
+        <li>☐ 确认 <b>Stage One 的 pass/fail 硬门槛</b>：是否真用了指定 API、是否切题、要件是否齐（评委原话：大量提交连基本要求都没满足）</li>
+        <li>☐ 搞清楚<b>最终交付什么</b>：视频时长上限、README 要求、提交截止、走桌 demo 还是台上路演、有没有 slides、pitch 几分钟</li>
+        <li>☐ 查清<b>赞助商名单</b>和各自赛道奖；<b>确认赞助商是否真的到你这场</b></li>
+        <li>☐ 查<b>评委是谁、什么背景</b></li>
+        <li>☐ 搭好环境：boilerplate、部署流水线、账号权限、<b>API key</b>、sandbox 权限、一条端到端测过的 build pipeline</li>
+        <li>☐ 写一份<b>自己的能力模块清单</b>（"报菜名"用）+ 四句话自我介绍</li>
+        <li>☐ 技术栈锁定最熟的；要用的新库<b>赛前先跑一遍</b></li>
+        <li>☐ 想 2–3 个候选点子（<b>点子可以提前想，代码不行</b>）</li>
+      </ul>
+    </div>
+
+    <div class="checklist">
+      <h4>📋 清单 B：开赛后</h4>
+      <ul>
+        <li>☐ <b>第 1 小时</b>：定唯一目标（赢 / 学 / 社交，只能选一个）；签团队协议（同步频率、分支规则、砍 scope 信号、任务四要素、关键岗位备份）</li>
+        <li>☐ <b>前 2 小时</b>：走遍赞助商展台，直接问"你们最想要什么 / 如果我做出来你们选我们吗"</li>
+        <li>☐ <b>选题前</b>：有争议的方向先做 30–60 分钟最小实验；三问过滤（需求真不真 / 几小时能不能做完 / 30 秒能不能讲懂）</li>
+        <li>☐ <b>写代码前</b>：写完整 demo 脚本（一句话问题绑到一个具体的人 → before state → trigger → aha moment → close），再<b>反推</b>必须做的功能</li>
+        <li>☐ <b>冻结 scope</b>，只定一个核心功能。禁止：登录页、动画、多余页面</li>
+        <li>☐ <b>总时长 25% 处</b>：端到端骨架必须跑通，多丑都行。之后只准改好，<b>不准加长</b></li>
+        <li>☐ <b>过半后不换方向</b>。有争议就砍功能，不砍主干</li>
+        <li>☐ <b>截止前一天</b>：冻结新功能</li>
+        <li>☐ 睡眠<b>轮换</b>，绝不全队同时倒</li>
+        <li>☐ 全程正常 commit（获奖后会被查提交时间线和每人贡献）</li>
+      </ul>
+    </div>
+
+    <div class="checklist">
+      <h4>🚨 清单 C：Demo 前 60 分钟（最高优先级，按顺序做）</h4>
+      <p><span class="tline">T-60 → T-45 ｜ 锁死</span></p>
+      <ul>
+        <li>☐ <b>停止写新功能。</b>现在起只允许改 demo 路径上的 bug</li>
+        <li>☐ commit + push，<b>确认公开 repo 能被匿名打开</b></li>
+        <li>☐ <b>删掉 README 里 repo 中不存在的功能描述</b>。宁可少写，不能对不上</li>
+        <li>☐ 把 pitch 里每一句技术宣称指到一个具体文件——<b>指不到的，这句话从 pitch 里删掉</b></li>
+      </ul>
+      <p><span class="tline">T-45 → T-30 ｜ 兜底四件套</span></p>
+      <ul>
+        <li>☐ <b>录一遍完整 demo 屏录</b>（哪怕手机拍屏幕），<b>存本地 + 传云各一份</b>；有时间再录第二遍</li>
+        <li>☐ <b>缓存 LLM 响应</b>：把 demo 路径跑一遍存成本地 JSON，写 <code>if (apiFail) return cachedResponse</code></li>
+        <li>☐ <b>Mock 掉所有外部服务</b>，<b>所有表单预填好</b>（但你号称最难的那件事必须真跑）</li>
+        <li>☐ <b>截图 3 张关键界面</b>放在最后一页隐藏页，网断了直接跳过去讲</li>
+      </ul>
+      <p><span class="tline">T-30 → T-20 ｜ 延迟工程</span></p>
+      <ul>
+        <li>☐ <b>App 一启动就发一次预热请求</b>（不要等上台点按钮才发）</li>
+        <li>☐ 确认<b>流式输出已开</b>，首 token 秒出</li>
+        <li>☐ <b>给每一次等待写好台词</b>：点击提交的那一刻嘴里立刻开始讲技术亮点，讲完正好出结果。<b>绝不静默</b></li>
+        <li>☐ 如果延迟 &gt; 8 秒且没法优化 → <b>这一段改用预录片段</b></li>
+      </ul>
+      <p><span class="tline">T-20 → T-10 ｜ 掐表排练</span></p>
+      <ul>
+        <li>☐ 完整跑 <b>2 遍</b>，<b>用手机秒表掐</b></li>
+        <li>☐ 硬指标：<b>90 秒内评委必须看到东西在跑</b>。超了就砍功能，不是砍讲解</li>
+        <li>☐ 检查 demo <b>只有一条流</b>。有第二条 → 删掉</li>
+        <li>☐ 检查第一句：<b>一句话锚点（为 Y 做 X 的工具）</b>，然后才是问题场景</li>
+        <li>☐ 时间配比：<b>问题 30% / 方案 70%</b></li>
+        <li>☐ <b>大声排练开场 30 秒</b>（不是整场，就开场）</li>
+        <li>☐ 准备一句诚实边界："这块现在还是 mock 的，真实实现在 X 文件里"</li>
+      </ul>
+      <p><span class="tline">T-10 → T-5 ｜ Q&amp;A 弹药</span></p>
+      <ul>
+        <li>☐ 全队对答案：<b>核心那 20% 的逻辑谁写的、怎么工作的</b></li>
+        <li>☐ 准备 <b>3 个数字</b>：测试数 / eval 结果 / 延迟或成本。有一个报一个</li>
+        <li>☐ 背下四个必答题：<b>具体给谁用（具体到一个人）/ 这次具体做了哪部分 / 规模化后最先崩什么 / 下季度谁能真用起来</b></li>
+        <li>☐ 准备 30 秒 / 2 分钟 / 5 分钟<b>三个版本</b>的介绍</li>
+      </ul>
+      <p><span class="tline">T-5 → T-0 ｜ 物理检查</span></p>
+      <ul>
+        <li>☐ 笔记本<b>插电</b>、<b>关通知</b>、关自动更新、分辨率调到投影兼容</li>
+        <li>☐ <b>准备手机热点</b>，会场 WiFi 一定会掉</li>
+        <li>☐ 浏览器只留 demo 需要的标签页</li>
+        <li>☐ 备份视频<b>在本地能双击播放</b>（不是只在云端）</li>
+        <li>☐ 让一个人<b>独立复核所有提交材料</b>，对照赛道要求逐项检查</li>
+        <li>☐ <b>提前 30 分钟提交</b>——"截止铃响的时候，正是问题出现的时候"</li>
+      </ul>
+    </div>
+
+    <div class="checklist">
+      <h4>📋 清单 D：线上赛提交页</h4>
+      <ul>
+        <li>☐ 用 Devpost 官方 7 段模板，但<b>在顶部先放 Live Demo / Docs 链接</b></li>
+        <li>☐ Inspiration 里塞<b>可核查的第三方数据</b>，不是主观感受</li>
+        <li>☐ How we built it 放<b>架构图</b></li>
+        <li>☐ 按主办方要求写清 <b>AI/指定工具的协作过程</b>（OpenAI Build Week 明说这会影响两项打分）</li>
+        <li>☐ <b>说出口的每个技术 claim 都能在仓库里找到对应代码</b></li>
+        <li>☐ Built With 打全赞助商工具标签</li>
+        <li>☐ Accomplishments 用<b>可验证运行数据</b>（线上 URL、真实用量、测试数）</li>
+        <li>☐ 仓库 public（或按规则分享给指定邮箱）+ <b>赛后保持 public</b>，否则改选他人</li>
+        <li>☐ 给评委一条<b>不用重建就能试</b>的路径（demo 实例 / 测试账号）</li>
+        <li>☐ 视频 <b>≤3 分钟（MLH ≤2 分钟）</b>、<b>公开传 YouTube</b>、<b>开头报赛事名</b>（MLH 硬要求）</li>
+        <li>☐ 留<b>至少 15% 赛程</b>做提交打磨</li>
+        <li>☐ 如有 Devpost 预审图标：<b>提前 1 周提交</b>换官方资格预检</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 溯源 ========== -->
+<section class="ch" id="src">
+  <div class="ch-head">
+    <div class="no">APPENDIX · 溯源</div>
+    <h2>用了哪些一手来源</h2>
+    <div class="sub">全部可点开核对。原始采集数据在同目录 data/ 下。</div>
+  </div>
+  <div class="ch-body">
+
+    <details open>
+      <summary>🏛️ 官方规则与组织者指南（最高权威）</summary>
+      <div class="scroller"><table>
+        <tr><th>来源</th><th>性质</th><th>时效</th></tr>
+        <tr><td><a href="https://github.com/MLH/mlh-policies/blob/main/standard-hackathon-rules.md">MLH Standard Hackathon Rules</a></td><td>MLH 官方评分标准与提交要求</td><td>活文档 ✅</td></tr>
+        <tr><td><a href="https://guide.mlh.io/general-information/judging-and-submissions/judging-plan">MLH Organizer Guide · Judging Plan</a></td><td>评审时长、Stack Ranking、science-fair 制</td><td>约 2026 Q1 ✅</td></tr>
+        <tr><td><a href="https://guide.mlh.com/general-information/judging-and-submissions/cheating-check">MLH Cheating Check</a></td><td>获奖项目作弊核查清单</td><td>官方 ✅</td></tr>
+        <tr><td><a href="https://guide.mlh.com/general-information/judging-and-submissions/judges-communication-and-recruiting">MLH 评委招募口径</a></td><td>"不要看商业面"</td><td>官方 ✅</td></tr>
+        <tr><td><a href="https://openai.devpost.com/rules">OpenAI Build Week Rules</a></td><td>四项等权重 + README 硬要求 + AI 参与评审</td><td>2026-07 ✅</td></tr>
+        <tr><td><a href="https://gemini3.devpost.com/rules">Gemini 3 Hackathon Rules</a> / <a href="https://gemini3.devpost.com/updates">Updates</a></td><td>40/30/20/10 权重；4,500+ 提交</td><td>2025-12～2026-02 ✅</td></tr>
+        <tr><td><a href="https://aws-agent-hackathon.devpost.com/rules">AWS AI Agent Global Rules</a></td><td>50/20/10/10/10 权重</td><td>2025 ✅</td></tr>
+        <tr><td><a href="https://socal-cbc-hackathon.devpost.com/">SoCal Claude Builder Club</a></td><td>Ethical Alignment 维度；mockups-only 不参与</td><td>2026-04 ✅</td></tr>
+        <tr><td><a href="https://treehacks-2026.devpost.com/">TreeHacks 2026</a></td><td>Creativity / Technical Complexity / Social Impact</td><td>2026-02 ✅</td></tr>
+        <tr><td><a href="https://help.devpost.com/article/64-judging-public-voting">Devpost 判分帮助页</a> / <a href="https://help.devpost.com/article/103-how-to-judge-an-online-hackathon">评委指引</a> / <a href="https://help.devpost.com/article/126-know-your-submission-steps">提交步骤</a></td><td>平台不支持加权；10 分钟/项目；1–5 星无评语</td><td>2024-11 ~ 2026-05 ✅</td></tr>
+        <tr><td><a href="https://github.com/HackMIT/gavel">HackMIT Gavel</a> + <a href="https://anishathalye.com/2015/03/07/designing-a-better-judging-system/">设计文</a></td><td>两两对比制；"评委平均只看 5% 项目"</td><td>2015/2016，机制仍在用</td></tr>
+        <tr><td><a href="https://angelhack.com/blog/ai-agent-hackathon/">AngelHack AI Agent Playbook</a> / <a href="https://angelhack.com/blog/hackathon-tips-for-winners/">Repeat Winners</a></td><td>450+ 场主办方；agent eval 五指标</td><td>2026-06 ✅</td></tr>
+      </table></div>
+    </details>
+
+    <details>
+      <summary>⚖️ 评委自述与平台机制</summary>
+      <div class="scroller"><table>
+        <tr><th>来源</th><th>身份</th><th>时间</th></tr>
+        <tr><td><a href="https://blog.jetbrains.com/ai/2026/06/how-to-win-a-hackathon-notes-from-the-judging-table/">JetBrains：Notes From the Judging Table</a></td><td><b>5 位评委</b>（OpenAI / Nebius / Scarf / Stateshift / JetBrains）</td><td>2026-06-22</td></tr>
+        <tr><td><a href="https://dev.to/kurbaitaev/what-judges-actually-score-notes-from-a-year-of-hackathon-judging-3p4l">dev.to：What Judges Actually Score</a></td><td><b>评委</b>，2026-07 十天内连判 3 场</td><td>2026-07-27</td></tr>
+        <tr><td><a href="https://info.devpost.com/blog/hackathon-judging-tips">Devpost：Advice from 5 seasoned judges</a></td><td><b>评委</b>：Square / Databricks / Google / NEAR / Atlassian</td><td>⚠️未标日期</td></tr>
+        <tr><td><a href="https://devfolio.co/blog/the-discerning-machine/">Devfolio：The Discerning Machine</a></td><td><b>平台官方</b>，AI 审计逐行对账机制</td><td>2026-05-18</td></tr>
+        <tr><td><a href="https://techunwrapped.com/enterprise-architect-and-cncf-kubestronaut-myroslav-mishov-on-why-a-slop-detector-that-cant-catch-slop-is-slop/">Myroslav Mishov 访谈</a></td><td><b>评委</b>，KubeCon 安全赛道程序委员</td><td>2026-06-26</td></tr>
+        <tr><td><a href="https://medium.com/@guongle/hackathon-prep-how-to-pick-the-right-idea-and-actually-ship-it-5f35a8b2d881">Guong Le</a></td><td>JACHack 2025 <b>评委</b></td><td>2026-04-10</td></tr>
+        <tr><td><a href="https://dev.to/cloudinary/how-to-win-a-hackathon-1377">Cloudinary on dev.to</a></td><td><b>赞助商赛道负责人</b></td><td>2026-05-03</td></tr>
+        <tr><td><a href="https://ai-beavers.com/blog/how-to-judge-hackathon-complete-guide">AI Beavers 评委指南</a></td><td>评委培训材料</td><td>2026-04-25</td></tr>
+        <tr><td><a href="https://global.moneyforward-dev.jp/2026/07/02/how-a-hackathon-judge-hacked-the-hackathon/">Money Forward：How a Hackathon Judge Hacked the Hackathon</a></td><td>企业内部赛评委自建 AI 评审平台</td><td>2026-07-02</td></tr>
+      </table></div>
+    </details>
+
+    <details>
+      <summary>🏆 获奖者与多冠选手复盘</summary>
+      <div class="scroller"><table>
+        <tr><th>来源</th><th>身份</th><th>时间</th></tr>
+        <tr><td><a href="https://getpushtoprod.substack.com/p/how-to-win-hackathons">John Kim</a></td><td>7–8 冠 / ~$40k / TC Disrupt 冠军 / 前 Meta</td><td>2026-04-06</td></tr>
+        <tr><td><a href="https://medium.com/codetodeploy/the-hackathon-insider-playbook-from-a-8x-winner-de83d138bab5">Kavisha Mathur</a></td><td>8 次冠军</td><td>2026-02-11</td></tr>
+        <tr><td><a href="https://jeremykintana.substack.com/p/how-to-win-at-hackathons">Jeremy Kintana</a>（= Reddit u/springtimeOnMars，同一人同一文）</td><td>6 战 6 中</td><td>2025-08-14</td></tr>
+        <tr><td><a href="https://www.nicksingh.com/posts/win-hackathons-a-how-to-guide">Nick Singh</a></td><td>参赛者 + 评委，前 FB/Google</td><td>2022</td></tr>
+        <tr><td><a href="https://medium.com/@sristee45/how-i-went-from-122-to-1-in-24-hours-building-a-multimodal-damage-claim-verifier-for-hackerrank-92cdc18242b2">Sristee Shrivastava</a></td><td>HackerRank Orchestrate <b>#1 / 15,295</b></td><td>2026-06-30</td></tr>
+        <tr><td><a href="https://samanvya.dev/blog/mit-llm-hackathon-first-place">Samanvya Tripathi</a></td><td>MIT LLM Hackathon <b>一等奖</b></td><td>2025-09-25</td></tr>
+        <tr><td><a href="https://klaviyo.tech/how-to-win-an-ai-hackathon-build-a-solution-that-actually-matters-aab49307587e">Tatiana Fesenko（Klaviyo）</a></td><td>Grand Prize，55 队取 3</td><td>2025-09-08</td></tr>
+        <tr><td><a href="https://devpost.com/software/ecolafaek">EcoLafaek</a>（AWS 冠军作品页）+ <a href="https://aws-agent-hackathon.devpost.com/updates/38140-congratulations-to-the-winners-of-the-aws-ai-agent-global-hackathon">官方公告</a></td><td>提交页结构范本</td><td>2025</td></tr>
+        <tr><td><a href="https://about.gitlab.com/blog/gitlab-ai-hackathon-2026-meet-the-winners/">GitLab AI Hackathon 2026 winners</a></td><td>LORE / Gitdefender / Aegis / DocSync</td><td>2026-04-22</td></tr>
+        <tr><td><a href="https://claude.com/blog/meet-the-winners-of-our-claude-opus-4-8-build-day-hackathon">Claude Opus 4.8 Build Day winners</a></td><td>前三名全是 2 人组</td><td>2026-06-17</td></tr>
+        <tr><td><a href="https://ai-mission.eu/blogs/blog-post-hackathon-4-winner.html">Bernhard Götzendorfer</a></td><td>AIM Hackathon 4 <b>单人冠军</b></td><td>2026-04-11</td></tr>
+        <tr><td><a href="https://info.devpost.com/blog/6-tips-for-making-a-hackathon-demo-video">Devpost 视频 6 tips</a> / <a href="https://info.devpost.com/blog/user-story-nathan">专访 Nathan（40 场 / 30+ 奖）</a></td><td>多冠选手方法</td><td>⚠️未标日期</td></tr>
+        <tr><td><a href="https://www.osedea.com/insight/how-we-built-ai-agents-in-16-hours-behind-the-scenes-of-osedeas-hackathon">Osedea 16 小时内部赛复盘</a></td><td>延迟从 30 秒降到 1 秒的实操</td><td>2026-05-01</td></tr>
+      </table></div>
+    </details>
+
+    <details>
+      <summary>📉 反向证据与社区吐槽</summary>
+      <div class="scroller"><table>
+        <tr><th>来源</th><th>内容</th><th>时间</th></tr>
+        <tr><td><a href="https://duti.dev/blog/2026/spr/">HackEurope 2026 复盘</a></td><td>"90% 是 vibe coded 垃圾"；前端即一切</td><td>2026 春</td></tr>
+        <tr><td><a href="https://medium.com/@liventsevvadim/the-promise-and-perils-of-sleeping-at-hackathons-25d577697a25">Vadim Liventsev 睡眠调查</a></td><td>Junction 2018 现场问卷 n=52</td><td>2018-12-17</td></tr>
+        <tr><td><a href="https://news.ycombinator.com/item?id=1366795">Ask HN: Hackathon tips?</a></td><td>不睡派 + 环境提前搭好</td><td>2010-05-21</td></tr>
+        <tr><td><a href="https://www.reddit.com/r/hackathon/comments/9u9qjw/how_do_i_win_hackathons/">r/hackathon：How do I win Hackathons?</a></td><td>老手实话（含灰色手法，本报告未采纳为建议）</td><td>2018</td></tr>
+        <tr><td><a href="https://szeyusim.medium.com/how-i-win-most-hackathons-stories-pro-tips-from-a-serial-hacker-1969c6470f92">szeyusim</a></td><td>按人数配比</td><td>2025-07-21</td></tr>
+      </table></div>
+    </details>
+
+    <details>
+      <summary>📕 小红书（202 条去重笔记，精读 60 篇 · 本报告直接引用的）</summary>
+      <ul>
+        <li><b>《3分钟黑客松pitch｜像十年老founder讲清项目》</b> — ex-VC 投资人 / AdventureX 评委 <span class="tag t-judge">评委</span></li>
+        <li><b>《评委燃尽了，闭幕式前说两句尖锐的真话》</b> — 同上作者 <span class="tag t-judge">评委</span></li>
+        <li><b>《黑客松评委视角观察：AI是起点，不是终点》</b> — 环球黑客松评委 <span class="tag t-judge">评委</span></li>
+        <li><b>《熬到凌晨2点，我在黑客松学到的3件事》</b> — AdventureX 未获奖，复盘因果链最完整</li>
+        <li><b>《几个参加黑客松之后悟出的血泪教训》</b> — 三段式（产品策略 / 路演 / 进程策略）</li>
+        <li><b>《48小时黑客松insight，差点翻车在这5个坑里》</b> — 设计返工、技术选型、Git 冲突、Plan B、细节内耗</li>
+        <li><b>《黑客松24小时实战｜10条血泪经验分享》</b> — 路演50/创意30/技术10 出处；Mentor 是隐藏外挂</li>
+        <li><b>《黑客松演示环节怎么办？四招教你稳赢！》</b> — 时间分配、气场、叙事、"描述未来"</li>
+        <li><b>《第一次参加黑客松，我们差点输在团队协作》</b> — 5 人线上协作 4 坑 + P0 Checklist</li>
+        <li><b>《港大Jennie｜AI黑客松备赛分享，纯干货经验帖》</b> — 48h 三段式</li>
+        <li><b>《Hackathon赢了$97k后学到的最重要五件事》</b> — 2–3 人黄金配置、Demo 优先不做 PPT</li>
+        <li><b>《赢10+次Hackathon后，我总结了3个关键》</b> — 近 20 次参赛赢 10+，"产品表达"的比赛</li>
+        <li><b>《旧金山黑客松第一名｜2.5小时做了个AI技能》</b> — scope 三问，BidRadar 已开源</li>
+        <li><b>《黑客松拿了一等奖，不是因为我代码写得最好》</b> — 技术平权后比故事和审美</li>
+        <li><b>《新人黑客松获胜指南（精简版）》</b> — 扒油管获奖者视频，"赞助商就是评委"</li>
+        <li><b>《如何准备参加一次黑客松（Hackthon）？》</b> — 唯一目标、水位管理、理解门槛</li>
+        <li><b>《一个真正值得参与的黑客松有什么特点？》</b> — 选场子六条判据</li>
+        <li><b>《帝国理工黑客松：临时组队 1.5 小时做出核电》</b> — 跨专业分工 + 把技术讲给外行的完整范例</li>
+        <li><b>《人生第一次黑客松就去WAIC拿一等奖的故事》</b> — 非技术出身，路演前两天全用来打磨演讲</li>
+        <li><b>《第一次参加黑客松，我给外婆造了部"手机"🏆》</b> — 选题从家人痛点来；网络断连靠前晚录屏救场</li>
+        <li><b>《一个🦞日记skill，获得了黑客松二等奖》</b> — 小需求胜过宏大项目</li>
+        <li><b>《文科生如何10分钟之内融入黑客松cafe chat》</b> — 现场 social 四动作</li>
+        <li><b>《脑控轮椅｜凭什么拿黑客松硬件一等奖？》</b> — 获奖项目理性拆解</li>
+        <li><b>《黑客松总决赛复盘：好的 idea，真的只是起点》</b> — 冠军里再拼冠军，行业经验即壁垒</li>
+        <li><b>《黑客松赛后反思：为什么要杜绝PM式的自嗨》</b> — 伪需求自我剖析 <span class="tag t-neg">反向</span></li>
+        <li><b>《AdventureX极其混乱。》</b>（102 评论）/ <b>《AdventureX 黑客松 太烂了！》</b>（53 评论） <span class="tag t-neg">反向</span></li>
+        <li><b>《黑客松可以，但我已经祛魅了》</b> <span class="tag t-neg">反向</span></li>
+        <li><b>《认真做了一个能落地的产品，反而没获奖》</b>（52 评论） <span class="tag t-neg">反向</span></li>
+        <li><b>《史上最壕bolt.new黑客马拉松：胜出项目赏析》</b>（36 评论） <span class="tag t-neg">反向</span></li>
+        <li><b>《黑客松没获奖怎么办？》</b> — "如果没有奖你还会不会去"</li>
+        <li><b>《如何优雅地参加一场黑客松》</b> — 纸板找队友，80% 回头率</li>
+        <li><b>《来抄作业了！黑客松冠军的Claude Code教程》</b> — everything-claude-code 配置</li>
+        <li>其余 30 篇正文见 <code>data/</code> 下 JSON</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>💬 微信公众号（58 篇命中 · <b>14 篇正文已全部取到，共 49,600 字</b>）</summary>
+      <p class="src">正文全文在 <code>data/公众号_14篇正文.json</code>；完整 58 篇命中清单在 <code>data/公众号_58篇命中.json</code>。本报告直接引用了其中 4 篇：<b>碳硅边界</b>（Anthropic 获奖名单 + 六大范式 + 三判据，见第 1 章）、<b>狮子的牙齿</b>（AI 游戏黑客松完整工作流，第 5 章）、<b>艾理Emily</b>（失败方复盘：结构化与 taste，第 5 章）、<b>新器集</b>（金奖后的隐性代价 + 风险分级清单法，第 2 章）。另有<b>一枚卓子</b>与<b>葭禾科技</b>两篇对同一批获奖项目的独立拆解，用于交叉验证。</p>
+      <div class="scroller"><table>
+        <tr><th>日期</th><th>公众号</th><th>标题</th></tr>
+        <tr><td class="n">2026-07-28</td><td>江春入新年</td><td>第一次黑客松复盘：两个人、五天、一台打给外婆的电话</td></tr>
+        <tr><td class="n">2026-03-31</td><td>狮子的牙齿</td><td>一次 AI 游戏黑客松复盘：从灵感、踩坑到最终得奖</td></tr>
+        <tr><td class="n">2026-03-13</td><td>葭禾科技</td><td>从AI创业角度深度解析：2026 Claude Code 黑客松五大获奖项目的启示</td></tr>
+        <tr><td class="n">2026-03-10</td><td>艾理Emily</td><td>AI黑客松比赛真实复盘：200支团队突围前45，我从这场黑客松里学到了什么？</td></tr>
+        <tr><td class="n">2026-03-10</td><td>一枚卓子</td><td>Claude Code 黑客松 5 个获奖案例</td></tr>
+        <tr><td class="n">2026-02-24</td><td>碳硅边界</td><td>黑客松获奖案例：发现2026年AI创业的六大范式</td></tr>
+        <tr><td class="n">2026-01-24</td><td>新器集</td><td>从黑客松金奖到多线作战：关于"秩序感"与"节奏感"的深度复盘</td></tr>
+        <tr><td class="n">2026-02-27</td><td>LXDAO</td><td>25 冬季 Web3 实习计划结营｜斩获 30+ Offer、48 个黑客松 Demo</td></tr>
+        <tr><td class="n">2022-12-15</td><td>OneBlock Community</td><td>Web3 项目路演秘诀：如何输出一份成功的 Pitch Deck</td></tr>
+        <tr><td class="n">2026-07-26</td><td>Rainbox AI</td><td>外滩黑客松｜扣子参赛通道指南</td></tr>
+      </table></div>
+      <p class="src">另有 4 篇（元甲的个人成长日记 / 飞桨PaddlePaddle / ShowMeAI研究中心 / 开源社）相关度较低，见数据文件。</p>
+    </details>
+
+    <details>
+      <summary>🕳️ 已知缺口（诚实标注）</summary>
+      <ul>
+        <li><s>微信公众号正文</s> —— <b style="color:#1f9d6b">已补齐 ✅</b> 14/14，49,600 字</li>
+        <li><b>Anthropic 黑客松的商业数据</b>——第 1 章那份获奖名单里，有公众号给出了定价、市场规模、签约医院数等，但那些是<b>作者的二次推演不是官方公布</b>，本报告<b>未采信</b>，只用了能与官方对上的获奖名单、作者身份与痛点描述</li>
+        <li><b>参赛条款 IP 风险</b>（第 4 章）——<b>单一来源转述，未拿到条款原文核对</b>，请当作"该去核对"的提醒而非结论</li>
+        <li><b>X/Twitter 与 YouTube</b>——完全没查（主办方 thread、demo day 录像）</li>
+        <li><b>YC / a16z / Cerebral Valley / AGI House 一手复盘</b>——未找到有效来源</li>
+        <li><b>"几个人上台"</b>——<b>没有任何一手实证</b>，本报告未给建议</li>
+        <li><b>live demo 翻车概率的量化数据</b>——<b>全网只有经验性建议，没有统计数字。请勿在对外材料里编这个数字</b></li>
+        <li><b>PennApps 2024 后的官方 rubric</b>——未找到，报告中标为旧资料</li>
+        <li><b>HackMIT 对评委的书面指引原文</b>——未找到（只确认它不公开 rubric）</li>
+        <li>部分 Devpost 博客与 HackerEarth 长文<b>页面未标日期或日期可疑</b>，已逐条标注</li>
+      </ul>
+    </details>
+
+  </div>
+</section>
+
+</div><!-- /.wrap -->
+
+<footer><div class="wrap">
+  <p><b>黑客松参赛玩法说明书</b> · 2026-07-31 · 小红书内容采集截至当日<br>
+  素材规模：小红书 202 条去重笔记（精读 60 篇正文）+ 微信公众号 14 篇正文（49,600 字）+ 国外约 45 个可溯源来源<br>
+  原始数据：<code>（本地数据目录）</code><br>
+  <b>诚实标注：</b>① 小红书存在明显幸存者偏差（获奖帖 ≫ 失败帖），已用第 7 章反向证据平衡；② 标注为「单点」的说法只有一个来源；③ 部分英文来源页面未标日期，已逐条标出；④ 第 1 章 Anthropic 获奖名单只采用了能与官方对上的部分，公众号作者推演的商业数字未采信；⑤ 第 4 章参赛条款 IP 风险为单一来源转述，未拿到条款原文核对。</p>
+</div></footer>
+
+<div id="gwm-tile" aria-hidden="true"></div><div id="gwm-line" aria-hidden="true">&#169; 2026 Alex Zheng &#183; alexzheng-unzen.github.io &#183; redacted copy, not for redistribution</div>
+<script id="cg-js">
+(function(){
+  var OPEN = 'a[href^="mailto:"], footer .links, input, textarea, select, [contenteditable]';
+  var CREDIT = "Copyright (c) 2026 Alex Zheng (\u90d1\u6653\u742a). All rights reserved. https://alexzheng-unzen.github.io/";
+  function allowed(n){
+    while (n && n.nodeType !== 1) n = n.parentNode;
+    return !!(n && n.closest && n.closest(OPEN));
+  }
+  document.addEventListener('contextmenu', function(e){
+    if (!allowed(e.target)) e.preventDefault();
+  }, true);
+  document.addEventListener('dragstart', function(e){
+    var n = e.target;
+    if (n && n.nodeType === 1 && /^(IMG|PICTURE|SVG|CANVAS)$/i.test(n.tagName)) e.preventDefault();
+  }, true);
+  /* anything that does get copied carries the source with it */
+  document.addEventListener('copy', function(e){
+    try {
+      var sel = String(window.getSelection());
+      if (!sel || sel.length < 24 || !e.clipboardData) return;
+      e.clipboardData.setData('text/plain', sel + '\n\n' + CREDIT);
+      e.preventDefault();
+    } catch (err) {}
+  });
+})();
+</script>
+</body>
+</html>
