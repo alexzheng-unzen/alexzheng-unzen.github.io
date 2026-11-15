@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noai, noimageai, noarchive">
+<meta name="copyright" content="© 2026 Alex Zheng (郑晓琪). All rights reserved.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2712%27 fill=%27%231D1B1C%27/%3E%3Ctext x=%2732%27 y=%2745%27 font-family=%27Georgia,serif%27 font-size=%2740%27 fill=%27%23F6F4EE%27 text-anchor=%27middle%27%3EA%3C/text%3E%3C/svg%3E">
+<title>Hi, I'm Alex · For Soldy.ai</title>
+<style>
+@font-face{font-family:Fell;src:url(src/fonts/im-fell-roman.woff2) format("woff2");font-display:block}
+@font-face{font-family:FellI;src:url(src/fonts/im-fell-italic.woff2) format("woff2");font-display:block}
+@font-face{font-family:GMono;src:url(src/fonts/GeistMono-Variable.woff2) format("woff2");font-weight:100 900;font-display:block}
+@font-face{font-family:Geist;src:url(src/fonts/Geist-Variable.woff2) format("woff2");font-weight:100 900;font-display:block}
+@font-face{font-family:CJKP;src:local("Microsoft YaHei"),local("PingFang SC"),local("Noto Sans CJK SC");unicode-range:U+3000-303F,U+FF01-FF0F,U+FF1A-FF20,U+FF3B-FF40,U+FF5B-FF65}
+@font-face{font-family:HwKai;src:url(src/fonts/hwkai.page.woff2) format("woff2");font-display:block}
+@font-face{font-family:HwHei;src:url(src/fonts/hwhei.page.woff2) format("woff2");font-display:block}
+:root{
+  --ink:#1D1B1C; --grey:#6E6A66; --line:#B9B4AD; --pen:#C3352B; --blue:#425BC1;
+  --seam-top:#E6E3DE; --seam-floor:#F2F0EC; --type:#F6F4EE; --grid:#F5F3EE; --desk:#C9C4BC;
+  --kai:CJKP,HwKai,"KaiTi","STKaiti",serif;
+  --hei:Geist,CJKP,HwHei,"Microsoft YaHei","PingFang SC",sans-serif;
+  --noise:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .4  0 0 0 0 .38  0 0 0 0 .35  0 0 0 .07 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--desk);scroll-behavior:smooth}
+body{color:var(--ink);font-family:var(--hei);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:none}
+a{color:inherit}
+a:focus-visible{outline:2px solid var(--pen);outline-offset:4px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+/* ---------- 跨页（沿用 A） ---------- */
+.book{padding:0 0 28px}
+.spread{position:relative;width:100%;aspect-ratio:3/2;container-type:inline-size;overflow:hidden;margin-top:22px}
+.spread:first-child{margin-top:0}
+.spread::before{content:"";position:absolute;z-index:30;top:0;bottom:0;left:calc(50% - 22px);width:44px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(40,30,20,.05) 38%,rgba(40,30,20,.13) 50%,rgba(255,255,255,.18) 53%,transparent)}
+.spread::after{content:"";position:absolute;z-index:30;top:0;bottom:0;right:0;width:7px;pointer-events:none;
+  background:repeating-linear-gradient(90deg,rgba(0,0,0,.10) 0 1px,transparent 1px 3px)}
+.a{position:absolute;left:calc(var(--x)*1%);top:calc(var(--y)*1%);width:calc(var(--w)*1%)}
+.folio{position:absolute;z-index:31;bottom:2.6%;font:400 max(10px,.72cqw)/1 GMono,monospace;letter-spacing:.12em;color:var(--grey)}
+.folio.l{left:3.2%}.folio.r{right:3.2%}
+.run{position:absolute;z-index:31;top:3.2%;left:3.2%;font:400 max(10px,.72cqw)/1 GMono,monospace;letter-spacing:.14em;color:var(--grey)}
+.run b{font:400 1.25em/1 Fell,serif;letter-spacing:0;color:var(--ink);margin-right:.6em}
+.run em{font-style:normal;font-family:var(--kai);letter-spacing:.06em;font-size:1.15em;color:var(--ink)}
+
+.ch{font-family:var(--kai);font-weight:400;line-height:.95;font-size:max(30px,5.6cqw);letter-spacing:.04em}
+.ch i{display:block;font:400 max(13px,1.15cqw)/1.2 FellI,serif;letter-spacing:.01em;margin-top:.5em;color:var(--grey)}
+.hand{font-family:var(--kai);font-size:max(13px,1.18cqw);line-height:1.55}
+.pen{color:var(--pen)}
+.mono{font:400 max(10px,.74cqw)/1.7 GMono,monospace;letter-spacing:.06em}
+.cap{font:400 max(11px,.8cqw)/1.6 var(--hei);color:var(--grey)}
+
+.seam{background:
+  radial-gradient(120% 70% at 20% 0%,rgba(255,255,255,.55),transparent 60%),
+  linear-gradient(180deg,var(--seam-top) 0%,#EAE7E2 56%,#EFECE8 61%,var(--seam-floor) 70%,#F5F3EF 100%)}
+.typesheet{background:var(--noise),var(--type)}
+.gridpaper{background:var(--noise),var(--grid)}
+.arrow{position:absolute;z-index:8;overflow:visible;pointer-events:none}
+.arrow path{fill:none;stroke:var(--pen);stroke-width:1.6;stroke-linecap:round}
+.strip{display:flex;gap:2px}
+.strip span{flex:1;aspect-ratio:350/197;background:url(src/avatar-walkin-8.webp) no-repeat;background-size:400% 200%;outline:1px solid rgba(29,27,28,.35)}
+
+/* ========== 01 片名 + What I can bring ========== */
+.cover .fig{z-index:5;height:auto}
+.wm{z-index:6;font-family:Fell,serif;font-weight:400;line-height:.86;font-size:max(56px,7.4cqw);letter-spacing:-.015em}
+.wm .l2{display:block;padding-left:.42em}
+.wm .dotless{position:relative}
+.wm .dotless::after{content:"";position:absolute;width:.13em;height:.13em;border-radius:50%;background:var(--ink);left:.02em;top:.02em}
+.wm .tuft{position:absolute;width:.62em;left:.04em;top:-.36em}
+.wm .A{position:relative;display:inline-block}
+.cover .assign{font-family:var(--kai);font-size:max(15px,1.4cqw);line-height:1.4}
+.cover .assign small{display:block;font:400 max(10px,.78cqw)/1.6 GMono,monospace;letter-spacing:.14em;color:var(--grey);margin-top:.3em}
+.cover .meta dl{display:grid;grid-template-columns:auto 1fr;column-gap:1.4em;row-gap:.15em}
+.cover .meta dt{color:var(--grey)}
+.cover .meta dd{font-family:var(--hei);letter-spacing:0;font-size:1.12em}
+
+.bring .eyebrow{font:400 max(10px,.74cqw)/1 GMono,monospace;letter-spacing:.18em;color:var(--grey)}
+.bring .eyebrow b{font-weight:400;color:var(--pen)}
+.bring .slogan{font:400 max(24px,2.62cqw)/1.1 FellI,serif;letter-spacing:-.005em;margin-top:.55em}
+.bring .sub{font:400 max(14px,1.25cqw)/1.35 Fell,serif;color:#3a3633;margin-top:.5em}
+.bring .src{margin-top:.9em}
+.bring h2{font-weight:400;display:flex;align-items:baseline;gap:.7em;padding-bottom:.6em;border-bottom:1px solid var(--ink)}
+.bring h2 span{font:400 max(20px,2.1cqw)/1 Fell,serif}
+.bring h2 em{font-style:normal;font-family:var(--kai);font-size:max(15px,1.3cqw)}
+.give{list-style:none}
+.give li{display:grid;grid-template-columns:2.2em 1fr auto;column-gap:1em;align-items:baseline;padding:.95em 0;border-bottom:1px solid var(--line)}
+.give .n{font:400 max(18px,1.6cqw)/1 FellI,serif;color:var(--pen)}
+.give b{display:block;font-weight:400;font-family:var(--kai);font-size:max(15px,1.32cqw);line-height:1.35}
+.give p{font-size:max(12px,.92cqw);line-height:1.7;color:#3a3633;margin-top:.3em}
+.give a{font:400 max(10px,.74cqw)/1 GMono,monospace;letter-spacing:.08em;color:var(--pen);text-decoration:none;white-space:nowrap;border-bottom:1px solid transparent;transition:border-color .2s}
+.give a:hover{border-bottom-color:var(--pen)}
+
+/* ========== 02 目录 ========== */
+.seatfade{mix-blend-mode:multiply;-webkit-mask-image:radial-gradient(closest-side,#000 62%,transparent);mask-image:radial-gradient(closest-side,#000 62%,transparent)}
+.toc{list-style:none}
+.toc>li{border-top:1px solid var(--ink)}
+.toc>li:last-child{border-bottom:1px solid var(--ink)}
+.toc a.row{display:grid;grid-template-columns:2.6em 28% 1fr;column-gap:1.3em;align-items:start;padding:1.15em 0;text-decoration:none;transition:background .3s}
+.toc a.row:hover{background:rgba(195,53,43,.05)}
+.toc .body,.toc .t,.toc .what,.toc .th{display:block}
+.toc .num{font:400 max(26px,2.6cqw)/1 FellI,serif;color:var(--pen)}
+.toc .th{position:relative;aspect-ratio:16/10;overflow:hidden;outline:1px solid #2b2826}
+.toc .th img{width:100%;height:100%;object-fit:cover;object-position:50% 0;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.toc a.row:hover .th img{transform:scale(1.04)}
+.toc .t{font:400 max(10px,.72cqw)/1 GMono,monospace;letter-spacing:.14em;color:var(--grey)}
+.toc h3{font-weight:400;font-family:var(--kai);font-size:max(18px,1.75cqw);line-height:1.25;margin:.45em 0 .25em}
+.toc h3 i{font:400 .78em/1 FellI,serif;color:var(--grey);margin-left:.35em}
+.toc .what{font-size:max(12px,.9cqw);line-height:1.65;color:#3a3633}
+.ticks{display:flex;flex-wrap:wrap;gap:.35em 1.1em;margin-top:.7em}
+.ticks span{font-family:var(--kai);font-size:max(13px,1.02cqw);white-space:nowrap}
+.ticks span::before{content:"✓";color:var(--pen);margin-right:.3em;font-family:Geist,sans-serif;font-weight:500}
+.toc .pp{font:400 max(10px,.72cqw)/1 GMono,monospace;letter-spacing:.1em;color:var(--grey);margin-left:.6em}
+
+/* ---------- 手机：每章一屏纵向（沿用 A） ---------- */
+@media (max-width:760px){
+  .spread{aspect-ratio:auto;padding:58px 16px 54px;margin-top:16px}
+  .spread::before{display:none}
+  .a{position:relative;left:auto;top:auto;width:calc(var(--mw,100)*1%);margin-left:calc(var(--mx,0)*1%);margin-top:calc(var(--mt,0)*1px)}
+  .run{top:22px;left:16px}
+  .folio{bottom:18px}.folio.l{left:16px}.folio.r{right:16px}
+  .ch{font-size:44px}.ch i{font-size:14px}
+  .hand{font-size:15px}.mono{font-size:10.5px}.cap{font-size:12px}
+  .m-hide{display:none!important}
+  .wm{font-size:68px;margin-top:22px}
+  .bring .slogan{font-size:30px}
+  .give li{grid-template-columns:1.8em 1fr;row-gap:.5em}
+  .give a{grid-column:2}
+  .toc a.row{grid-template-columns:2em 1fr;row-gap:.9em}
+  .toc .th{grid-column:2}
+  .toc .body{grid-column:2}
+}
+
+/* ========== 章节通用（03–10） ========== */
+.col{z-index:5}
+.h3{font-family:var(--kai);font-weight:400;font-size:max(16px,1.45cqw);line-height:1.3;margin:0 0 .65em}
+.h3 small{font:400 max(10px,.66cqw)/1 GMono,monospace;letter-spacing:.14em;color:var(--grey);margin-left:.9em;vertical-align:middle}
+.txt{font-size:max(12.5px,.96cqw);line-height:1.8;color:#2f2b29}
+.g1{margin-top:max(10px,1cqw)}.g2{margin-top:max(14px,1.6cqw)}.g3{margin-top:max(20px,2.5cqw)}
+.tn{font-family:GMono,monospace;font-size:.9em;letter-spacing:.02em}
+s{text-decoration:line-through;text-decoration-color:var(--pen);text-decoration-thickness:2px}
+.board{background:var(--noise),#E9E9E6}
+.night{background:var(--noise),#1D1B1C;color:#EDE9E3}
+.split{background:linear-gradient(90deg,var(--type) 50%,#1D1B1C 50%)}
+.night .run,.night .folio,.split .folio.r{color:#A9A39C}
+.night .run b,.night .run em{color:#EDE9E3}
+.night .cap,.nightcol .cap,.nightcol .mono{color:#A9A39C}
+.nightcol{color:#EDE9E3}
+.nightcol .ch i{color:#A9A39C}
+
+/* 一 · 人物素材 */
+.faces{display:grid;grid-template-columns:repeat(4,1fr);gap:max(8px,1.1cqw)}
+.faces figure{text-align:center}
+.faces .f{border-radius:50%;overflow:hidden;aspect-ratio:1;background:#E9E6E1}
+.faces .f img{width:100%;height:100%;object-fit:cover;object-position:50% 18%;transform:scale(1.25);transform-origin:50% 22%}
+.faces figcaption{font-family:var(--kai);font-size:max(12px,.95cqw);margin-top:.9em}
+.walk{display:grid;grid-template-columns:repeat(4,1fr);gap:3px}
+.walk span{aspect-ratio:350/197;background:url(src/avatar-walkin-8.webp) no-repeat;background-size:400% 200%;outline:1px solid rgba(29,27,28,.28)}
+.brief{border:1.5px solid var(--pen);padding:.85em 1.1em;transform:rotate(-.6deg)}
+.brief .mono{color:var(--pen);letter-spacing:.14em}
+.brief ul{list-style:none;display:flex;flex-wrap:wrap;gap:.35em 1.1em;margin-top:.45em}
+.brief li{font-family:var(--kai);font-size:max(13px,1.05cqw)}
+.brief li::before{content:"☐ ";color:var(--pen)}
+
+/* 一 · 脚本与分镜 */
+.ms{--c:calc(41cqw / 30);--n:30;font-family:var(--kai);font-size:var(--c);line-height:1.8;word-break:break-all;line-break:anywhere;color:#2a2624;width:calc(var(--n) * var(--c));
+  background:
+   linear-gradient(180deg,transparent .4em,rgba(120,126,128,.5) .4em,rgba(120,126,128,.5) calc(.4em + 1px),transparent calc(.4em + 1px),transparent 1.4em,rgba(120,126,128,.5) 1.4em,rgba(120,126,128,.5) calc(1.4em + 1px),transparent calc(1.4em + 1px)) 0 0/100% 1.8em,
+   linear-gradient(90deg,rgba(120,126,128,.38) 1px,transparent 1px) 0 0/1em 100%}
+.ms p{margin:0}
+.ms .lat{display:inline-block;font:400 .78em/1 GMono,monospace;text-align:center;letter-spacing:-.04em;vertical-align:baseline}
+.ms .sid{color:var(--grey)}
+.ms .x{position:relative}
+.ms .x svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.ms .x svg path{stroke:var(--pen);stroke-width:1.8;fill:none;vector-effect:non-scaling-stroke}
+.ms .blank{display:block;height:1.8em}
+.ring{display:inline-block;border:1.6px solid var(--pen);border-radius:50%;padding:.05em .55em;transform:rotate(-4deg)}
+.shots{display:grid;grid-template-columns:1fr 1fr;gap:max(14px,1.5cqw) max(10px,1.2cqw)}
+.pan{position:relative;outline:1px solid #2b2826}
+.pan img{width:100%}
+.pan.grey img{filter:grayscale(1) contrast(1.02)}
+.pan svg{position:absolute;right:8%;top:6%;width:22%;height:86%;overflow:visible}
+.pan svg path{stroke:var(--pen);stroke-width:2.2;fill:none;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.shot{font:400 max(10px,.72cqw)/1.4 GMono,monospace;letter-spacing:.12em;margin-top:.9em}
+.shot b{font-weight:400;color:var(--grey);margin-left:.8em;font-family:var(--hei);letter-spacing:0}
+.fb{display:grid;grid-template-columns:auto 1fr;gap:.3em 1em;align-items:baseline}
+.fb .mono{color:var(--pen);letter-spacing:.12em}
+
+/* 一 · 制作笔记 */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:max(14px,1.8cqw)}
+.icons{display:grid;grid-template-columns:1fr 1fr;gap:max(12px,1.6cqw);max-width:66%}
+.icons figure{position:relative}
+.icons img{width:100%;aspect-ratio:1;object-fit:cover}
+.icons .iw{position:relative;display:block}
+.icons .pick .iw::after{content:"";position:absolute;left:-6%;top:-6%;width:112%;height:112%;border:1.8px solid var(--pen);border-radius:48%/44%;transform:rotate(-3deg);pointer-events:none}
+.icons figcaption{font:400 max(10px,.68cqw)/1.4 GMono,monospace;letter-spacing:.08em;color:var(--grey);margin-top:1.6em}
+.flow{width:100%;max-width:30cqw;height:auto;overflow:visible}
+.flow text{font-family:var(--kai)}
+
+/* 胶片帧按钮 */
+.fm{display:block;width:100%;background:#1D1B1C;padding:max(12px,1.1cqw) max(9px,.85cqw);position:relative;text-decoration:none;color:#EDE9E3;transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+.fm::before,.fm::after{content:"";position:absolute;left:max(9px,.85cqw);right:max(9px,.85cqw);height:6px;background:repeating-linear-gradient(90deg,#EDE9E3 0 7px,transparent 7px 16px);opacity:.85;border-radius:1px}
+.fm::before{top:4px}.fm::after{bottom:4px}
+.fm .pic{position:relative;aspect-ratio:16/9;overflow:hidden;background:#E9E9E6}
+.fm .pic img{width:100%;height:100%;object-fit:cover;object-position:50% 0;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.fm .tc{position:absolute;left:8px;bottom:6px;font:400 max(10px,.7cqw)/1.3 GMono,monospace;letter-spacing:.08em;color:#1D1B1C;background:rgba(246,244,238,.88);padding:2px 6px}
+.fm .pl{position:absolute;right:10px;bottom:8px;width:max(34px,2.8cqw);aspect-ratio:1;border-radius:50%;border:1.25px solid #1D1B1C;background:rgba(246,244,238,.9);display:grid;place-items:center;transition:background .3s,border-color .3s,transform .3s}
+.fm .pl::after{content:"";margin-left:3px;border-left:10px solid #1D1B1C;border-top:6px solid transparent;border-bottom:6px solid transparent;transition:border-color .3s}
+.fm .cap2{display:flex;justify-content:space-between;align-items:baseline;gap:1em;margin-top:10px;padding:0 2px 2px}
+.fm .cap2 b{font:400 max(16px,1.3cqw)/1.2 FellI,serif}
+.fm .cap2 span{font:400 max(10px,.68cqw)/1 GMono,monospace;letter-spacing:.14em;opacity:.78;white-space:nowrap}
+.fm:hover{transform:translateY(-2px)}
+.fm:hover .pic img,.fm:focus-visible .pic img{transform:scale(1.035)}
+.fm:hover .pl,.fm:focus-visible .pl{background:var(--pen);border-color:var(--pen);transform:scale(1.06)}
+.fm:hover .pl::after,.fm:focus-visible .pl::after{border-left-color:#F6F4EE}
+.fm.tall .pic{aspect-ratio:16/11}
+.fm.wide .pic{aspect-ratio:16/9.5}
+.fm.mail .pic{display:grid;place-items:center;background:#F6F4EE;color:var(--ink);aspect-ratio:16/6}
+.fm.mail .pic div{font:400 max(19px,1.55cqw)/1.3 FellI,serif;text-align:center;padding:0 .6em}
+.fm.mail .pic small{display:block;font:400 max(10px,.7cqw)/1.4 GMono,monospace;letter-spacing:.04em;color:var(--grey);margin-top:.5em;word-break:break-all}
+
+/* 二 · 情绪板（沿用 A） */
+.cut{overflow:hidden}
+.cut img{width:100%;height:100%;object-fit:cover}
+.mood .boat{z-index:3;clip-path:polygon(17% 0,83% 0,84% 5%,98% 21%,98% 100%,2% 100%,2% 21%,16% 5%)}
+.mood .glass{z-index:4}
+.mood .swatch{z-index:2;background:var(--blue);color:#F4F2EC;padding:2.2% 2.4%;
+  clip-path:polygon(0 2%,9% 0,40% 1.5%,72% .2%,100% 1.8%,99.2% 30%,100% 64%,98.8% 100%,62% 98.6%,30% 100%,1.4% 98.4%,.4% 60%)}
+.mood .swatch .big{font-family:var(--kai);font-size:max(24px,2.9cqw);line-height:1.1}
+.mood .opera{z-index:5;clip-path:polygon(50% 0,64% 9%,82% 6%,90% 22%,100% 36%,94% 50%,100% 64%,90% 79%,82% 94%,64% 91%,50% 100%,36% 91%,18% 94%,10% 79%,0 64%,6% 50%,0 36%,10% 22%,18% 6%,36% 9%)}
+.mood .lion{z-index:3;clip-path:inset(4% 4% 4% 4% round 10% 10% 10% 10%)}
+.mood .huisu{z-index:3;clip-path:ellipse(46% 47% at 50% 51%)}
+.mood .flower{z-index:4;clip-path:polygon(12% 0,88% 0,100% 8%,100% 92%,88% 100%,12% 100%,0 92%,0 8%)}
+.mood .px{image-rendering:pixelated;z-index:6}
+.chips{display:flex;gap:1.1em;align-items:flex-end;flex-wrap:wrap}
+.chip{display:flex;flex-direction:column;align-items:center;gap:.35em}
+.chip span{display:block;width:max(26px,2.5cqw);height:max(26px,2.5cqw);border-radius:46% 54% 50% 48%/52% 46% 54% 48%}
+.chip em{font-style:normal;font-family:var(--kai);font-size:max(11px,.92cqw);white-space:nowrap}
+@media (min-width:761px){.mood .run{left:56%}}
+
+/* 二 / 三 · 列表 */
+.steps{list-style:none;counter-reset:s}
+.steps li{counter-increment:s;display:grid;grid-template-columns:2em 1fr;column-gap:.6em;padding:max(8px,.8cqw) 0;border-top:1px solid var(--line)}
+.steps li:last-child{border-bottom:1px solid var(--line)}
+.steps li::before{content:counter(s,lower-roman);font:400 max(17px,1.45cqw)/1.1 FellI,serif;color:var(--pen);grid-row:1/3}
+.steps b{font-family:var(--kai);font-weight:400;font-size:max(14px,1.15cqw);line-height:1.4}
+.steps span{font-size:max(12px,.9cqw);line-height:1.72;color:#3a3633}
+.flowv{list-style:none}
+.flowv li{display:grid;grid-template-columns:2.2em 1fr;column-gap:.6em;padding:max(5px,.5cqw) 0;position:relative}
+.flowv li::after{content:"";position:absolute;left:.8em;top:2.4em;bottom:-.4em;width:1px;background:var(--line)}
+.flowv li:last-child::after{display:none}
+.flowv .k{font:400 max(11px,.82cqw)/1 GMono,monospace;width:1.9em;height:1.9em;border:1px solid var(--ink);border-radius:50%;display:grid;place-items:center;background:var(--grid)}
+.flowv b{font-family:var(--kai);font-weight:400;font-size:max(14px,1.12cqw);line-height:1.35}
+.flowv span{display:block;font-size:max(12px,.88cqw);line-height:1.65;color:#3a3633}
+.srcs{display:flex;flex-wrap:wrap;gap:.45em}
+.srcs span{font-size:max(12px,.88cqw);border:1px solid var(--ink);border-radius:999px;padding:.2em .8em}
+.redbox{border:1.5px solid var(--pen);padding:.8em 1.1em;transform:rotate(-.5deg)}
+.redbox .mono{color:var(--pen);letter-spacing:.14em}
+.redbox .cap{color:#2f2b29}
+
+/* 回执 */
+.end h2{font-family:var(--kai);font-weight:400;font-size:max(28px,3.2cqw);line-height:1.35}
+.end .en{font:400 max(15px,1.25cqw)/1.35 FellI,serif;color:#A9A39C}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:max(14px,1.6cqw)}
+.btns .fm:first-child{grid-column:1/3}
+.mailto{font:400 max(13px,1cqw)/1.4 GMono,monospace;color:#EDE9E3;text-decoration:none;border-bottom:1px solid rgba(237,233,227,.4)}
+.mailto:hover{border-bottom-color:var(--pen)}
+
+@media (max-width:760px){
+  .split{background:var(--type)}
+  .split .nightcol{width:auto!important;margin:40px -16px -54px!important;padding:40px 16px 64px;background:#1D1B1C}
+  .ms{--c:calc(100cqw / 22);--n:22}
+  .duo{grid-template-columns:1fr}
+  .icons{max-width:none}
+  .flow{max-width:100%}
+  .mood .swatch{aspect-ratio:auto!important;padding:18px 18px 64px}
+  .mood .swatch .hand{position:static!important;width:auto!important;margin-top:1.2em}
+}
+</style>
+</head>
+<body>
+<main class="book">
+
+<!-- ===================== 01 片名 · What I can bring to Soldy.ai ===================== -->
+<section class="spread seam cover" id="p1" aria-label="片名与能带去的">
+  <div class="a assign" style="--x:6;--y:7;--w:30">作业册<small>FOR SOLDY.AI · AI CREATOR</small></div>
+
+  <h1 data-tight class="a wm" style="--x:5.4;--y:16;--w:36">H<span class="dotless">ı</span>,<span class="l2">I’m <span class="A">A<svg class="tuft" viewBox="0 0 60 40" aria-hidden="true"><path d="M14 38 C10 22 16 10 26 6 M28 38 C28 22 32 8 42 2 M40 38 C44 26 50 20 58 18" stroke="#1D1B1C" stroke-width="4.2" fill="none" stroke-linecap="round"/></svg></span>lex.</span></h1>
+
+  <div class="a meta mono" style="--x:6.2;--y:44;--w:22;--mt:24">
+    <dl>
+      <dt>本名</dt><dd>郑晓琪</dd>
+      <dt>出身</dt><dd>建筑设计</dd>
+      <dt>做过</dt><dd>小红书内容运营</dd>
+      <dt>现在</dt><dd>健康险服务机构 · AI 落地</dd>
+      <dt>爱看</dt><dd>上海国际电影节，连续四届</dd>
+    </dl>
+  </div>
+
+  <div class="a strip m-hide" style="--x:6.2;--y:80;--w:22">
+    <span style="background-position:0 0"></span><span style="background-position:33.33% 0"></span><span style="background-position:66.67% 0"></span><span style="background-position:100% 0"></span>
+  </div>
+  <div class="a cap m-hide" style="--x:6.2;--y:86;--w:22;font-size:max(10px,.7cqw)">介绍片开场：走入八帧，最后一帧抬手。</div>
+
+  <img class="a fig" src="src/standing-alpha.png" alt="Alex 的 3D 形象，站姿，抬手打招呼" style="--x:31.5;--y:39;--w:16.5;--mw:58;--mx:21;--mt:8">
+  <svg class="arrow m-hide" style="left:43%;top:30%;width:3.4%;height:9.4%" viewBox="0 0 40 60" preserveAspectRatio="none"><path d="M6 4 C 26 10, 34 30, 24 54 M17 47 L24 55 L31 46"/></svg>
+  <div class="a hand m-hide" style="--x:39.5;--y:23;--w:9.6;z-index:7;color:#3a3633;font-size:max(11px,.92cqw);line-height:1.4">眉上一颗小黑点，<br>认人只认这一点。</div>
+
+  <div class="a bring" style="--x:56;--y:8;--w:39;--mt:36">
+    <div class="eyebrow"><b>SOLDY.AI</b> · 由 Chatail 团队孵化</div>
+    <p class="slogan">“Turn any product into winning ads.”</p>
+    <p class="sub">Creator-curated presets. AI video ads in a few clicks.</p>
+    <p class="cap src">引自 soldy.ai 首页。从创作者整理好的 preset 出发，一件产品几步就能做成一条广告。preset 背后，是有人把一条好广告拆清楚、做成能复现的流程。</p>
+  </div>
+
+  <div class="a bring" style="--x:56;--y:43;--w:39;--mt:30">
+    <h2><span>What I can bring</span><em>能带去的</em></h2>
+    <ol class="give">
+      <li><span class="n">i</span><div><b>把一条好广告，拆成能复现的步骤</b><p>先锁人物，再定镜头，最后定节奏。</p></div><a href="#ch1">→ 一 视频</a></li>
+      <li><span class="n">ii</span><div><b>在质量、稳定性和成本之间做判断</b><p>同一段提示词交给两个模型，先看放进成片会不会穿帮。</p></div><a href="#ch1">→ 一 视频</a></li>
+      <li><span class="n">iii</span><div><b>把创作需求，写成模型能验收的条件</b><p>嘴型三态、走入八帧、遮罩以外零像素改动。</p></div><a href="#ch2">→ 二 作品集</a></li>
+      <li><span class="n">iv</span><div><b>持续供给选题，并把做法讲清楚</b><p>一套社媒情报流水线，换一批数据源，就能给 preset 供题。</p></div><a href="#ch3">→ 三 社媒情报</a></li>
+    </ol>
+  </div>
+  <span class="folio l m-hide">01</span>
+</section>
+
+<!-- ===================== 02 目录 ===================== -->
+<section class="spread typesheet" id="p2" aria-label="目录">
+  <div class="run"><b>02</b>目录 · Contents</div>
+  <div class="a ch" style="--x:6;--y:12;--w:30">目录<i>Contents</i></div>
+  <p class="a hand" style="--x:6;--y:33;--w:34;--mt:20;font-size:max(15px,1.4cqw);line-height:1.75">下面三件作品，都由 AI 加脚本完成。<br>每一件摊开的都是做法：<br>素材怎么来，镜头怎么排，判断怎么下。</p>
+  <p class="a hand pen" style="--x:6;--y:53;--w:32;--mt:16;transform:rotate(-1.5deg)">每一章的最后一页，都有一个能点开的入口：成片、网站、演示站。</p>
+  <img class="a m-hide seatfade" src="src/avatar-seated.webp" alt="形象盘腿坐着，身边三只猫一只兔子" style="--x:4;--y:62;--w:36">
+
+  <ol class="a toc" style="--x:53;--y:9;--w:42;--mt:24">
+    <li><a class="row" href="#ch1">
+      <span class="num">i</span>
+      <span class="th"><img src="src/frame-boat.webp" alt=""></span>
+      <span class="body"><span class="t">AIGC VIDEO<span class="pp">p.03–05</span></span>
+        <h3>求职介绍片<i>4′43″</i></h3>
+        <span class="what">展示制作视频的思路：一条片子怎样从一张线稿做到成片。</span>
+        <span class="ticks"><span>人物素材</span><span>分镜</span><span>脚本</span><span>字幕</span><span>声音</span><span>模型测评</span><span>流水线</span></span>
+      </span></a></li>
+    <li><a class="row" href="#ch2">
+      <span class="num">ii</span>
+      <span class="th"><img src="src/live-home.webp" alt=""></span>
+      <span class="body"><span class="t">AIGC PORTFOLIO<span class="pp">p.06–07</span></span>
+        <h3>作品集网站</h3>
+        <span class="what">展示制作作品集的思路：先定主题，再理故事线，最后做减法。</span>
+        <span class="ticks"><span>主题</span><span>情绪板</span><span>Storyline</span><span>比稿</span><span>取舍</span></span>
+      </span></a></li>
+    <li><a class="row" href="#ch3">
+      <span class="num">iii</span>
+      <span class="th"><img src="src/sls-demo.webp" alt=""></span>
+      <span class="body"><span class="t">VIBE CODING<span class="pp">p.08–09</span></span>
+        <h3>社媒情报系统<i>Social Listening</i></h3>
+        <span class="what">一条从数据源到对口部门的信息流水线，独立设计开发，已交给业务线自己运营。</span>
+        <span class="ticks"><span>问题</span><span>信源</span><span>流水线</span><span>判级分流</span><span>边界</span><span>放到 Soldy</span></span>
+      </span></a></li>
+  </ol>
+  <span class="folio r">02</span>
+</section>
+
+<!-- ===================== 03 一 · 人物素材 ===================== -->
+<section class="spread seam" id="ch1" aria-label="一 求职介绍片 · 人物素材">
+  <div class="run"><b>03</b><em>一</em> · AIGC 求职视频 · 人物素材</div>
+  <div class="a ch" style="--x:5;--y:10;--w:30">人物素材<i>Character sheet</i></div>
+  <img class="a" src="src/turnaround.jpg" alt="形象六视图：正面、四分之三、侧面、背面" style="--x:4;--y:27;--w:38;mix-blend-mode:multiply;--mt:20">
+  <p class="a hand pen" style="--x:5;--y:87;--w:40;--mt:14">身份锚点：眉上一颗小黑点，永远在画面左侧。补件一律不许镜像。</p>
+
+  <div class="a col" style="--x:54;--y:10;--w:41;--mt:32">
+    <h3 class="h3">口型<small>MOUTH · 4 STATES</small></h3>
+    <div class="faces">
+      <figure><div class="f"><img src="src/face-closed.jpg" alt="闭嘴"></div><figcaption>闭嘴</figcaption></figure>
+      <figure><div class="f"><img src="src/face-half.jpg" alt="半张"></div><figcaption>半张</figcaption></figure>
+      <figure><div class="f"><img src="src/face-open.jpg" alt="张嘴"></div><figcaption>张嘴</figcaption></figure>
+      <figure><div class="f"><img src="src/face-blink.jpg" alt="眨眼"></div><figcaption>眨眼</figcaption></figure>
+    </div>
+    <p class="cap g1">口型随配音逐字切换。闭嘴一张与基准图逐像素一致，切换时脸不跳。</p>
+    <h3 class="h3 g3">走入<small>WALK-IN · 8 FRAMES</small></h3>
+    <div class="walk" role="img" aria-label="走入八帧">
+      <span style="background-position:0 0"></span><span style="background-position:33.33% 0"></span><span style="background-position:66.67% 0"></span><span style="background-position:100% 0"></span><span style="background-position:0 100%"></span><span style="background-position:33.33% 100%"></span><span style="background-position:66.67% 100%"></span><span style="background-position:100% 100%"></span>
+    </div>
+    <p class="cap g1">八帧直接硬切只有 7.5 fps，看着是卡的；改为差分抠出步态，再沿缓动路径逐帧移动。</p>
+    <div class="brief g3">
+      <div class="mono">补件需求单 · 交给模型的验收条件</div>
+      <ul><li>嘴型三态</li><li>眨眼</li><li>走入八帧</li><li>透明底</li><li>遮罩以外零像素改动</li></ul>
+    </div>
+  </div>
+  <span class="folio r">03</span>
+</section>
+
+<!-- ===================== 04 一 · 脚本与分镜 ===================== -->
+<section class="spread gridpaper" id="p4" aria-label="一 求职介绍片 · 脚本与分镜">
+  <div class="run"><b>04</b><em>一</em> · AIGC 求职视频 · 脚本与分镜</div>
+  <div class="a col" style="--x:5;--y:10;--w:42">
+    <div class="ch">脚本<i>Script</i></div>
+    <p class="hand g2" style="font-size:max(16px,1.5cqw)">口播稿　<span class="tn">7′12″</span> → <span class="ring pen tn">3′08″</span></p>
+    <div class="ms g2" data-ms>
+      <p><span class="sid">S0-3</span>学建筑出身，毕业后做过两年多建筑设计。<s>这段经历训练了在规范、需求和交付条件之间解决问题。</s></p>
+      <span class="blank"></span>
+      <p class="x"><span class="sid">S1-4</span>随着规模扩大，又建立了用量与资源的治理机制。<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M2 6 L98 94 M98 4 L3 96"/></svg></p>
+    </div>
+    <p class="hand pen g2">每个项目只回答四个问题：叫什么，为什么挑，用来做什么，做出什么效果。三十五段，砍到十九段。</p>
+    <p class="g3" style="font:400 max(17px,1.6cqw)/1.3 Fell,serif">Make it work. Take it further.</p>
+    <p class="cap" style="margin-top:.4em">先把事做成，再让它走得更远。成片英文稿的最后一句。</p>
+  </div>
+  <div class="a col" style="--x:54;--y:10;--w:41;--mt:40">
+    <div class="ch">分镜<i>Shots</i></div>
+    <div class="shots g2">
+      <figure><div class="pan"><img src="src/frame-walkin.webp" alt="S0-1 走入"></div><figcaption class="shot">S0-1<b>走入，开场</b></figcaption></figure>
+      <figure><div class="pan"><img src="src/frame-boat.webp" alt="S0-2 龙舟"></div><figcaption class="shot">S0-2<b>来处，龙舟</b></figcaption></figure>
+      <figure><div class="pan grey"><img src="src/frame-pilot.webp" alt="S1 中间镜头"><svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M6 8 L94 94 M92 6 L8 96"/></svg></div><figcaption class="shot">S1<b>中间镜头，形象退场</b></figcaption></figure>
+      <figure><div class="pan"><img src="src/frame-end.webp" alt="S5 收尾，形象回到画面"></div><figcaption class="shot">S5<b>收尾，形象回来</b></figcaption></figure>
+    </div>
+    <div class="fb g2">
+      <span class="mono">试映 01</span><p class="hand">形象太大，把信息挤到角落。<span class="pen">改：形象只留在头尾，中间镜头让给内容。</span></p>
+      <span class="mono">试映 02</span><p class="hand">太长了。<span class="pen">改：另剪一条 50 秒社媒版。</span></p>
+    </div>
+  </div>
+  <span class="folio r">04</span>
+</section>
+
+<!-- ===================== 05 一 · 制作笔记 + 放映 ===================== -->
+<section class="spread split" id="p5" aria-label="一 求职介绍片 · 制作笔记与放映">
+  <div class="run"><b>05</b><em>一</em> · AIGC 求职视频 · 制作笔记</div>
+  <div class="a col" style="--x:5;--y:10;--w:41">
+    <div class="ch">制作笔记<i>Notes</i></div>
+    <div class="duo g2">
+      <div><h3 class="h3">字幕<small>SUBTITLES</small></h3><p class="cap">时间戳取自配音的逐字边界，中文每行不超过 14 字；碰到字幕带，卡片先上移。</p></div>
+      <div><h3 class="h3">声音<small>VOICE</small></h3><p class="cap">反馈说默认男声「像老头在说话」。换成更快的女声，段间停顿压到 0.25 秒。</p></div>
+    </div>
+    <h3 class="h3 g3">模型测评<small>SAME PROMPT, TWO MODELS</small></h3>
+    <div class="icons">
+      <figure class="pick"><span class="iw"><img src="src/icons-gptimage2.webp" alt="GPT Image 2 画的 16 个图标"></span><figcaption>GPT IMAGE 2 · 采用</figcaption></figure>
+      <figure><span class="iw"><img src="src/icons-nanobanana.webp" alt="另一个模型画的 16 个图标"></span><figcaption>另一个模型 · 落选</figcaption></figure>
+    </div>
+    <p class="hand pen g1">选 GPT Image 2：绿色用多了可以压，材质对不上就没法补。</p>
+    <h3 class="h3 g3">流水线<small>RE-RUNNABLE</small></h3>
+    <svg class="flow" viewBox="0 0 300 92" role="img" aria-label="流水线：稿子、配音、时间轴、逐帧、成片，改一句重跑一次">
+      <g font-size="13" fill="#1D1B1C"><text x="0" y="22">稿子</text><text x="66" y="22">配音</text><text x="132" y="22">时间轴</text><text x="210" y="22">逐帧</text><text x="262" y="22">成片</text></g>
+      <g stroke="#6E6A66" stroke-width="1" fill="none"><path d="M32 17 H60 M56 13 L60 17 L56 21"/><path d="M98 17 H126 M122 13 L126 17 L122 21"/><path d="M176 17 H204 M200 13 L204 17 L200 21"/><path d="M240 17 H256 M252 13 L256 17 L252 21"/></g>
+      <path d="M276 30 C 276 70, 14 70, 14 32 M9 37 L14 31 L19 37" stroke="#C3352B" stroke-width="1.6" fill="none"/>
+      <text x="96" y="86" font-size="13" fill="#C3352B">改一句，重跑一次</text>
+    </svg>
+  </div>
+  <div class="a col nightcol" style="--x:55;--y:10;--w:40">
+    <div class="ch">放映<i>Screening</i></div>
+    <a class="fm g3" href="https://youtu.be/a0mLIYgg0Vk" target="_blank" rel="noopener" aria-label="在 YouTube 观看成片，4 分 43 秒">
+      <div class="pic"><img src="src/frame-walkin.webp" alt=""><span class="tc" data-on-image>00:00 → 04:43</span><span class="pl"></span></div>
+      <div class="cap2"><b>Watch the film</b><span>YOUTUBE ↗</span></div>
+    </a>
+    <p class="mono g2">英文版 4′43″ · 另有中文版与 50 秒社媒版</p>
+    <p class="cap g1">形象、配音、字幕、动画，由 AI 加脚本完成；没有拍摄，也没有外包。</p>
+  </div>
+  <span class="folio r">05</span>
+</section>
+
+<!-- ===================== 06 二 · 主题与情绪板（沿用 A） ===================== -->
+<section class="spread board mood" id="ch2" aria-label="二 作品集 · 主题与情绪板">
+  <div class="run"><b>06</b><em>二</em> · AIGC Portfolio · 主题与情绪板</div>
+  <div class="a cut boat" style="--x:-1;--y:-6;--w:31;aspect-ratio:423/615;--mw:70"><img src="src/mb-boat.jpg" alt="岭南版画：扒龙舟"></div>
+  <div class="a cut glass" style="--x:27;--y:9;--w:11.5;aspect-ratio:400/360;--mw:40;--mx:56;--mt:-180"><img src="src/mb-window.jpg" alt="满洲窗彩色玻璃" style="object-position:0 0"></div>
+  <div class="a hand" style="--x:31.5;--y:52;--w:10.5;z-index:6;--mw:60;--mt:64">满洲窗：外来的彩色玻璃，镶进本地的木格。</div>
+
+  <div class="a swatch" style="--x:42;--y:12;--w:21;aspect-ratio:1/1.05;--mw:74;--mt:18">
+    <div class="big">满洲窗蓝</div>
+    <div class="mono" style="color:#F4F2EC;margin-top:.6em">#425BC1 · RGB 66 91 193</div>
+    <div class="hand" style="position:absolute;left:8%;bottom:7%;width:84%;color:#F4F2EC">35 扇满洲窗玻璃实测的色值，也是作品集网站的主蓝。</div>
+  </div>
+  <div class="a cut opera" style="--x:64;--y:40;--w:18;aspect-ratio:495/504;--mw:52;--mx:44;--mt:16"><img src="src/mb-opera.jpg" alt="岭南版画：粤剧" style="transform:scale(1.16);transform-origin:58% 58%"></div>
+  <div class="a cut lion" style="--x:80;--y:8;--w:15;aspect-ratio:402/632;--mw:40;--mt:-110"><img src="src/mb-lion.jpg" alt="岭南版画：醒狮"></div>
+  <div class="a cut huisu" style="--x:78;--y:45;--w:16;aspect-ratio:500/653;--mw:46;--mx:50;--mt:-160"><img src="src/mb-huisu.jpg" alt="岭南版画：灰塑"></div>
+  <div class="a cut flower m-hide" style="--x:31;--y:66;--w:9.5;aspect-ratio:312/495"><img src="src/mb-flower.jpg" alt="岭南版画：花市"></div>
+
+  <img class="a px" src="src/pixel-orig-dragon-boat.png" alt="" style="--x:17;--y:82;--w:6;--mw:22">
+  <img class="a px m-hide" src="src/pixel-orig-manchu-window.png" alt="" style="--x:44;--y:63;--w:3.6">
+  <img class="a px m-hide" src="src/pixel-orig-lion-dance.png" alt="" style="--x:93;--y:40;--w:4.4">
+  <img class="a px m-hide" src="src/pixel-orig-opera.png" alt="" style="--x:70;--y:86;--w:4">
+
+  <div class="a hand" style="--x:16;--y:72;--w:14;z-index:6;--mw:70;--mt:8">龙舟：一船人，朝一个方向用力。<br>早出海，常寄信。</div>
+
+  <div class="a chips" style="--x:43;--y:76;--w:30;--mt:20">
+    <div class="chip"><span style="background:#425BC1"></span><em>满洲窗蓝</em></div>
+    <div class="chip"><span style="background:#C3352B"></span><em>朱砂</em></div>
+    <div class="chip"><span style="background:#B08D3A"></span><em>织金</em></div>
+    <div class="chip"><span style="background:#2F6B4F"></span><em>灰塑绿</em></div>
+    <div class="chip"><span style="background:#E9E9E6;border:1px solid #c9c6c0"></span><em>砖灰白</em></div>
+    <div class="chip"><span style="background:#1D1B1C"></span><em>墨</em></div>
+  </div>
+
+  <div class="a ch" style="--x:78;--y:79;--w:22;z-index:6;--mt:24">情绪板<i>Theme &amp; mood</i></div>
+  <div class="a hand" style="--x:56;--y:91;--w:22;z-index:6;font-size:max(15px,1.5cqw);--mt:10">主题从岭南来：<br>广东人出洋，已有几百年。</div>
+  <div class="a cap" style="--x:3.2;--y:95.4;--w:44;font-size:max(9px,.66cqw);--mt:16">动手前先查证：两路调研，162 个来源，每条标可信等级。锦鲤是日语借词，改用金鱼。</div>
+  <span class="folio r">06</span>
+</section>
+
+<!-- ===================== 07 二 · 故事线与取舍 ===================== -->
+<section class="spread typesheet" id="p7" aria-label="二 作品集 · 故事线与取舍">
+  <div class="run"><b>07</b><em>二</em> · AIGC Portfolio · 故事线与取舍</div>
+  <div class="a col" style="--x:6;--y:10;--w:40">
+    <div class="ch">故事线<i>Storyline &amp; cuts</i></div>
+    <p class="hand g2">第一版网站读起来像简历换了个排版。于是把自己当成客户，同一份需求发给 7 家 AI agent 比稿，再挑选、合并、删减。</p>
+    <ol class="steps g2">
+      <li><b>比稿</b><span>7 份方案，评审表逐条记下取舍理由；合稿时只留各家最强的一两处。</span></li>
+      <li><b>基线</b><span>前后出过七个方向。真正有用的一步，是冻结两版做基线：一版管版式与文案，一版管材质与色板。</span></li>
+      <li><b>取舍</b><span>招聘方要的是能快速翻看。靠悬停才看得到的数字整体下线，两句口号只留一句。</span></li>
+    </ol>
+    <p class="hand pen g2">首屏只答三件事：是谁，这里有什么，从哪里开始看。</p>
+  </div>
+  <div class="a col" style="--x:54;--y:12;--w:41;--mt:36">
+    <a class="fm tall" href="https://alexzheng-unzen.github.io/" target="_blank" rel="noopener" aria-label="打开作品集网站">
+      <div class="pic"><img src="src/live-home.webp" alt=""><span class="tc" data-on-image>alexzheng-unzen.github.io</span></div>
+      <div class="cap2"><b>Visit the site</b><span>PORTFOLIO ↗</span></div>
+    </a>
+    <p class="cap g2">上线前跑过三档宽度的自动验收：零溢出、零报错、零坏图。</p>
+  </div>
+  <span class="folio r">07</span>
+</section>
+
+<!-- ===================== 08 三 · 问题与流水线 ===================== -->
+<section class="spread gridpaper" id="ch3" aria-label="三 社媒情报 · 问题与流水线">
+  <div class="run"><b>08</b><em>三</em> · Social Listening · 问题与流水线</div>
+  <div class="a col" style="--x:6;--y:10;--w:40">
+    <div class="ch">社媒情报<i>Social Listening System · Vibe Coding</i></div>
+    <p class="hand g2" style="font-size:max(15px,1.35cqw)">把散落的外部信息，变成各部门能直接用的判断。</p>
+    <h3 class="h3 g3">要解决的三件事<small>WHY</small></h3>
+    <ol class="steps">
+      <li><b>信息又多又漏</b><span>公众号一天几百条，相关的只有两三条，该看到的那条偏偏没人刷到。</span></li>
+      <li><b>东西留不下来</b><span>有价值的信息躺在各人的收藏夹和群聊里，人一走就带走了。</span></li>
+      <li><b>看起来太费劲</b><span>大家真正想知道的是：这条和我有什么关系，要不要做点什么。</span></li>
+    </ol>
+    <h3 class="h3 g3">五路信源<small>SOURCES</small></h3>
+    <p class="srcs"><span>竞品官网</span><span>微信公众号</span><span>小红书</span><span>X</span><span>监管与官方网站</span></p>
+  </div>
+  <div class="a col" style="--x:54;--y:10;--w:41;--mt:36">
+    <h3 class="h3">一条内容怎么走<small>PIPELINE</small></h3>
+    <ol class="flowv">
+      <li><span class="k">0</span><div><b>公司画像</b><span>先写清业务是什么、什么不归自己管；每份 Prompt 都带着它。</span></div></li>
+      <li><span class="k">1</span><div><b>抓取</b><span>按监控词分头去采，正文和发帖时间当场入库。</span></div></li>
+      <li><span class="k">2</span><div><b>读与打标签</b><span>每类信源走自己的 Prompt，逐条读完再打标签。</span></div></li>
+      <li><span class="k">3</span><div><b>判级</b><span>三个维度一票否决；无关内容直接滤掉，约占一半。</span></div></li>
+      <li><span class="k">4</span><div><b>分流</b><span>每条只判一个主归属部门。</span></div></li>
+      <li><span class="k">5</span><div><b>看板</b><span>送到各部门看板；高危的置顶，等人确认。</span></div></li>
+    </ol>
+    <div class="redbox g2"><div class="mono">改过一次规则</div><p class="cap" style="margin-top:.4em">旧规则下，一条内容常常同时点亮三四个部门。抽查发现，某个部门收到的 <span class="tn">247</span> 条里，约 <span class="tn">200</span> 条是误入。现在每条只判一个主归属，判据用各部门的问卷做了真人校准。</p></div>
+  </div>
+  <span class="folio r">08</span>
+</section>
+
+<!-- ===================== 09 三 · 边界与放到 Soldy ===================== -->
+<section class="spread typesheet" id="p9" aria-label="三 社媒情报 · 边界与放到 Soldy">
+  <div class="run"><b>09</b><em>三</em> · Social Listening · 边界与放到 Soldy</div>
+  <div class="a col" style="--x:6;--y:10;--w:40">
+    <h3 class="h3">设计上的取舍<small>BY DESIGN</small></h3>
+    <ol class="steps">
+      <li><b>它不是实时的</b><span>定时成批采集，一条帖子从发出到上看板，通常是几小时到一两天。</span></li>
+      <li><b>高危绝不自动外发</b><span>研判卡只停在预警区等人看。AI 会判错，品牌声誉的事要有人签字。</span></li>
+      <li><b>判定标准要人一直校准</b><span>这套系统的上限不在技术，在判定标准写得准不准。</span></li>
+    </ol>
+    <a class="fm wide g3" href="https://alexzheng-unzen.github.io/sls-demo-a1cx48p2es/" target="_blank" rel="noopener" aria-label="打开社媒情报系统的脱敏演示">
+      <div class="pic"><img src="src/sls-demo.webp" alt=""></div>
+      <div class="cap2"><b>Open the demo</b><span>已脱敏 ↗</span></div>
+    </a>
+  </div>
+  <div class="a col" style="--x:54;--y:10;--w:41;--mt:36">
+    <h3 class="h3">放到 Soldy<small>FOR SOLDY</small></h3>
+    <p class="hand">同一套机制换一批数据源，可以做三件事。</p>
+    <ol class="steps g2">
+      <li><b>给 Viral Presets 供应选题</b><span>每周把 TikTok、Instagram 与 Meta Ads Library 里正在起量的形式整理成候选，按「能否换产品复现」「前 3 秒能否形成 hook」打分，交给模板团队挑选。</span></li>
+      <li><b>竞品上新提醒</b><span>盯住 Higgsfield、Pippit、Creatify、Arcads 的新功能与新模型接入；有动作就当天给出一句判断：要不要跟，影响哪个 Studio。</span></li>
+      <li><b>把用户原声变成需求</b><span>出海卖家在评论区里问「用什么工具」「求提示词」，这些都是需求。按品类和问题归类，可以直接转成教程选题，或交给产品团队。</span></li>
+    </ol>
+    <p class="hand pen g2">以上是设想，还没有在 Soldy 的数据上跑过。入职后可以先用一周，在一个品类上跑通一版。</p>
+  </div>
+  <span class="folio r">09</span>
+</section>
+
+<!-- ===================== 10 回执 ===================== -->
+<section class="spread night end" id="p10" aria-label="回执">
+  <div class="run"><b>10</b>回执 · Reply</div>
+  <div class="a col" style="--x:6;--y:14;--w:40">
+    <h2>好的想法，<br>要能被持续打磨成结果。</h2>
+    <p class="en g1">Creativity deserves respect, and so does the process behind it.</p>
+    <p class="cap g3">两句都化用自 Soldy 的招聘启事，也是这一册想证明的事：会用模型只是起点，能讲清为什么这样选、能重跑、能验收，才是能交给团队的工作方式。</p>
+    <p class="g3"><a class="mailto" href="mailto:alexanderchat1005@gmail.com">alexanderchat1005@gmail.com</a></p>
+    <p class="cap g3" style="font-size:max(10px,.7cqw)">© 2026 Alex Zheng · 郑晓琪 · 保留所有权利。页面内的公司名、同事姓名和样本内容均已替换或隐去。</p>
+  </div>
+  <p class="a m-hide" style="--x:6;--y:84;--w:30;font:400 max(22px,2.4cqw)/1 FellI,serif;color:#EDE9E3">Ready for the next take.</p>
+  <div class="a col" style="--x:54;--y:14;--w:41;--mt:40">
+    <div class="btns">
+      <a class="fm mail" href="mailto:alexanderchat1005@gmail.com" aria-label="发邮件">
+        <div class="pic"><div>Write back<small>alexanderchat1005@gmail.com</small></div></div>
+        <div class="cap2"><b>Correspondence</b><span>MAIL ✉</span></div>
+      </a>
+      <a class="fm" href="https://youtu.be/a0mLIYgg0Vk" target="_blank" rel="noopener" aria-label="在 YouTube 观看成片">
+        <div class="pic"><img src="src/frame-boat.webp" alt=""><span class="pl"></span></div>
+        <div class="cap2"><b>The film</b><span>4′43″ ↗</span></div>
+      </a>
+      <a class="fm" href="https://alexzheng-unzen.github.io/" target="_blank" rel="noopener" aria-label="打开作品集网站">
+        <div class="pic"><img src="src/frame-end.webp" alt=""></div>
+        <div class="cap2"><b>The site</b><span>↗</span></div>
+      </a>
+    </div>
+  </div>
+  <span class="folio r">10</span>
+</section>
+
+</main>
+<script>
+// 稿纸：拉丁字母和数字两个占一格，保证每个汉字落在格里
+document.querySelectorAll('[data-ms]').forEach(function(box){
+  var w = document.createTreeWalker(box, NodeFilter.SHOW_TEXT), nodes = [];
+  while (w.nextNode()) { if (!w.currentNode.parentNode.closest('svg')) nodes.push(w.currentNode); }
+  nodes.forEach(function(t){
+    var s = t.nodeValue.replace(/\s*([A-Za-z0-9][A-Za-z0-9 .\-]*[A-Za-z0-9]|[A-Za-z0-9])\s*/g, '\u0001$1\u0001');
+    if (s.indexOf('\u0001') < 0) return;
+    var frag = document.createDocumentFragment();
+    s.split('\u0001').forEach(function(part, i){
+      if (!part) return;
+      if (i % 2) {
+        var sp = document.createElement('span'), n = Math.ceil(part.length / 2);
+        sp.className = 'lat'; sp.textContent = part;
+        sp.style.width = (n / 0.78) + 'em';
+        frag.appendChild(sp);
+      } else frag.appendChild(document.createTextNode(part));
+    });
+    t.parentNode.replaceChild(frag, t);
+  });
+});
+</script>
+</body>
+</html>
